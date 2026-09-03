@@ -1,0 +1,39 @@
+import { ImageResponse } from 'next/og';
+
+export const alt = 'Srs da Limpeza — higienização de estofados e limpeza pós-obra';
+export const size = { width: 1200, height: 630 };
+export const contentType = 'image/png';
+
+export default function OgImage() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: 72,
+          background: 'linear-gradient(135deg, #062637 0%, #0f5f83 55%, #1d9bc4 100%)',
+          color: 'white',
+          fontFamily: 'sans-serif',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 30, letterSpacing: 6, textTransform: 'uppercase', opacity: .9 }}>
+          <div style={{ width: 22, height: 22, borderRadius: 999, background: '#7fd9ea' }} />
+          Srs da Limpeza · desde 2018
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div style={{ fontSize: 84, fontWeight: 700, lineHeight: 1.02, letterSpacing: -2 }}>Seu sofá como novo.</div>
+          <div style={{ fontSize: 84, fontWeight: 700, lineHeight: 1.02, letterSpacing: -2, color: '#7fd9ea' }}>Sua casa livre de ácaros.</div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 30, opacity: .92 }}>
+          <span>Guarujá · Santos · Bertioga</span>
+          <span>★★★★★ Excelente no Google</span>
+        </div>
+      </div>
+    ),
+    size,
+  );
+}
