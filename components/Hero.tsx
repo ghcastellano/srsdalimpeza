@@ -58,14 +58,11 @@ export default function Hero() {
             <Line text="Sua casa livre" delay={.27} />
             <Line text="de ácaros." delay={.37} className="text-gradient pr-2" />
           </h1>
-          <motion.p
-            initial={reduced ? false : { opacity: .01, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .7, delay: .55 }}
-            className="mt-7 max-w-xl text-lg text-ink/80"
-          >
+          {/* Sem animação de entrada: é o elemento LCP no mobile e qualquer
+              transição de opacidade atrasa a métrica em ~2s sob CPU lenta. */}
+          <p className="mt-7 max-w-xl text-lg text-ink/80">
             Higienização profunda de sofás, colchões e estofados, impermeabilização, limpeza pós-obra e revitalização de pisos. Mais de 6.000 clientes atendidos em Guarujá, Santos e Bertioga. Orçamento grátis em minutos.
-          </motion.p>
+          </p>
           <motion.div
             initial={reduced ? false : { opacity: .01, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
