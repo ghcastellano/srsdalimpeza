@@ -94,7 +94,7 @@ export const services = [
     slug: 'pisos',
     title: 'Revitalização de pisos',
     text: 'Pisos de madeira, porcelanato e pedra recuperados com máquinas industriais e produtos adequados.',
-    image: '/assets/photos/equipe-revitalizacao.webp',
+    image: '/assets/photos/posobra-2.webp',
     line: 'postWork' as Line,
   },
 ];
@@ -130,12 +130,14 @@ export const postWorkClients = ['Residências', 'Hotéis e pousadas', 'Imobiliá
 
 export const gallery = [
   { src: '/assets/photos/sofa-7.webp', alt: 'Sofá de suede marrom: metade suja e metade higienizada, mostrando a diferença', tag: 'Sofá · antes e depois' },
+  { src: '/assets/photos/sofa-1.webp', alt: 'Profissional da Srs da Limpeza fazendo a extração em um sofá claro', tag: 'Extração profissional' },
   { src: '/assets/photos/sofa-8.webp', alt: 'Estofado higienizado com extração profunda', tag: 'Sofá' },
   { src: '/assets/photos/colchao-2.webp', alt: 'Colchão durante a higienização profissional', tag: 'Colchão' },
   { src: '/assets/photos/poltronas.webp', alt: 'Poltrona clara após higienização', tag: 'Poltrona' },
   { src: '/assets/photos/carpete-1.webp', alt: 'Carpete lavado com extração', tag: 'Carpete' },
   { src: '/assets/photos/cadeiras-3.webp', alt: 'Cadeiras de jantar higienizadas', tag: 'Cadeiras' },
-  { src: '/assets/photos/sofa-11.webp', alt: 'Sofá em tecido claro após higienização', tag: 'Sofá' },
+  { src: '/assets/photos/sofa-3.webp', alt: 'Sofá de canto em tecido claro após higienização', tag: 'Sofá de canto' },
+  { src: '/assets/photos/cadeiras-1.webp', alt: 'Cadeiras de couro higienizadas', tag: 'Cadeiras' },
   { src: '/assets/photos/tapete.webp', alt: 'Tapete higienizado', tag: 'Tapete' },
   { src: '/assets/photos/sofa-6.webp', alt: 'Sofá higienizado em sala de estar', tag: 'Sofá' },
   { src: '/assets/photos/colchao-3.webp', alt: 'Colchão limpo e higienizado', tag: 'Colchão' },

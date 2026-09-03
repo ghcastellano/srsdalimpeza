@@ -140,7 +140,7 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={.2}>
                 <div className="relative mt-12 hidden aspect-[4/3] overflow-hidden rounded-3xl lg:block">
-                  <Image src="/assets/photos/equipe-higienizacao.webp" alt="Profissional da Srs da Limpeza higienizando um estofado" fill quality={80} sizes="40vw" className="object-cover" />
+                  <Image src="/assets/photos/sofa-1.webp" alt="Profissional da Srs da Limpeza higienizando um sofá com extratora" fill quality={80} sizes="40vw" className="object-cover" />
                 </div>
               </Reveal>
             </div>
@@ -216,7 +216,7 @@ export default function HomePage() {
             </div>
             <div className="lg:col-span-6">
               <Reveal>
-                <ParallaxImage src="/assets/photos/pos-obra-wide.webp" alt="Ambiente entregue limpo após obra" sizes="(max-width: 1023px) 92vw, 46vw" quality={80} className="aspect-[4/3] w-full rounded-3xl" imageClassName="object-cover" />
+                <ParallaxImage src="/assets/photos/pos-obra-hero.webp" alt="Profissional aspirando o piso de um imóvel recém-construído" sizes="(max-width: 1023px) 92vw, 46vw" quality={80} className="aspect-[4/3] w-full rounded-3xl" imageClassName="object-cover" />
               </Reveal>
               <div className="mt-5 grid grid-cols-4 gap-3">
                 {postWorkGallery.map((item, index) => (

@@ -5,7 +5,7 @@ import { services, whatsappUrl } from '@/lib/content';
 
 export default function Services() {
   return (
-    <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
+    <div className="mt-12 grid gap-5 min-[480px]:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
       {services.map((service, index) => (
         <Reveal key={service.slug} delay={(index % 4) * .06} className="h-full">
           <a

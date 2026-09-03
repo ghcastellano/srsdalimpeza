@@ -40,7 +40,7 @@ export default function Hero() {
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
 
   return (
-    <section id="inicio" ref={root} className="water-bg relative overflow-hidden pt-[96px] lg:min-h-[100svh] lg:pt-[110px]">
+    <section id="inicio" ref={root} className="water-bg relative overflow-hidden pt-[96px] lg:min-h-[min(100svh,920px)] lg:pt-[110px]">
       <div aria-hidden="true" className="dots pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_40%,#000,transparent)]" />
 
       <div className="container-shell relative grid items-center gap-10 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32">
@@ -127,7 +127,7 @@ export default function Hero() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
             </motion.div>
-            <Bubbles3D className="-inset-[12%] z-10" />
+            <Bubbles3D className="-inset-x-[8%] -inset-y-[6%] z-10" />
             {/* Selo flutuante */}
             <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/90 p-3 pr-5 shadow-card backdrop-blur sm:bottom-7 sm:left-7">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>
