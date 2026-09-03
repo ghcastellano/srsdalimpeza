@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const launchOpts = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};
+const launchOpts = { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), ...(process.env.PW_PROXY ? { proxy: { server: process.env.PW_PROXY } } : {}) };
 import AxeBuilder from '@axe-core/playwright';
 
 const base = process.env.BASE_URL || 'http://localhost:3300';

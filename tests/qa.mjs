@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const launchOpts = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};
+const launchOpts = { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), ...(process.env.PW_PROXY ? { proxy: { server: process.env.PW_PROXY } } : {}) };
 
 const base = process.env.BASE_URL || 'http://localhost:3300';
 const browser = await chromium.launch(launchOpts);
@@ -8,7 +8,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
 
 // Desktop
 {
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, ignoreHTTPSErrors: true });
   await context.route('**/wa.me/**', (route) => route.fulfill({ status: 200, contentType: 'text/html', body: 'ok' }));
   const page = await context.newPage();
   const errors = [];
@@ -61,7 +61,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
 }
 // Mobile
 {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, ignoreHTTPSErrors: true });
   const page = await context.newPage();
   await page.goto(base, { waitUntil: 'networkidle' });
   check(await page.locator('[data-bubbles] canvas').count() === 0, 'no 3D canvas on mobile');
@@ -81,7 +81,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
 }
 // 404
 {
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const res = await page.goto(`${base}/pagina-inexistente`);
   check(res.status() === 404 && (await page.locator('h1').textContent()).length > 0, 'custom 404');
   const og = await page.goto(`${base}/opengraph-image`);

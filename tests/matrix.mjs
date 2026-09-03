@@ -1,5 +1,5 @@
 import { chromium, webkit } from 'playwright';
-const launchOpts = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};
+const launchOpts = { ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), ...(process.env.PW_PROXY ? { proxy: { server: process.env.PW_PROXY } } : {}) };
 import fs from 'node:fs/promises';
 
 const base = process.env.BASE_URL || 'http://localhost:3300';
@@ -17,7 +17,7 @@ const browser = await engine.launch(engine === chromium ? launchOpts : {});
 let failures = 0;
 for (const [name, width, height, mobile] of viewports) {
   for (const path of ['/', '/politica-de-privacidade']) {
-    const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, isMobile: mobile && engine === chromium, hasTouch: mobile });
+    const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, isMobile: mobile && engine === chromium, hasTouch: mobile, ignoreHTTPSErrors: true });
     const page = await context.newPage();
     const errors = [];
     page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
