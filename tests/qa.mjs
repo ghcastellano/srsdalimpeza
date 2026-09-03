@@ -13,7 +13,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto(base, { waitUntil: 'networkidle' });
+  await page.goto(`${base}/?bolhas=1`, { waitUntil: 'networkidle' });
   check((await page.title()).includes('Srs da Limpeza'), 'title contains brand');
   check(await page.locator('link[rel="icon"]').count() > 0, 'favicon declared');
   check(await page.locator('script[type="application/ld+json"]').count() === 2, 'JSON-LD LocalBusiness + FAQ');

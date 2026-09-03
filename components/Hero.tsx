@@ -46,7 +46,7 @@ export default function Hero() {
       <div className="container-shell relative grid items-center gap-10 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32">
         <motion.div style={reduced ? undefined : { y: copyY, opacity: copyOpacity }} className="relative z-10 lg:col-span-6">
           <motion.p
-            initial={reduced ? false : { opacity: 0, y: 12 }}
+            initial={reduced ? false : { opacity: .01, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: .7, delay: .1 }}
             className="eyebrow text-aqua-dark"
@@ -59,7 +59,7 @@ export default function Hero() {
             <Line text="de ácaros." delay={.37} className="text-gradient pr-2" />
           </h1>
           <motion.p
-            initial={reduced ? false : { opacity: 0, y: 14 }}
+            initial={reduced ? false : { opacity: .01, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: .7, delay: .55 }}
             className="mt-7 max-w-xl text-lg text-ink/80"
@@ -67,7 +67,7 @@ export default function Hero() {
             Higienização profunda de sofás, colchões e estofados, impermeabilização, limpeza pós-obra e revitalização de pisos. Mais de 6.000 clientes atendidos em Guarujá, Santos e Bertioga. Orçamento grátis em minutos.
           </motion.p>
           <motion.div
-            initial={reduced ? false : { opacity: 0, y: 14 }}
+            initial={reduced ? false : { opacity: .01, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: .7, delay: .68 }}
             className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center"
@@ -88,7 +88,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.ul
-            initial={reduced ? false : { opacity: 0 }}
+            initial={reduced ? false : { opacity: .01 }}
             animate={{ opacity: 1 }}
             transition={{ duration: .7, delay: .85 }}
             aria-label="Diferenciais"
@@ -127,7 +127,7 @@ export default function Hero() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
             </motion.div>
-            <Bubbles3D className="-inset-x-[8%] -inset-y-[6%] z-10" />
+            <Bubbles3D className="-inset-x-[4%] -inset-y-[6%] z-10" />
             {/* Selo flutuante */}
             <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/90 p-3 pr-5 shadow-card backdrop-blur sm:bottom-7 sm:left-7">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>

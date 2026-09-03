@@ -33,8 +33,20 @@ export default function Bubbles3D({ className = '' }: { className?: string }) {
         canvas.remove();
         return;
       }
+      // Sem GPU (SwiftShader/llvmpipe, GPU bloqueada): cada frame vira uma
+      // long task e trava a página. Só roda com aceleração real — a menos que
+      // ?bolhas=1 force (usado pelos testes).
+      const forced = new URLSearchParams(window.location.search).has('bolhas');
+      const gl = renderer.getContext();
+      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+      const gpu = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+      if (!forced && /swiftshader|llvmpipe|software|mesa offscreen/i.test(gpu)) {
+        renderer.dispose();
+        canvas.remove();
+        return;
+      }
       renderer.setClearColor(0x000000, 0);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
@@ -71,8 +83,8 @@ export default function Bubbles3D({ className = '' }: { className?: string }) {
           }`,
       });
 
-      const geometry = new THREE.SphereGeometry(1, 48, 48);
-      const count = 13;
+      const geometry = new THREE.SphereGeometry(1, 32, 32);
+      const count = 11;
       const bubbles: { mesh: import('three').Mesh; speed: number; phase: number; drift: number; base: import('three').Vector3 }[] = [];
       for (let i = 0; i < count; i++) {
         const mesh = new THREE.Mesh(geometry, material);
