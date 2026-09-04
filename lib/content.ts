@@ -158,13 +158,20 @@ export type GalleryItem = { src: string; title: string; tag: string; alt: string
 /**
  * Item de mídia do lightbox. `kind` decide o que é reproduzido:
  * - 'photo' (padrão): a foto em object-contain, com zoom.
- * - 'youtube': player do YouTube embutido, tocando dentro da página.
- * - 'instagram': embed do reel; o link para o post fica como saída.
+ * - 'video': arquivo hospedado aqui, em <video> nativo. Nada de terceiros.
+ * - 'youtube': player do YouTube embutido.
  */
 export type MediaItem = GalleryItem & {
-  kind?: 'photo' | 'youtube' | 'instagram';
-  /** ID do vídeo no YouTube ou código do reel no Instagram. */
+  kind?: 'photo' | 'video' | 'youtube';
+  /** ID do vídeo no YouTube (kind 'youtube'). */
   mediaId?: string;
+  /** Arquivo servido por nós (kind 'video'). WebM primeiro: o browser pega a
+   *  primeira fonte que sabe tocar, e o VP9 é ~28% menor que o H.264 aqui. */
+  videoSrc?: string;
+  videoSrcWebm?: string;
+  /** Proporção do vídeo; reels são verticais. */
+  vertical?: boolean;
+  /** Post original, mantido como crédito/saída. */
   url?: string;
   caption?: string;
 };
@@ -244,24 +251,28 @@ export const media: MediaItem[] = [
     url: 'https://www.youtube.com/watch?v=VBI5Rb2Vq4Y',
   },
   {
-    kind: 'instagram',
-    mediaId: 'DV1wBAzEWu8',
-    src: '/assets/photos/posobra-12.webp',
-    title: 'Mais um lar transformado',
-    tag: 'Reel · Pós-obra',
-    alt: 'Apartamento entregue limpo após a limpeza pós-obra da Srs da Limpeza',
-    caption: 'Pós-obra completo após marcenaria, pedras, fechamento de varanda e pintura. Prontinho para receber a família.',
-    url: 'https://www.instagram.com/reel/DV1wBAzEWu8/',
+    kind: 'video',
+    vertical: true,
+    videoSrc: '/assets/video/reel-estofados.mp4',
+    videoSrcWebm: '/assets/video/reel-estofados.webm',
+    src: '/assets/photos/reel-estofados.webp',
+    title: 'O que sai de um colchão',
+    tag: 'Vídeo · Higienização de colchão',
+    alt: 'Colchão com sujidade visível na superfície, antes da higienização',
+    caption: 'A sujeira que aparece na superfície é só o começo: a extração puxa o que está impregnado no fundo da espuma.',
+    url: 'https://www.instagram.com/reel/DUrNh81kccg/',
   },
   {
-    kind: 'instagram',
-    mediaId: 'DUrNh81kccg',
-    src: '/assets/photos/sofa-8.webp',
-    title: 'Higienização profunda de estofado',
-    tag: 'Reel · Estofados',
-    alt: 'Higienização profunda de estofado com extração, em vídeo no Instagram',
-    caption: 'Extração, odorização e secagem rápida. O retorno de água suja mostra o que estava no fundo da espuma.',
-    url: 'https://www.instagram.com/reel/DUrNh81kccg/',
+    kind: 'video',
+    vertical: true,
+    videoSrc: '/assets/video/reel-pos-obra.mp4',
+    videoSrcWebm: '/assets/video/reel-pos-obra.webm',
+    src: '/assets/photos/reel-pos-obra.webp',
+    title: 'Mais um lar transformado',
+    tag: 'Vídeo · Limpeza pós-obra',
+    alt: 'Cozinha de apartamento durante a limpeza pós-obra, com o piso já tratado',
+    caption: 'Pós-obra completo após marcenaria, pedras, fechamento de varanda e pintura. Prontinho para receber a família.',
+    url: 'https://www.instagram.com/reel/DV1wBAzEWu8/',
   },
   {
     src: '/assets/photos/sofa-7.webp',

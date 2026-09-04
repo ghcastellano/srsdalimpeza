@@ -18,7 +18,7 @@ import Services from '@/components/Services';
 import WhatsAppFab from '@/components/WhatsAppFab';
 import PhotoGrid from '@/components/PhotoGrid';
 import Reveal from '@/components/ui/Reveal';
-import { benefits, contact, faq, fullAddress, messages, postWorkClients, postWorkGallery, postWorkScope, process, reviews, services, siteUrl, whatsappUrl } from '@/lib/content';
+import { benefits, contact, faq, fullAddress, messages, postWorkClients, postWorkGallery, media, postWorkScope, process, reviews, services, siteUrl, whatsappUrl } from '@/lib/content';
 
 const benefitIcons = [ShieldCheck, Wind, Leaf, Sparkles, Users, BadgeCheck];
 
@@ -94,6 +94,17 @@ export default function HomePage() {
     '@graph': [
       business,
       ...serviceEntities,
+      ...media.filter((m) => m.kind === 'video' || m.kind === 'youtube').map((m) => ({
+        '@type': 'VideoObject',
+        name: m.title,
+        description: m.caption ?? m.alt,
+        thumbnailUrl: `${siteUrl}${m.src}`,
+        uploadDate: '2026-03-01',
+        ...(m.kind === 'video'
+          ? { contentUrl: `${siteUrl}${m.videoSrc}` }
+          : { embedUrl: `https://www.youtube-nocookie.com/embed/${m.mediaId}` }),
+        publisher: { '@id': businessId },
+      })),
       {
         '@type': 'WebSite',
         '@id': `${siteUrl}/#website`,

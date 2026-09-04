@@ -66,7 +66,16 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   await dialog.getByRole('button', { name: 'Próximo' }).click();
   await page.waitForTimeout(400);
   check((await dialog.locator('h2').textContent()).length > 0, 'lightbox next button works');
-  const imgBox = await dialog.locator('img').boundingBox();
+  // Espera a imagem carregar e a animação de entrada assentar antes de medir.
+  const img = dialog.locator('img').first();
+  await img.waitFor({ state: 'visible', timeout: 5000 });
+  await img.evaluate((el) => el.complete || new Promise((r) => el.addEventListener('load', r, { once: true }))).catch(() => {});
+  let imgBox = null;
+  for (let i = 0; i < 20; i++) {
+    imgBox = await img.boundingBox();
+    if (imgBox && imgBox.height > 500) break;
+    await page.waitForTimeout(150);
+  }
   check(imgBox && imgBox.height > 500, `lightbox image sized to viewport (${Math.round(imgBox?.height ?? 0)}px)`);
   await page.keyboard.press('Escape');
   await page.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
@@ -215,6 +224,37 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   await page.keyboard.press('Escape');
   await page.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
   check(await page.getByRole('dialog').count() === 0, 'video lightbox closes and stops playback');
+
+  // Os reels são arquivos nossos em <video> nativo, não iframe de terceiro
+  const nativeIndex = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll('#videos [data-rail] [data-index]')];
+    return cards.findIndex((c) => c.textContent.includes('colchão'));
+  });
+  check(nativeIndex >= 0, `native video card found at index ${nativeIndex}`);
+  await page.locator(`${rail} [data-index="${nativeIndex}"]`).click();
+  await page.waitForTimeout(900);
+  const video = page.getByRole('dialog').locator('video');
+  check(await video.count() === 1, 'reel plays in a native <video>');
+  check(await page.getByRole('dialog').locator('iframe').count() === 0, 'reel does not use a third-party iframe');
+  const vsrc = await video.evaluate((el) => el.currentSrc || el.querySelector('source')?.src || '');
+  check(/\/assets\/video\/[\w-]+\.(mp4|webm)$/.test(vsrc), `video is served by us (${vsrc.split('/').pop()})`);
+  check(await video.locator('source[type="video/mp4"]').count() === 1, 'has an H.264 fallback source');
+  const played = await video.evaluate((el) => new Promise((resolve) => {
+    if (el.readyState >= 2 && !el.paused) return resolve({ ok: true, t: el.currentTime, d: el.duration });
+    const done = () => resolve({ ok: !el.paused, t: el.currentTime, d: el.duration });
+    el.addEventListener('timeupdate', done, { once: true });
+    setTimeout(() => resolve({ ok: !el.paused, t: el.currentTime, d: el.duration }), 4000);
+  }));
+  check(played.ok && played.d > 1, `video actually plays (t=${played.t?.toFixed(2)}s de ${played.d?.toFixed(1)}s)`);
+  await page.keyboard.press('Escape');
+  await page.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
+
+  // arquivos entregues com o content-type certo
+  for (const f of ['/assets/video/reel-estofados.mp4', '/assets/video/reel-pos-obra.mp4', '/assets/video/reel-estofados.webm', '/assets/video/reel-pos-obra.webm']) {
+    const r = await page.request.get(`${base}${f}`);
+    const ct = r.headers()['content-type'] || '';
+    check(r.status() === 200 && /video\/(mp4|webm)/.test(ct), `${f.split('/').pop()} → ${r.status()} ${ct}`);
+  }
   await page.close();
 }
 

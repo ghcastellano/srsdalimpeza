@@ -14,33 +14,58 @@ type Props = {
   onClose: () => void;
 };
 
-/** Player embutido: o vídeo toca dentro da página, sem sair para o YouTube. */
+/**
+ * Player embutido. Vídeo nosso toca em <video> nativo — sem terceiros, sem
+ * login e sem iframe. Só o YouTube usa embed, por ser hospedado lá.
+ */
 function Player({ item }: { item: MediaItem }) {
-  const src = item.kind === 'youtube'
-    ? `https://www.youtube-nocookie.com/embed/${item.mediaId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&hl=pt-BR`
-    : `https://www.instagram.com/reel/${item.mediaId}/embed/`;
-  // O reel é vertical (9:16); o vídeo do YouTube é 16:9.
-  const vertical = item.kind === 'instagram';
+  const native = item.kind === 'video';
+  const vertical = Boolean(item.vertical);
+  // No vertical quem manda é a ALTURA (h-full + aspect), senão a caixa 9:16
+  // calculada a partir da largura estoura para fora da área e cobre a legenda.
+  const frame = vertical
+    ? 'relative h-full max-h-full w-auto aspect-[9/16] overflow-hidden rounded-2xl bg-black/40'
+    : 'relative w-full aspect-video overflow-hidden rounded-2xl bg-black/40';
 
   return (
-    <div className={`relative mx-auto flex h-full w-full items-center justify-center ${vertical ? 'max-w-[420px]' : 'max-w-[1100px]'}`}>
-      <div className={`relative w-full overflow-hidden rounded-2xl bg-black/40 ${vertical ? 'aspect-[9/16] max-h-full' : 'aspect-video'}`}>
-        {/* Capa por trás do player: cobre o instante de carregamento (e o caso
-            raro de o embed não abrir) em vez de deixar um retângulo preto. */}
+    <div className={`relative mx-auto flex h-full w-full items-center justify-center ${vertical ? '' : 'max-w-[1100px]'}`}>
+      <div className={frame}>
+        {/* Capa por trás do player: cobre o instante de carregamento em vez de
+            deixar um retângulo preto. */}
         <Image src={item.src} alt="" data-decorative fill quality={60} sizes="(max-width: 1023px) 92vw, 1100px" className="scale-105 object-cover opacity-25 blur-sm" />
         <span aria-hidden="true" className="absolute inset-0 grid place-items-center">
           <span className="h-9 w-9 animate-spin rounded-full border-2 border-white/25 border-t-white/80" />
         </span>
-        <iframe
-          key={item.mediaId}
-          src={src}
-          title={item.title}
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
-        />
+        {native ? (
+          // muted + autoPlay: os navegadores bloqueiam autoplay com som; os
+          // controles ficam visíveis para quem quiser ativar o áudio.
+          <video
+            key={item.videoSrc}
+            poster={item.src}
+            controls
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-label={item.title}
+            className="absolute inset-0 h-full w-full bg-black object-contain"
+          >
+            {item.videoSrcWebm && <source src={item.videoSrcWebm} type="video/webm" />}
+            <source src={item.videoSrc} type="video/mp4" />
+          </video>
+        ) : (
+          <iframe
+            key={item.mediaId}
+            src={`https://www.youtube-nocookie.com/embed/${item.mediaId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&hl=pt-BR`}
+            title={item.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full border-0"
+          />
+        )}
       </div>
     </div>
   );
@@ -79,7 +104,7 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
 
   if (!mounted) return null;
   const item = active === null ? null : items[active];
-  const isVideo = item?.kind === 'youtube' || item?.kind === 'instagram';
+  const isVideo = item?.kind === 'youtube' || item?.kind === 'video';
 
   return createPortal(
     <AnimatePresence>

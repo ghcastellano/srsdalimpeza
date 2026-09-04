@@ -32,7 +32,7 @@ export default function MediaRail() {
         className={`scrollbar-none -mx-5 mt-12 flex snap-x gap-4 overflow-x-auto overflow-y-clip overscroll-x-contain px-5 pb-2 pt-2 [scroll-padding-left:20px] sm:mx-0 sm:gap-6 sm:px-0 sm:[scroll-padding-left:0] lg:mt-16 ${rail.dragging ? 'select-none' : ''}`}
       >
         {media.map((item, index) => {
-          const isVideo = item.kind === 'youtube' || item.kind === 'instagram';
+          const isVideo = item.kind === 'youtube' || item.kind === 'video';
           return (
             <button
               key={item.src}
@@ -56,7 +56,7 @@ export default function MediaRail() {
                 />
                 <span className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
                 <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[.14em] text-white backdrop-blur">
-                  {item.kind === 'instagram' ? <InstagramIcon className="h-3.5 w-3.5" /> : isVideo ? <Play className="h-3.5 w-3.5 fill-current" /> : null}
+                  {isVideo ? <Play className="h-3.5 w-3.5 fill-current" /> : null}
                   {item.tag}
                 </span>
                 {isVideo && (
