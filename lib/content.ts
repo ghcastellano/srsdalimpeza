@@ -1,4 +1,9 @@
-export const siteUrl = 'https://srsdalimpeza.vercel.app';
+/**
+ * Domínio canônico. Alimenta canonical, sitemap, robots, Open Graph e todo o
+ * schema.org. Ao migrar para o domínio próprio basta definir
+ * NEXT_PUBLIC_SITE_URL na Vercel — nenhuma linha de código muda.
+ */
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://srsdalimpeza.vercel.app').replace(/\/$/, '');
 
 export const contact = {
   brand: 'Srs da Limpeza',
@@ -123,7 +128,7 @@ export const services: Service[] = [
   },
 ];
 
-export const process = [
+export const processSteps = [
   { title: 'Você chama no WhatsApp', text: 'Envie uma foto do estofado ou do imóvel e descreva o que precisa. Respondemos em minutos com o orçamento.' },
   { title: 'Agendamos no seu horário', text: 'Escolha o melhor dia e horário. Vamos até você, em Guarujá, Santos, Bertioga e região.' },
   { title: 'Higienização profissional', text: 'Aspiração, pré-tratamento das manchas, extração profunda e odorização com produtos biodegradáveis.' },

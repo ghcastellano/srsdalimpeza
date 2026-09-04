@@ -182,6 +182,17 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   for (const slug of ['higienizacao-de-sofa-guaruja', 'limpeza-pos-obra-santos']) {
     check(await page.locator(`a[href="/${slug}"]`).count() > 0, `home links internally to /${slug}`);
   }
+  // 301 do WordPress antigo: sem isso o Google perde o ranking das URLs antigas
+  for (const [from, to] of [
+    ['/higienizacao-de-estofados-na-baixada-santista', '/higienizacao-de-sofa-guaruja'],
+    ['/wp-admin/edit.php', '/'],
+    ['/wp-login.php', '/'],
+    ['/feed', '/'],
+  ]) {
+    const r = await page.request.get(`${base}${from}`, { maxRedirects: 0 });
+    const loc = r.headers()['location'] || '';
+    check([301, 308].includes(r.status()) && loc.endsWith(to), `${from} → ${r.status()} ${loc || '(sem location)'}`);
+  }
   // sitemap e robots
   const sm = await page.goto(`${base}/sitemap.xml`);
   const smText = await sm.text();

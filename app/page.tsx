@@ -18,7 +18,7 @@ import Services from '@/components/Services';
 import WhatsAppFab from '@/components/WhatsAppFab';
 import PhotoGrid from '@/components/PhotoGrid';
 import Reveal from '@/components/ui/Reveal';
-import { benefits, contact, faq, fullAddress, messages, postWorkClients, postWorkGallery, media, postWorkScope, process, reviews, services, siteUrl, whatsappUrl } from '@/lib/content';
+import { benefits, contact, faq, fullAddress, messages, postWorkClients, postWorkGallery, media, postWorkScope, processSteps, reviews, services, siteUrl, whatsappUrl } from '@/lib/content';
 
 const benefitIcons = [ShieldCheck, Wind, Leaf, Sparkles, Users, BadgeCheck];
 
@@ -219,7 +219,7 @@ export default function HomePage() {
               </Reveal>
             </div>
             <div className="lg:col-span-7">
-              <ProcessTimeline steps={process} />
+              <ProcessTimeline steps={processSteps} />
             </div>
           </div>
         </section>
