@@ -1,37 +1,38 @@
 'use client';
 
-import { animate, useInView, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
-export default function Counter({
-  value,
-  className = '',
-  duration = 1.8,
-}: {
-  value: number;
-  className?: string;
-  duration?: number;
-}) {
+/**
+ * Contador que sobe ao entrar na tela. rAF direto no textContent: sem
+ * re-render do React e sem biblioteca de animação.
+ */
+export default function Counter({ value, className = '', duration = 1600 }: { value: number; className?: string; duration?: number }) {
   const node = useRef<HTMLSpanElement>(null);
-  const inView = useInView(node, { once: true, margin: '-10% 0px' });
-  const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (!node.current) return;
-    if (!inView) return;
-    if (reduced) {
-      node.current.textContent = String(value);
+    const el = node.current;
+    if (!el) return;
+    if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+      el.textContent = String(value);
       return;
     }
-    const controls = animate(0, value, {
-      duration,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (latest) => {
-        if (node.current) node.current.textContent = String(Math.round(latest));
-      },
-    });
-    return () => controls.stop();
-  }, [inView, reduced, value, duration]);
+    let frame = 0;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        // easeOutQuint: rápido no começo, assenta no fim
+        const eased = 1 - Math.pow(1 - t, 5);
+        el.textContent = String(Math.round(value * eased));
+        if (t < 1) frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    }, { rootMargin: '-10% 0px' });
+    observer.observe(el);
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, [value, duration]);
 
   return <span ref={node} className={`tabular-nums ${className}`}>0</span>;
 }

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { ArrowUpRight, Play } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import Lightbox from './Lightbox';
+import dynamic from 'next/dynamic';
 import RailControls from './ui/RailControls';
 import { contact, media } from '@/lib/content';
 import { useRail } from '@/lib/useRail';
@@ -17,6 +17,9 @@ function InstagramIcon({ className = '' }: { className?: string }) {
     </svg>
   );
 }
+
+// O lightbox só existe depois do primeiro clique: fora do bundle inicial.
+const Lightbox = dynamic(() => import('./Lightbox'), { ssr: false });
 
 export default function MediaRail() {
   const [lightbox, setLightbox] = useState<number | null>(null);

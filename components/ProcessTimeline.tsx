@@ -1,8 +1,7 @@
 'use client';
 
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
 import Reveal from './ui/Reveal';
+import { useScrollProgress } from '@/lib/scrollProgress';
 
 function Step({ step, index, dark }: { step: { title: string; text: string }; index: number; dark: boolean }) {
   return (
@@ -32,17 +31,17 @@ function Step({ step, index, dark }: { step: { title: string; text: string }; in
  * Linha vertical que se desenha conforme o scroll percorre as etapas.
  */
 export default function ProcessTimeline({ steps, dark = false }: { steps: { title: string; text: string }[]; dark?: boolean }) {
-  const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: root, offset: ['start 0.78', 'end 0.55'] });
-  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  // A linha se desenha via scaleY numa variável CSS: sem re-render por frame.
+  const root = useScrollProgress((progress) => {
+    root.current?.style.setProperty('--draw', String(progress));
+  }, .78, .2);
 
   return (
-    <div ref={root} className={`relative border-t ${dark ? 'border-white/20' : 'border-ink/20'}`}>
+    <div ref={root as never} className={`relative border-t [--draw:0] ${dark ? 'border-white/20' : 'border-ink/20'}`}>
       <div aria-hidden="true" className={`absolute bottom-0 left-4 top-0 w-px ${dark ? 'bg-white/15' : 'bg-ink/12'}`} />
-      <motion.div
+      <div
         aria-hidden="true"
-        style={reduced ? undefined : { scaleY }}
+        style={{ transform: 'scaleY(var(--draw))' }}
         className={`absolute bottom-0 left-4 top-0 w-px origin-top ${dark ? 'bg-aqua' : 'bg-aqua-dark'}`}
       />
       {steps.map((step, index) => (

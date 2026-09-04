@@ -1,6 +1,5 @@
 'use client';
 
-import { useReducedMotion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function RailControls({
@@ -16,14 +15,13 @@ export default function RailControls({
   onMove: (direction: -1 | 1) => void;
   hint?: string;
 }) {
-  const reduced = useReducedMotion();
   return (
     <div className="mt-8 flex items-center gap-4 sm:gap-5 lg:gap-6">
       <p className="w-[60px] shrink-0 text-xs font-bold tabular-nums tracking-[.16em] text-ink/80">
         {String(active + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
       </p>
       <div className="h-px flex-1 bg-ink/15">
-        <div className="h-px origin-left bg-aqua" style={{ transform: `scaleX(${progress})`, transition: reduced ? 'none' : 'transform .3s ease' }} />
+        <div style={{ transform: `scaleX(${progress})` }} className="h-px origin-left bg-aqua transition-transform duration-300" />
       </div>
       <p className="shrink-0 text-xs font-bold uppercase tracking-[.2em] text-ink/80">
         <span className="lg:hidden">Deslize</span>

@@ -33,9 +33,9 @@ export default function Footer() {
           <div>
             <p className="text-xs font-bold uppercase tracking-[.2em] text-sky">Serviços</p>
             <div className="mt-4 flex flex-col gap-0.5 text-base text-white/85">
-              <Link href="/higienizacao-de-sofa-guaruja" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Higienização de sofá</Link>
-              <Link href="/limpeza-pos-obra-santos" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Limpeza pós-obra</Link>
-              {navLinks.slice(0, 4).map((link) => <Link key={link.href} href={`/${link.href}`} className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">{link.label}</Link>)}
+              <Link prefetch={false} href="/higienizacao-de-sofa-guaruja" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Higienização de sofá</Link>
+              <Link prefetch={false} href="/limpeza-pos-obra-santos" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Limpeza pós-obra</Link>
+              {navLinks.slice(0, 4).map((link) => <Link prefetch={false} key={link.href} href={`/${link.href}`} className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">{link.label}</Link>)}
             </div>
           </div>
           <div>
@@ -66,7 +66,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-white/15 pt-6 text-sm text-white/70 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Srs da Limpeza · Todos os direitos reservados</p>
-          <Link href="/politica-de-privacidade" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Política de privacidade</Link>
+          <Link prefetch={false} href="/politica-de-privacidade" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Política de privacidade</Link>
         </div>
       </div>
     </footer>

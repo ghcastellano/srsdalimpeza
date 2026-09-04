@@ -3,9 +3,12 @@
 import Image from 'next/image';
 import { Maximize2 } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import Lightbox from './Lightbox';
+import dynamic from 'next/dynamic';
 import Reveal from './ui/Reveal';
 import type { GalleryItem } from '@/lib/content';
+
+// O lightbox só existe depois do primeiro clique: fora do bundle inicial.
+const Lightbox = dynamic(() => import('./Lightbox'), { ssr: false });
 
 /**
  * Grade de fotos em que TODA foto abre no lightbox (com ida e volta).

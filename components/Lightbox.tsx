@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -102,23 +101,17 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
     };
   }, [active, onChange, onClose, items.length]);
 
-  if (!mounted) return null;
   const item = active === null ? null : items[active];
-  const isVideo = item?.kind === 'youtube' || item?.kind === 'video';
+  if (!mounted || !item || active === null) return null;
+  const isVideo = item.kind === 'youtube' || item.kind === 'video';
 
   return createPortal(
-    <AnimatePresence>
-      {item && active !== null && (
-        <motion.div
+        <div
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: .28 }}
           onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}
-          className="fixed inset-0 z-[80] grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)_auto] bg-ink/[.98] p-3 backdrop-blur-md text-white sm:p-5 lg:p-6"
+          className="fade-in fixed inset-0 z-[80] grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)_auto] bg-ink/[.98] p-3 backdrop-blur-md text-white sm:p-5 lg:p-6"
         >
           <header className="flex min-w-0 items-start justify-between gap-4 border-b border-white/15 pb-3 sm:gap-6 sm:pb-4">
             <div className="min-w-0">
@@ -133,15 +126,7 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
           </header>
 
           <div className={`min-h-0 py-3 sm:py-4 ${!isVideo && zoom ? 'overflow-auto overscroll-contain' : 'grid place-items-center'}`}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={item.src}
-                initial={{ opacity: 0, scale: .985 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: .992 }}
-                transition={{ duration: .35, ease: [0.22, 1, 0.36, 1] }}
-                className="relative h-full w-full"
-              >
+              <div key={item.src} className="fade-in relative h-full w-full">
                 {isVideo ? (
                   <Player item={item} />
                 ) : (
@@ -156,8 +141,7 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
                     <Image src={item.src} alt={item.alt} fill quality={92} sizes="100vw" className="object-contain" priority />
                   </div>
                 )}
-              </motion.div>
-            </AnimatePresence>
+              </div>
           </div>
 
           <footer className="flex min-w-0 flex-col gap-3 border-t border-white/15 pt-3 sm:pt-4">
@@ -178,9 +162,7 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
               </button>
             </div>
           </footer>
-        </motion.div>
-      )}
-    </AnimatePresence>,
+        </div>,
     document.body,
   );
 }

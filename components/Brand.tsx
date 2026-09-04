@@ -4,14 +4,16 @@ import Image from 'next/image';
  * Wordmark vetorial (redesenhado a partir do logo original, mesma tipografia
  * e gradiente) — nítido em qualquer tamanho. `white` para fundos escuros.
  */
-export function Wordmark({ white = false, className = '' }: { white?: boolean; className?: string }) {
+export function Wordmark({ white = false, className = '', priority = false }: { white?: boolean; className?: string; priority?: boolean }) {
   return (
     <Image
       src={white ? '/assets/brand/wordmark-white.svg' : '/assets/brand/wordmark.svg'}
       alt="Srs da Limpeza"
       width={720}
       height={310}
-      priority
+      // Só o do cabeçalho entra no caminho crítico; o do rodapé carrega quando chega a vez.
+      priority={priority}
+      loading={priority ? undefined : 'lazy'}
       className={className}
     />
   );

@@ -1,14 +1,11 @@
 import Image from 'next/image';
-import { ArrowUpRight, Star } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Reveal from './ui/Reveal';
 import { contact, reviews } from '@/lib/content';
 
+/** As 5 estrelas em um único elemento: background repetido em vez de 10 nós. */
 function Stars({ className = '' }: { className?: string }) {
-  return (
-    <span role="img" aria-label="5 de 5 estrelas" className={`flex gap-0.5 text-[#f5b400] ${className}`}>
-      {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" aria-hidden="true" />)}
-    </span>
-  );
+  return <span role="img" aria-label="5 de 5 estrelas" className={`stars ${className}`} />;
 }
 
 /** Marca do Google, para deixar claro que as avaliações são de lá. */
@@ -48,10 +45,7 @@ export default function Reviews() {
         {reviews.map((review, index) => (
           <Reveal key={review.name} delay={(index % 3) * .06}>
             <figure className="rounded-3xl bg-white p-6 shadow-card ring-1 ring-ink/5">
-              <div className="flex items-center justify-between gap-3">
-                <Stars />
-                <GoogleMark className="h-4 w-4 shrink-0 opacity-70" />
-              </div>
+              <Stars />
               <blockquote className="mt-4 text-base leading-7 text-ink/85">“{review.text}”</blockquote>
               <figcaption className="mt-5 flex items-center gap-3">
                 {review.avatar ? (

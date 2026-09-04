@@ -41,6 +41,7 @@ export default function Services() {
           <Reveal key={service.slug} delay={(index % 4) * .06} className="h-full">
             {internal ? (
               <Link
+                prefetch={false}
                 href={service.href!}
                 data-cursor="view"
                 data-cursor-label="Ver"

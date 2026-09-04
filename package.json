@@ -10,7 +10,6 @@
     "qa": "node tests/qa.mjs && node tests/a11y.mjs && node tests/matrix.mjs"
   },
   "dependencies": {
-    "framer-motion": "^12.42.0",
     "lenis": "^1.3.25",
     "lucide-react": "^1.21.0",
     "next": "^16.2.10",
@@ -31,5 +30,12 @@
   },
   "overrides": {
     "postcss": "$postcss"
-  }
+  },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4",
+    "not dead"
+  ]
 }

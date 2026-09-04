@@ -6,7 +6,10 @@ const nextConfig = {
     minimumCacheTTL: 2678400,
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: ['lucide-react'],
+    // CSS embutido no HTML: elimina a ida e volta do stylesheet, que é
+    // render-blocking e atrasa o primeiro pixel.
+    inlineCss: true,
   },
   // Redirects 301 do WordPress antigo. Quando o DNS apontar para cá, estas
   // URLs deixam de existir no servidor antigo; sem o 301 o Google perde o

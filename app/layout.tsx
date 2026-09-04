@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import Cursor from '@/components/fx/Cursor';
+import RevealObserver from '@/components/fx/RevealObserver';
 import SmoothScroll from '@/components/fx/SmoothScroll';
 import { siteUrl } from '@/lib/content';
 import './globals.css';
@@ -48,10 +49,12 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
   },
   icons: {
+    // O 192x192 fica só no manifest: como <link rel="icon"> o Chrome o baixa
+    // em prioridade alta durante o carregamento (21 KB disputando banda com a
+    // foto do hero e as fontes) sem nenhum ganho visual.
     icon: [
       { url: '/assets/brand/favicon.svg', type: 'image/svg+xml' },
       { url: '/assets/brand/favicon-32.png', type: 'image/png', sizes: '32x32' },
-      { url: '/assets/brand/icon-192.png', type: 'image/png', sizes: '192x192' },
     ],
     shortcut: '/assets/brand/favicon-32.png',
     apple: '/assets/brand/apple-touch-icon.png',
@@ -80,6 +83,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <SmoothScroll />
         {children}
+        <RevealObserver />
         <Cursor />
       </body>
     </html>

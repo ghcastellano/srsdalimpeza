@@ -3,10 +3,13 @@
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import Lightbox from './Lightbox';
+import dynamic from 'next/dynamic';
 import RailControls from './ui/RailControls';
 import { gallery } from '@/lib/content';
 import { useRail } from '@/lib/useRail';
+
+// O lightbox só existe depois do primeiro clique: fora do bundle inicial.
+const Lightbox = dynamic(() => import('./Lightbox'), { ssr: false });
 
 export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null);

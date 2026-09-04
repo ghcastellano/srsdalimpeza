@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { ArrowUpRight, Mail, Menu, Phone, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Wordmark } from './Brand';
@@ -17,13 +16,27 @@ export default function Header() {
   const isHome = pathname === '/';
   // Fora da home as âncoras precisam do prefixo da rota para levar de volta.
   const hrefFor = (href: string) => (isHome ? href : `/${href}`);
-  const { scrollY, scrollYProgress } = useScroll();
   const menuRef = useFocusTrap<HTMLDivElement>(open, () => setOpen(false));
 
-  useMotionValueEvent(scrollY, 'change', (value) => setScrolled(value > 40));
-
+  // Um listener passivo escreve o progresso numa variável CSS; a barra é
+  // transform puro. Antes isso vinha do useScroll do framer-motion.
   useEffect(() => {
-    setScrolled(window.scrollY > 40);
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      document.documentElement.style.setProperty('--scroll-progress', String(max > 0 ? window.scrollY / max : 0));
+      setScrolled(window.scrollY > 40);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -53,8 +66,8 @@ export default function Header() {
         }`}
       >
         <div className="container-shell flex h-[72px] items-center justify-between lg:h-[84px]">
-          <Link href={isHome ? '#inicio' : '/'} aria-label="Srs da Limpeza — início" className="relative z-10 flex shrink-0 items-center">
-            <Wordmark white={open} className="h-[40px] w-auto sm:h-[44px] lg:h-[50px]" />
+          <Link prefetch={false} href={isHome ? '#inicio' : '/'} aria-label="Srs da Limpeza — início" className="relative z-10 flex shrink-0 items-center">
+            <Wordmark priority white={open} className="h-[40px] w-auto sm:h-[44px] lg:h-[50px]" />
           </Link>
 
           <nav aria-label="Navegação principal" className="hidden items-center gap-1 text-[15px] font-semibold text-ink/80 xl:flex">
@@ -104,28 +117,23 @@ export default function Header() {
             </button>
           </div>
         </div>
-        <motion.div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-sky via-aqua to-ocean" style={{ scaleX: scrollYProgress }} />
+        <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-sky via-aqua to-ocean" style={{ transform: 'scaleX(var(--scroll-progress, 0))' }} />
       </header>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
+      {open && (
+          <div
             ref={menuRef}
             id="mobile-menu"
             role="dialog"
             aria-modal="true"
             aria-label="Menu de navegação"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: .28 }}
-            className="fixed inset-0 z-[45] overflow-y-auto bg-ink pb-[max(28px,calc(env(safe-area-inset-bottom)+16px))] pt-[84px] text-white"
+            className="fade-in fixed inset-0 z-[45] overflow-y-auto bg-ink pb-[max(28px,calc(env(safe-area-inset-bottom)+16px))] pt-[84px] text-white"
           >
             <div aria-hidden="true" className="dots pointer-events-none absolute inset-0 opacity-30" />
             <div className="container-shell relative flex min-h-full flex-col gap-6">
               <nav aria-label="Menu móvel" className="border-t border-white/15">
                 {navLinks.map((link, index) => (
-                  <motion.div key={link.href} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .05 + .04 * index, duration: .45, ease: [0.22, 1, 0.36, 1] }}>
+                  <div key={link.href} className="fade-up" style={{ animationDelay: `${.05 + .04 * index}s` }}>
                     <a
                       href={hrefFor(link.href)}
                       onClick={() => setOpen(false)}
@@ -134,10 +142,10 @@ export default function Header() {
                       {link.label}
                       <span className="font-sans text-xs tabular-nums text-white/45">0{index + 1}</span>
                     </a>
-                  </motion.div>
+                  </div>
                 ))}
               </nav>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .36, duration: .45 }} className="mt-auto">
+              <div className="fade-up mt-auto" style={{ animationDelay: '.3s' }}>
                 <div role="group" aria-label="Contato rápido" className="border-y border-white/15 py-4">
                   <p className="mb-3 text-xs font-bold uppercase tracking-[.17em] text-sky">Contato rápido</p>
                   <div className="grid grid-cols-1 gap-x-4 gap-y-1 text-base text-white/85 sm:grid-cols-2">
@@ -150,11 +158,10 @@ export default function Header() {
                 <a href={whatsappUrl(messages.general)} target="_blank" rel="noopener noreferrer" className="mt-4 flex min-h-14 items-center justify-between rounded-full bg-whatsapp px-6 text-base font-bold text-ink">
                   Pedir orçamento no WhatsApp <ArrowUpRight className="h-5 w-5" />
                 </a>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 }
