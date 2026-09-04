@@ -37,6 +37,16 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   // FAQ
   await page.click('#faq button[aria-expanded]');
   check(await page.locator('#faq [role="region"]').count() >= 1, 'FAQ accordion toggles');
+  // Painel fechado precisa ter altura ZERO: já vazou uma linha da resposta
+  // porque o padding do filho não era recortado pela linha de 0fr.
+  // O clique acima fechou o primeiro (que abre por padrão); abre outro.
+  await page.locator('#faq button[aria-expanded]').nth(1).click();
+  await page.waitForTimeout(500);
+  const panels = await page.locator('#faq [role="region"]').evaluateAll((els) =>
+    els.map((el) => ({ open: el.previousElementSibling.getAttribute('aria-expanded') === 'true', h: el.getBoundingClientRect().height })));
+  const leaking = panels.filter((p) => !p.open && p.h > 1);
+  check(leaking.length === 0, `FAQ fechado com altura 0 (${leaking.length} vazando de ${panels.filter((p) => !p.open).length})`);
+  check(panels.some((p) => p.open && p.h > 20), 'FAQ aberto mostra a resposta');
   // Gallery buttons
   const railSel = '#resultados [data-rail]';
   const before = await page.locator(railSel).evaluate((el) => el.scrollLeft);

@@ -9,7 +9,7 @@ import './globals.css';
 const display = localFont({
   src: './fonts/sora-var.woff2',
   variable: '--font-display',
-  weight: '300 800',
+  weight: '400 800',
   display: 'swap',
 });
 

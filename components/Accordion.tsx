@@ -33,11 +33,19 @@ export default function Accordion({ items }: { items: { q: string; a: string }[]
               id={`faq-panel-${index}`}
               role="region"
               aria-labelledby={`faq-trigger-${index}`}
-              hidden={!expanded}
+              // `hidden` não serve aqui: a classe `grid` define display e
+              // vence o display:none do atributo. `inert` tira do teclado e
+              // dos leitores de tela sem interferir na animação.
+              inert={!expanded}
               className="grid transition-[grid-template-rows] duration-300 ease-out"
               style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
             >
-              <p className="overflow-hidden pb-7 text-sm text-ink/85 sm:text-base [max-width:48rem]">{item.a}</p>
+              {/* O padding precisa ficar DENTRO do elemento que recorta: em
+                  0fr a linha tem altura zero, mas o padding do filho continua
+                  ocupando espaço e deixava uma linha da resposta aparecendo. */}
+              <div className="overflow-hidden">
+                <p className="pb-7 text-sm text-ink/85 sm:text-base [max-width:48rem]">{item.a}</p>
+              </div>
             </div>
           </div>
         );
