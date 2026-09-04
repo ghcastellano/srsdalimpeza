@@ -36,7 +36,7 @@ export default function Reviews() {
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-mist"><GoogleMark className="h-6 w-6" /></span>
           <span>
             <span className="flex items-center gap-2 text-base font-extrabold text-ink">Excelente <Stars /></span>
-            <span className="block text-sm text-ink/70">Com base em 73 avaliações publicadas no Google</span>
+            <span className="block text-sm text-ink/70">Nota {String(contact.rating).replace('.', ',')} de 5, com base em {contact.reviewCount} avaliações publicadas no Google</span>
           </span>
           <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-5 text-sm font-bold text-white transition-colors group-hover:bg-ocean">
             Ver todas <ArrowUpRight className="h-4 w-4" />
@@ -55,7 +55,7 @@ export default function Reviews() {
               <blockquote className="mt-4 text-base leading-7 text-ink/85">“{review.text}”</blockquote>
               <figcaption className="mt-5 flex items-center gap-3">
                 {review.avatar ? (
-                  <Image src={review.avatar} alt="" width={40} height={40} className="h-10 w-10 shrink-0 rounded-full object-cover" />
+                  <Image src={review.avatar} alt="" data-decorative width={40} height={40} className="h-10 w-10 shrink-0 rounded-full object-cover" />
                 ) : (
                   <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-sky to-aqua text-sm font-bold text-ink">
                     {review.name.split(' ').map((p) => p[0]).slice(0, 2).join('')}

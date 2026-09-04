@@ -89,7 +89,7 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
                 aria-label={zoom ? 'Reduzir foto' : 'Ampliar foto'}
                 className={zoom ? 'relative h-[200%] w-[200%] cursor-zoom-out' : 'relative h-full w-full cursor-zoom-in'}
               >
-                <Image src={items[active].src} alt="" fill quality={92} sizes="100vw" className="object-contain" priority />
+                <Image src={items[active].src} alt={items[active].alt} fill quality={92} sizes="100vw" className="object-contain" priority />
               </motion.div>
             </AnimatePresence>
           </div>

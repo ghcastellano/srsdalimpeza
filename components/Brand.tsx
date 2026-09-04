@@ -24,17 +24,17 @@ export function Wordmark({ white = false, className = '' }: { white?: boolean; c
 export function BrandLockup({ className = '' }: { className?: string }) {
   return (
     <div className={`relative ${className}`} role="img" aria-label="Srs da Limpeza">
-      <Image src="/assets/brand/wordmark.svg" alt="" width={720} height={310} className="h-auto w-full" />
+      <Image src="/assets/brand/wordmark.svg" alt="" data-decorative width={720} height={310} className="h-auto w-full" />
       <Image
         src="/assets/brand/mascot-man.png"
-        alt=""
+        alt="" data-decorative
         width={70}
         height={160}
         className="float-slow absolute left-[-9%] top-[-30%] h-auto w-[11%]"
       />
       <Image
         src="/assets/brand/mascot-woman.png"
-        alt=""
+        alt="" data-decorative
         width={97}
         height={140}
         className="absolute bottom-[-2%] right-[-13%] h-auto w-[15%]"

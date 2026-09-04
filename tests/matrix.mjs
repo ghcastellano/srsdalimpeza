@@ -16,7 +16,7 @@ const viewports = [
 const browser = await engine.launch(engine === chromium ? launchOpts : {});
 let failures = 0;
 for (const [name, width, height, mobile] of viewports) {
-  for (const path of ['/', '/politica-de-privacidade']) {
+  for (const path of ['/', '/higienizacao-de-sofa-guaruja', '/limpeza-pos-obra-santos', '/politica-de-privacidade']) {
     const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, isMobile: mobile && engine === chromium, hasTouch: mobile, ignoreHTTPSErrors: true });
     const page = await context.newPage();
     const errors = [];

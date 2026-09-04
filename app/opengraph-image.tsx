@@ -36,7 +36,7 @@ export default function OgImage() {
                 <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z" />
               </svg>
             ))}
-            <span style={{ marginLeft: 6 }}>Excelente no Google</span>
+            <span style={{ marginLeft: 6 }}>4,9 no Google · 82 avaliações</span>
           </div>
         </div>
       </div>

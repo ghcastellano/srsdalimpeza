@@ -27,7 +27,7 @@ export default function Instagram() {
             className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-ink text-white shadow-card"
           >
             <div className="relative aspect-[4/5] overflow-hidden sm:aspect-square">
-              <Image src={post.image} alt="" fill quality={80} sizes="(max-width: 1023px) 92vw, 30vw" className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-[1.05]" />
+              <Image src={post.image} alt={post.alt} fill quality={80} sizes="(max-width: 1023px) 92vw, 30vw" className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-[1.05]" />
               <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
               <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[.14em] backdrop-blur">
                 {post.kind.startsWith('Reel') ? <Play className="h-3.5 w-3.5 fill-current" /> : <InstagramIcon className="h-3.5 w-3.5" />}

@@ -18,35 +18,91 @@ import Services from '@/components/Services';
 import WhatsAppFab from '@/components/WhatsAppFab';
 import PhotoGrid from '@/components/PhotoGrid';
 import Reveal from '@/components/ui/Reveal';
-import { benefits, contact, faq, messages, postWorkClients, postWorkGallery, postWorkScope, process, reviews, siteUrl, whatsappUrl } from '@/lib/content';
+import { benefits, contact, faq, fullAddress, messages, postWorkClients, postWorkGallery, postWorkScope, process, reviews, services, siteUrl, whatsappUrl } from '@/lib/content';
 
 const benefitIcons = [ShieldCheck, Wind, Leaf, Sparkles, Users, BadgeCheck];
 
 export default function HomePage() {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+  // Grafo único: o LocalBusiness é referenciado pelos Service, o que evita
+  // entidades soltas e deixa claro para o Google quem presta cada serviço.
+  const businessId = `${siteUrl}/#business`;
+  const business = {
+    '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
+    '@id': businessId,
     name: 'Srs da Limpeza',
+    alternateName: 'Srs da Limpeza Higienização de Estofados',
+    description: 'Higienização e impermeabilização de sofás, colchões e estofados, limpeza pós-obra e revitalização de pisos em Guarujá, Santos e Bertioga.',
     url: siteUrl,
     email: contact.email,
     telephone: `+${contact.upholsteryDigits}`,
-    image: `${siteUrl}/opengraph-image`,
+    image: [`${siteUrl}/opengraph-image`, `${siteUrl}/assets/photos/equipe-srs.webp`, `${siteUrl}/assets/photos/sofa-7.webp`],
     logo: `${siteUrl}/assets/brand/icon-512.png`,
     foundingDate: '2018',
+    currenciesAccepted: 'BRL',
+    paymentAccepted: 'Cartão de crédito, PIX, dinheiro, cartão de débito',
     sameAs: [contact.instagram, contact.facebook, contact.youtube, contact.googleMaps],
-    address: { '@type': 'PostalAddress', addressLocality: 'Guarujá', addressRegion: 'SP', addressCountry: 'BR' },
-    areaServed: contact.areas.map((name) => ({ '@type': 'City', name })),
-    openingHours: 'Mo-Fr 08:00-18:00',
-    priceRange: '$$',
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: '5', reviewCount: '73' },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: contact.street,
+      addressLocality: contact.city,
+      addressRegion: contact.state,
+      postalCode: contact.zip,
+      addressCountry: 'BR',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: contact.geo.lat, longitude: contact.geo.lng },
+    hasMap: contact.googleMaps,
+    areaServed: contact.areas.map((name) => ({ '@type': 'City', name, containedInPlace: { '@type': 'State', name: 'São Paulo' } })),
+    openingHoursSpecification: [{
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '18:00',
+    }],
+    priceRange: 'R$$',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: String(contact.rating),
+      reviewCount: String(contact.reviewCount),
+      bestRating: '5',
+    },
     review: reviews.map((r) => ({
       '@type': 'Review',
       author: { '@type': 'Person', name: r.name },
-      datePublished: r.iso,
+      ...(r.iso ? { datePublished: r.iso } : {}),
       reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
       reviewBody: r.text,
     })),
-    makesOffer: ['Higienização de sofá', 'Higienização de colchão', 'Impermeabilização de estofados', 'Limpeza pós-obra', 'Revitalização de pisos'].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Serviços de higienização e limpeza',
+      itemListElement: services.map((service) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: service.title, description: service.text },
+      })),
+    },
+  };
+  const serviceEntities = services.map((service) => ({
+    '@type': 'Service',
+    name: `${service.title} em ${contact.city} e região`,
+    description: service.text,
+    serviceType: service.title,
+    provider: { '@id': businessId },
+    areaServed: contact.areas.map((name) => ({ '@type': 'City', name })),
+  }));
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      business,
+      ...serviceEntities,
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'Srs da Limpeza',
+        inLanguage: 'pt-BR',
+        publisher: { '@id': businessId },
+      },
+    ],
   };
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -66,7 +122,7 @@ export default function HomePage() {
           <div className="container-shell grid grid-cols-2 divide-ink/10 py-10 sm:py-12 lg:grid-cols-4 lg:divide-x">
             {[
               { value: 6000, prefix: '+', label: 'clientes atendidos', note: 'Baixada Santista e São Paulo' },
-              { value: 73, prefix: '', label: 'avaliações no Google', note: 'todas com 5 estrelas' },
+              { value: contact.reviewCount, prefix: '', label: 'avaliações no Google', note: 'nota 4,9 de 5' },
               { value: 8, prefix: '', label: 'serviços especializados', note: 'estofados, pós-obra e pisos' },
               { value: 5, prefix: '', label: 'cidades atendidas', note: 'Guarujá, Santos, Bertioga e mais' },
             ].map((item, index) => (
@@ -297,8 +353,16 @@ export default function HomePage() {
                     <dd className="mt-1 text-lg font-bold"><a href={whatsappUrl(messages.postWork, 'postWork')} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center">{contact.postWorkPhone}</a></dd>
                   </div>
                   <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur sm:col-span-2">
-                    <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">E-mail e região</dt>
-                    <dd className="mt-1 text-base"><a href={`mailto:${contact.email}`} className="inline-flex min-h-11 items-center font-bold">{contact.email}</a><br /><span className="text-white/80">{contact.areas.join(' · ')}</span></dd>
+                    <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">E-mail</dt>
+                    <dd className="mt-1 text-base"><a href={`mailto:${contact.email}`} className="inline-flex min-h-11 items-center font-bold">{contact.email}</a></dd>
+                  </div>
+                  <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur sm:col-span-2">
+                    <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">Endereço e atendimento</dt>
+                    <dd className="mt-1 text-base">
+                      <address className="not-italic leading-7 text-white/90">{fullAddress}</address>
+                      <a href={contact.googleMaps} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex min-h-11 items-center gap-2 font-bold text-sky underline underline-offset-4">Ver no Google Maps <ArrowUpRight className="h-4 w-4" /></a>
+                      <span className="mt-1 block text-white/80">Atendemos em domicílio: {contact.areas.join(' · ')}</span>
+                    </dd>
                   </div>
                 </dl>
               </Reveal>

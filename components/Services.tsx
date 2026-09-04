@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import Reveal from './ui/Reveal';
 import { services, whatsappUrl } from '@/lib/content';
@@ -6,21 +7,17 @@ import { services, whatsappUrl } from '@/lib/content';
 export default function Services() {
   return (
     <div className="mt-12 grid gap-5 min-[480px]:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
-      {services.map((service, index) => (
-        <Reveal key={service.slug} delay={(index % 4) * .06} className="h-full">
-          <a
-            href={whatsappUrl(`Olá! Quero um orçamento para: ${service.title}.`, service.line)}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="view"
-            data-cursor-label="Orçar"
-            aria-label={`${service.title} — pedir orçamento no WhatsApp`}
-            className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-card ring-1 ring-ink/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-glow"
-          >
+      {services.map((service, index) => {
+        // Serviço com landing própria linka para ela — é o link interno que
+        // faz o Google descobrir e ranquear a página. Os demais seguem
+        // indo direto para o WhatsApp.
+        const internal = Boolean(service.href);
+        const card = (
+          <>
             <div className="relative aspect-[4/3] overflow-hidden">
               <Image
                 src={service.image}
-                alt={service.title}
+                alt={service.imageAlt}
                 fill
                 quality={80}
                 sizes="(max-width: 640px) 92vw, (max-width: 1023px) 46vw, 23vw"
@@ -32,12 +29,42 @@ export default function Services() {
               <h3 className="font-display text-xl font-semibold text-ink">{service.title}</h3>
               <p className="mt-2.5 flex-1 text-sm text-ink/70">{service.text}</p>
               <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-aqua-dark">
-                Pedir orçamento <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                {internal ? 'Ver serviço' : 'Pedir orçamento'}
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </span>
             </div>
-          </a>
-        </Reveal>
-      ))}
+          </>
+        );
+        const className = 'group relative flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-card ring-1 ring-ink/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-glow';
+
+        return (
+          <Reveal key={service.slug} delay={(index % 4) * .06} className="h-full">
+            {internal ? (
+              <Link
+                href={service.href!}
+                data-cursor="view"
+                data-cursor-label="Ver"
+                aria-label={`${service.title} — ver página do serviço`}
+                className={className}
+              >
+                {card}
+              </Link>
+            ) : (
+              <a
+                href={whatsappUrl(`Olá! Quero um orçamento para: ${service.title}.`, service.line)}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="view"
+                data-cursor-label="Orçar"
+                aria-label={`${service.title} — pedir orçamento no WhatsApp`}
+                className={className}
+              >
+                {card}
+              </a>
+            )}
+          </Reveal>
+        );
+      })}
     </div>
   );
 }

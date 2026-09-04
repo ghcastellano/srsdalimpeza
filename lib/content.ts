@@ -18,7 +18,19 @@ export const contact = {
   hours: 'Seg. a sex., 8h às 18h',
   areas: ['Guarujá', 'Santos', 'Bertioga', 'Praia Grande', 'São Vicente'],
   region: 'Baixada Santista · SP',
+  // NAP (nome/endereço/telefone) igual ao do perfil do Google — a consistência
+  // entre site e ficha é um dos pesos mais fortes do SEO local.
+  street: 'R. Dr. Gervásio Bonavides, 84 — Loja A',
+  district: 'Vila Luis Antonio',
+  city: 'Guarujá',
+  state: 'SP',
+  zip: '11420-210',
+  geo: { lat: -24.0060872, lng: -46.2713672 },
+  rating: 4.9,
+  reviewCount: 82,
 };
+
+export const fullAddress = `${contact.street}, ${contact.district}, ${contact.city} — ${contact.state}, ${contact.zip}`;
 
 export const messages = {
   general: 'Olá, Srs da Limpeza! Vim pelo site e quero um orçamento gratuito.',
@@ -35,17 +47,21 @@ export function whatsappUrl(message: string, line: Line = 'upholstery') {
 
 export const stats = [
   { value: 6000, prefix: '+', label: 'clientes atendidos', note: 'na Baixada Santista e em São Paulo' },
-  { value: 73, prefix: '', label: 'avaliações no Google', note: 'nota Excelente · 5 estrelas' },
+  { value: 82, prefix: '', label: 'avaliações no Google', note: 'nota 4,9 de 5 no Google' },
   { value: 99.9, prefix: '', suffix: '%', label: 'de ácaros e bactérias', note: 'eliminados a cada higienização' },
   { value: 2018, prefix: '', label: 'ano de fundação', note: 'referência no Guarujá desde então', raw: true },
 ];
 
-export const services = [
+export type Service = { slug: string; title: string; text: string; image: string; imageAlt: string; href?: string; line: Line };
+
+export const services: Service[] = [
   {
     slug: 'sofa',
     title: 'Higienização de sofá',
     text: 'Extração profunda que remove ácaros, manchas e odores. Seu sofá volta a ter cor, maciez e cheiro de novo.',
     image: '/assets/photos/sofa-7.webp',
+    imageAlt: 'Higienização de sofá: antes e depois em tecido suede',
+    href: '/higienizacao-de-sofa-guaruja',
     line: 'upholstery' as Line,
   },
   {
@@ -53,6 +69,7 @@ export const services = [
     title: 'Higienização de colchão',
     text: 'Remove mofo, suor e ácaros que causam rinite e alergia. Você dorme em um colchão realmente limpo.',
     image: '/assets/photos/colchao-1.webp',
+    imageAlt: 'Higienização de colchão que remove ácaros, mofo e suor',
     line: 'upholstery' as Line,
   },
   {
@@ -60,6 +77,7 @@ export const services = [
     title: 'Poltronas e cadeiras',
     text: 'Cadeiras de jantar, poltronas e cadeiras de escritório com o mesmo padrão de limpeza profunda.',
     image: '/assets/photos/cadeiras-2.webp',
+    imageAlt: 'Higienização de poltronas e cadeiras estofadas',
     line: 'upholstery' as Line,
   },
   {
@@ -67,6 +85,7 @@ export const services = [
     title: 'Tapetes e carpetes',
     text: 'Lavagem com extração que tira a sujeira acumulada entre as fibras sem danificar o tecido.',
     image: '/assets/photos/tapete.webp',
+    imageAlt: 'Higienização de tapetes e carpetes com extração',
     line: 'upholstery' as Line,
   },
   {
@@ -74,6 +93,7 @@ export const services = [
     title: 'Estofados de bebê',
     text: 'Carrinhos, bebê-conforto e cadeirinhas higienizados com produtos biodegradáveis e seguros.',
     image: '/assets/photos/cadeira-infantil.webp',
+    imageAlt: 'Higienização de estofados de bebê: bebê-conforto e cadeirinha',
     line: 'upholstery' as Line,
   },
   {
@@ -81,6 +101,7 @@ export const services = [
     title: 'Impermeabilização',
     text: 'Camada protetora que repele líquidos e facilita a limpeza do dia a dia. Proteção que dura.',
     image: '/assets/photos/sofa-4.webp',
+    imageAlt: 'Impermeabilização de sofá que repele líquidos e manchas',
     line: 'upholstery' as Line,
   },
   {
@@ -88,6 +109,8 @@ export const services = [
     title: 'Limpeza pós-obra',
     text: 'Remoção de poeira, cimento, tinta, gesso e rejunte. Entregamos o imóvel pronto para morar ou alugar.',
     image: '/assets/photos/pos-obra-5.webp',
+    imageAlt: 'Limpeza pós-obra em imóvel recém-construído no Guarujá',
+    href: '/limpeza-pos-obra-santos',
     line: 'postWork' as Line,
   },
   {
@@ -95,6 +118,7 @@ export const services = [
     title: 'Revitalização de pisos',
     text: 'Pisos de madeira, porcelanato e pedra recuperados com máquinas industriais e produtos adequados.',
     image: '/assets/photos/posobra-2.webp',
+    imageAlt: 'Revitalização de piso de porcelanato após a obra',
     line: 'postWork' as Line,
   },
 ];
@@ -128,33 +152,34 @@ export const postWorkScope = [
 
 export const postWorkClients = ['Residências', 'Hotéis e pousadas', 'Imobiliárias', 'Arquitetos', 'Empreiteiras', 'Condomínios', 'Comércios', 'Escolas'];
 
-export type GalleryItem = { src: string; title: string; tag: string };
+/** `alt` descreve a imagem para busca/leitor de tela; `title` é o rótulo visível. */
+export type GalleryItem = { src: string; title: string; tag: string; alt: string };
 
 export const gallery: GalleryItem[] = [
-  { src: '/assets/photos/sofa-7.webp', title: 'Sofá de suede: antes e depois', tag: 'Higienização de sofá' },
-  { src: '/assets/photos/sofa-1.webp', title: 'Extração profissional em sofá claro', tag: 'Equipe em ação' },
-  { src: '/assets/photos/sofa-8.webp', title: 'Tecido recuperado com extração', tag: 'Higienização de sofá' },
-  { src: '/assets/photos/colchao-2.webp', title: 'Colchão de casal higienizado', tag: 'Higienização de colchão' },
-  { src: '/assets/photos/poltronas.webp', title: 'Poltrona clara como nova', tag: 'Poltronas' },
-  { src: '/assets/photos/carpete-1.webp', title: 'Carpete de escritório lavado', tag: 'Tapetes e carpetes' },
-  { src: '/assets/photos/cadeiras-3.webp', title: 'Cadeiras de jantar higienizadas', tag: 'Cadeiras' },
-  { src: '/assets/photos/sofa-3.webp', title: 'Sofá de canto em linho', tag: 'Higienização de sofá' },
-  { src: '/assets/photos/cadeiras-1.webp', title: 'Cadeiras de couro revitalizadas', tag: 'Cadeiras' },
-  { src: '/assets/photos/tapete.webp', title: 'Tapete de sala higienizado', tag: 'Tapetes e carpetes' },
-  { src: '/assets/photos/sofa-6.webp', title: 'Sofá retrátil pronto para uso', tag: 'Higienização de sofá' },
-  { src: '/assets/photos/colchao-3.webp', title: 'Colchão livre de ácaros', tag: 'Higienização de colchão' },
+  { src: '/assets/photos/sofa-7.webp', title: 'Sofá de suede: antes e depois', tag: 'Higienização de sofá' , alt: 'Sofá de suede marrom higienizado pela Srs da Limpeza: metade com sujeira impregnada e metade limpa após a extração' },
+  { src: '/assets/photos/sofa-1.webp', title: 'Extração profissional em sofá claro', tag: 'Equipe em ação' , alt: 'Profissional da Srs da Limpeza higienizando um sofá claro com máquina extratora em uma residência no Guarujá' },
+  { src: '/assets/photos/sofa-8.webp', title: 'Tecido recuperado com extração', tag: 'Higienização de sofá' , alt: 'Tecido de sofá recuperado após higienização profunda com extração de sujeira e ácaros' },
+  { src: '/assets/photos/colchao-2.webp', title: 'Colchão de casal higienizado', tag: 'Higienização de colchão' , alt: 'Colchão de casal durante a higienização profissional que remove ácaros, mofo e suor impregnado' },
+  { src: '/assets/photos/poltronas.webp', title: 'Poltrona clara como nova', tag: 'Poltronas' , alt: 'Poltrona de tecido claro higienizada e sem manchas após limpeza profissional de estofados' },
+  { src: '/assets/photos/carpete-1.webp', title: 'Carpete de escritório lavado', tag: 'Tapetes e carpetes' , alt: 'Carpete de escritório lavado com extração profissional, sem manchas e com secagem rápida' },
+  { src: '/assets/photos/cadeiras-3.webp', title: 'Cadeiras de jantar higienizadas', tag: 'Cadeiras' , alt: 'Cadeiras de jantar estofadas higienizadas em residência na Baixada Santista' },
+  { src: '/assets/photos/sofa-3.webp', title: 'Sofá de canto em linho', tag: 'Higienização de sofá' , alt: 'Sofá de canto em tecido claro higienizado e pronto para uso em sala de estar' },
+  { src: '/assets/photos/cadeiras-1.webp', title: 'Cadeiras de couro revitalizadas', tag: 'Cadeiras' , alt: 'Cadeiras de couro revitalizadas após limpeza e hidratação profissional' },
+  { src: '/assets/photos/tapete.webp', title: 'Tapete de sala higienizado', tag: 'Tapetes e carpetes' , alt: 'Tapete de sala higienizado com lavagem por extração, sem odores e livre de ácaros' },
+  { src: '/assets/photos/sofa-6.webp', title: 'Sofá retrátil pronto para uso', tag: 'Higienização de sofá' , alt: 'Sofá retrátil higienizado e pronto para uso poucas horas após a limpeza' },
+  { src: '/assets/photos/colchao-3.webp', title: 'Colchão livre de ácaros', tag: 'Higienização de colchão' , alt: 'Colchão livre de ácaros e bactérias após higienização com produtos biodegradáveis' },
 ];
 
 export const postWorkGallery: GalleryItem[] = [
-  { src: '/assets/photos/posobra-12.webp', title: 'Varanda entregue limpa após a obra', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-9.webp', title: 'Cozinha pronta para uso', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-7.webp', title: 'Ilha e bancada sem resíduo de obra', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-14.webp', title: 'Sala liberada para a mudança', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-13.webp', title: 'Cozinha com eletrodomésticos limpos', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-5.webp', title: 'Banheiro higienizado no pós-obra', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-2.webp', title: 'Porcelanato revitalizado', tag: 'Revitalização de pisos' },
-  { src: '/assets/photos/posobra-10.webp', title: 'Área social pronta para receber', tag: 'Limpeza pós-obra' },
-  { src: '/assets/photos/posobra-3.webp', title: 'Esquadrias e vidros sem respingo', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-12.webp', title: 'Varanda entregue limpa após a obra', tag: 'Limpeza pós-obra' , alt: 'Varanda de apartamento entregue limpa após a limpeza pós-obra da Srs da Limpeza' },
+  { src: '/assets/photos/posobra-9.webp', title: 'Cozinha pronta para uso', tag: 'Limpeza pós-obra' , alt: 'Cozinha nova pronta para uso após limpeza pós-obra, sem poeira nem respingos de tinta' },
+  { src: '/assets/photos/posobra-7.webp', title: 'Ilha e bancada sem resíduo de obra', tag: 'Limpeza pós-obra' , alt: 'Ilha e bancada de cozinha sem resíduo de obra após limpeza técnica das superfícies' },
+  { src: '/assets/photos/posobra-14.webp', title: 'Sala liberada para a mudança', tag: 'Limpeza pós-obra' , alt: 'Sala de apartamento reformado pronta para morar após a limpeza pós-obra' },
+  { src: '/assets/photos/posobra-13.webp', title: 'Cozinha com eletrodomésticos limpos', tag: 'Limpeza pós-obra' , alt: 'Cozinha com eletrodomésticos e armários limpos por dentro depois da obra' },
+  { src: '/assets/photos/posobra-5.webp', title: 'Banheiro higienizado no pós-obra', tag: 'Limpeza pós-obra' , alt: 'Banheiro higienizado no pós-obra, com louças e rejunte livres de cimento' },
+  { src: '/assets/photos/posobra-2.webp', title: 'Porcelanato revitalizado', tag: 'Revitalização de pisos' , alt: 'Piso de porcelanato revitalizado após a obra, sem manchas de cimento ou rejunte' },
+  { src: '/assets/photos/posobra-10.webp', title: 'Área social pronta para receber', tag: 'Limpeza pós-obra' , alt: 'Cozinha nova entregue sem resíduos de obra, poeira ou respingos de tinta' },
+  { src: '/assets/photos/posobra-3.webp', title: 'Esquadrias e vidros sem respingo', tag: 'Limpeza pós-obra' , alt: 'Esquadrias e vidros sem respingo de tinta ou massa após a limpeza pós-obra' },
 ];
 
 /**
@@ -162,9 +187,12 @@ export const postWorkGallery: GalleryItem[] = [
  * `avatar` só existe para quem tem foto de perfil pública no Google; os demais
  * caem nas iniciais da marca. Ordenadas da mais recente para a mais antiga.
  */
-export type Review = { name: string; iso: string; date: string; service: string; text: string; avatar?: string };
+export type Review = { name: string; iso?: string; date: string; service: string; text: string; avatar?: string; note?: string };
 
 export const reviews: Review[] = [
+  // Sem data: o perfil do Google não a exibe na ordenação por relevância.
+  { name: 'Gustavo', date: 'Local Guide · 21 avaliações', service: 'Higienização de sofá', note: 'Ótimo preço · R$ 300–400', text: 'Super pontuais e sérios! Difícil no Guarujá algum tipo de serviço similar. Empresa higiênica, deixaram o piso super seco e não fizeram sujeira alguma. Sou detalhista e elas foram impecáveis.' },
+  { name: 'Fabricio Rodrigues', iso: '2026-06-01', date: 'junho de 2026', service: 'Pós-obra', text: 'Profissionais muito qualificadas. Deixaram o apartamento um brinco. Tudo como se fosse super novo. Agradeço à Juliana e sua equipe pela simpatia, atenção, profissionalismo e cumprimento dos prazos.' },
   { name: 'Daiane Ribeiro', iso: '2026-02-10', date: 'fevereiro de 2026', service: 'Sofá e poltrona', text: 'Elas são muito caprichosas, deixam tudo bem limpinho e cheiroso, meu sofá ficou novo depois da limpeza e minha poltrona então, que é clara, nossa, parece outra!' },
   { name: 'Marina Oliveira Lopes', iso: '2026-01-22', date: 'janeiro de 2026', service: 'Residencial', avatar: '/assets/reviews/marina-oliveira-lopes.webp', text: 'Atendimento rápido, equipe focada e com produtos especializados para o trabalho. Pessoas que entendem o que estão fazendo. Deixaram minha casa impecável.' },
   { name: 'Zê', iso: '2025-12-15', date: 'dezembro de 2025', service: 'Condomínio', text: 'A empresa fez serviços no meu condomínio. São muito sérios, entendem do que fazem, pontuais: marca e vem na hora e dia marcado, e o resultado ficou ótimo! Pode contratar sem medo.' },
@@ -177,10 +205,10 @@ export const reviews: Review[] = [
 ];
 
 /** Posts públicos do Instagram referenciados no site atual. */
-export const instagramPosts = [
-  { url: 'https://www.instagram.com/reel/DV1wBAzEWu8/', image: '/assets/photos/posobra-12.webp', caption: 'Mais um lar transformado! Pós-obra completo após marcenaria, pedras, fechamento de varanda e pintura. Prontinho para receber a família.', kind: 'Reel · Pós-obra' },
-  { url: 'https://www.instagram.com/reel/DUrNh81kccg/', image: '/assets/photos/sofa-8.webp', caption: 'Higienização profunda de estofados: extração, odorização e secagem rápida. Veja o resultado em vídeo.', kind: 'Reel · Estofados' },
-  { url: 'https://www.instagram.com/srsdalimpeza/', image: '/assets/photos/colchao-1.webp', caption: 'Bastidores, antes e depois e dicas de conservação. Siga @srsdalimpeza e acompanhe o dia a dia da equipe.', kind: 'Perfil · @srsdalimpeza' },
+export const instagramPosts: { url: string; image: string; alt: string; caption: string; kind: string }[] = [
+  { url: 'https://www.instagram.com/reel/DV1wBAzEWu8/', image: '/assets/photos/posobra-12.webp', caption: 'Mais um lar transformado! Pós-obra completo após marcenaria, pedras, fechamento de varanda e pintura. Prontinho para receber a família.', alt: 'Apartamento entregue limpo após a limpeza pós-obra da Srs da Limpeza', kind: 'Reel · Pós-obra' },
+  { url: 'https://www.instagram.com/reel/DUrNh81kccg/', image: '/assets/photos/sofa-8.webp', caption: 'Higienização profunda de estofados: extração, odorização e secagem rápida. Veja o resultado em vídeo.', alt: 'Higienização profunda de estofado com extração, em vídeo no Instagram', kind: 'Reel · Estofados' },
+  { url: 'https://www.instagram.com/srsdalimpeza/', image: '/assets/photos/colchao-1.webp', caption: 'Bastidores, antes e depois e dicas de conservação. Siga @srsdalimpeza e acompanhe o dia a dia da equipe.', alt: 'Perfil da Srs da Limpeza no Instagram com antes e depois de estofados', kind: 'Perfil · @srsdalimpeza' },
 ];
 
 export const faq = [

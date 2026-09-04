@@ -121,6 +121,68 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   check(og.status() === 200 && og.headers()['content-type'].includes('image/png'), 'OG image renders');
   await page.close();
 }
+
+// ---------- SEO ----------
+{
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  const pages = ['/', '/higienizacao-de-sofa-guaruja', '/limpeza-pos-obra-santos'];
+  const titles = new Set(), descs = new Set(), h1s = new Set();
+  for (const path of pages) {
+    await page.goto(`${base}${path}`, { waitUntil: 'networkidle' });
+    const seo = await page.evaluate(() => {
+      const g = (s, a = 'content') => document.querySelector(s)?.getAttribute(a) ?? '';
+      const hs = [...document.querySelectorAll('h1')].map((h) => h.textContent.replace(/\s+/g, ' ').trim());
+      const imgs = [...document.querySelectorAll('main img:not([data-decorative])')];
+      return {
+        title: document.title,
+        desc: g('meta[name="description"]'),
+        canonical: g('link[rel="canonical"]', 'href'),
+        h1count: hs.length,
+        h1: hs[0] ?? '',
+        og: g('meta[property="og:title"]'),
+        imgs: imgs.length,
+        emptyAlt: imgs.filter((i) => !i.getAttribute('alt')).length,
+        ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => s.textContent),
+      };
+    });
+    check(seo.title.length > 20 && seo.title.length <= 65, `${path} title ${seo.title.length} chars`);
+    check(seo.desc.length > 80 && seo.desc.length <= 300, `${path} description ${seo.desc.length} chars`);
+    check(seo.canonical.startsWith('http'), `${path} canonical ${seo.canonical}`);
+    check(seo.h1count === 1, `${path} exactly one h1 (${seo.h1count})`);
+    check(seo.og.length > 0, `${path} og:title present`);
+    check(seo.emptyAlt === 0, `${path} all ${seo.imgs} content images have alt (${seo.emptyAlt} empty)`);
+    let parsed = true;
+    for (const raw of seo.ld) { try { JSON.parse(raw); } catch { parsed = false; } }
+    check(parsed && seo.ld.length > 0, `${path} JSON-LD parses (${seo.ld.length} blocks)`);
+    titles.add(seo.title); descs.add(seo.desc); h1s.add(seo.h1);
+  }
+  check(titles.size === pages.length, 'titles are unique across pages');
+  check(descs.size === pages.length, 'descriptions are unique across pages');
+  check(h1s.size === pages.length, 'h1s are unique across pages');
+  // keyword coverage no h1 da home
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const h1 = (await page.locator('h1').textContent()).toLowerCase();
+  check(h1.includes('higieniza') && h1.includes('guarujá'), 'home h1 carries service + city keywords');
+  // dados estruturados corretos
+  const ld = JSON.parse(await page.locator('script[type="application/ld+json"]').first().textContent());
+  const biz = ld['@graph'].find((n) => String(n['@type']).includes('LocalBusiness'));
+  check(biz.address.streetAddress.length > 5, `LocalBusiness has streetAddress`);
+  check(biz.aggregateRating.ratingValue === '4.9' && biz.aggregateRating.reviewCount === '82', `aggregateRating ${biz.aggregateRating.ratingValue}/${biz.aggregateRating.reviewCount}`);
+  check(!!biz.geo?.latitude, 'LocalBusiness has geo coordinates');
+  // links internos para as landings
+  await page.goto(base, { waitUntil: 'networkidle' });
+  for (const slug of ['higienizacao-de-sofa-guaruja', 'limpeza-pos-obra-santos']) {
+    check(await page.locator(`a[href="/${slug}"]`).count() > 0, `home links internally to /${slug}`);
+  }
+  // sitemap e robots
+  const sm = await page.goto(`${base}/sitemap.xml`);
+  const smText = await sm.text();
+  check(sm.status() === 200 && pages.every((p) => smText.includes(p === '/' ? 'vercel.app<' : p.slice(1))), 'sitemap lists all pages');
+  const rb = await page.goto(`${base}/robots.txt`);
+  check((await rb.text()).includes('Sitemap:'), 'robots.txt points to sitemap');
+  await page.close();
+}
+
 await browser.close();
 if (failures.length) { console.log(`\n${failures.length} failure(s)`); process.exit(1); }
 console.log('\nQA OK');

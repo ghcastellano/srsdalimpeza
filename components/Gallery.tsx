@@ -139,7 +139,7 @@ export default function Gallery() {
             <span className="relative block aspect-square overflow-hidden rounded-3xl bg-mist shadow-card">
               <Image
                 src={item.src}
-                alt=""
+                alt={item.alt}
                 fill
                 quality={85}
                 sizes="(max-width: 640px) 78vw, (max-width: 1023px) 46vw, 460px"

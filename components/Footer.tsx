@@ -31,9 +31,11 @@ export default function Footer() {
             <p className="mt-4 text-sm text-white/60">CNPJ {contact.cnpj}</p>
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[.2em] text-sky">Navegação</p>
+            <p className="text-xs font-bold uppercase tracking-[.2em] text-sky">Serviços</p>
             <div className="mt-4 flex flex-col gap-0.5 text-base text-white/85">
-              {navLinks.map((link) => <a key={link.href} href={link.href} className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">{link.label}</a>)}
+              <Link href="/higienizacao-de-sofa-guaruja" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Higienização de sofá</Link>
+              <Link href="/limpeza-pos-obra-santos" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Limpeza pós-obra</Link>
+              {navLinks.slice(0, 4).map((link) => <Link key={link.href} href={`/${link.href}`} className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">{link.label}</Link>)}
             </div>
           </div>
           <div>
@@ -51,8 +53,13 @@ export default function Footer() {
               <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center">Instagram</a>
               <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center">Facebook</a>
               <a href={contact.youtube} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center">YouTube</a>
-              <a href={contact.googleMaps} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center">Google · avaliações</a>
-              <span className="pt-2 text-sm text-white/70">{contact.areas.join(' · ')}</span>
+              <a href={contact.googleMaps} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center">Google · {contact.reviewCount} avaliações</a>
+              <address className="not-italic pt-2 text-sm leading-6 text-white/70">
+                {contact.street}<br />
+                {contact.district} · {contact.city} — {contact.state}<br />
+                CEP {contact.zip}
+              </address>
+              <span className="pt-1 text-sm text-white/70">Atendemos {contact.areas.join(' · ')}</span>
             </div>
           </div>
         </div>

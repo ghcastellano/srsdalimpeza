@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { ArrowUpRight, Mail, Menu, Phone, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -12,6 +13,10 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+  // Fora da home as âncoras precisam do prefixo da rota para levar de volta.
+  const hrefFor = (href: string) => (isHome ? href : `/${href}`);
   const { scrollY, scrollYProgress } = useScroll();
   const menuRef = useFocusTrap<HTMLDivElement>(open, () => setOpen(false));
 
@@ -27,6 +32,7 @@ export default function Header() {
   }, [open]);
 
   useEffect(() => {
+    if (!isHome) return;
     const nodes = navLinks.map((l) => document.getElementById(l.href.slice(1))).filter(Boolean) as HTMLElement[];
     const observer = new IntersectionObserver(
       (entries) => {
@@ -37,7 +43,7 @@ export default function Header() {
     );
     nodes.forEach((n) => observer.observe(n));
     return () => observer.disconnect();
-  }, []);
+  }, [isHome]);
 
   return (
     <>
@@ -47,7 +53,7 @@ export default function Header() {
         }`}
       >
         <div className="container-shell flex h-[72px] items-center justify-between lg:h-[84px]">
-          <Link href="#inicio" aria-label="Srs da Limpeza — início" className="relative z-10 flex shrink-0 items-center">
+          <Link href={isHome ? '#inicio' : '/'} aria-label="Srs da Limpeza — início" className="relative z-10 flex shrink-0 items-center">
             <Wordmark white={open} className="h-[40px] w-auto sm:h-[44px] lg:h-[50px]" />
           </Link>
 
@@ -57,7 +63,7 @@ export default function Header() {
               return (
                 <a
                   key={link.href}
-                  href={link.href}
+                  href={hrefFor(link.href)}
                   aria-current={current ? 'location' : undefined}
                   className={`group relative rounded-full px-3.5 py-2.5 transition-colors hover:text-ink ${current ? 'text-ink' : ''}`}
                 >
@@ -121,7 +127,7 @@ export default function Header() {
                 {navLinks.map((link, index) => (
                   <motion.div key={link.href} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .05 + .04 * index, duration: .45, ease: [0.22, 1, 0.36, 1] }}>
                     <a
-                      href={link.href}
+                      href={hrefFor(link.href)}
                       onClick={() => setOpen(false)}
                       className="flex min-h-12 items-center justify-between border-b border-white/15 py-3 font-display text-[clamp(1.7rem,6.5vw,2.3rem)] font-semibold transition-colors hover:text-sky"
                     >

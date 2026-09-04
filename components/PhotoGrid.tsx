@@ -43,7 +43,7 @@ export default function PhotoGrid({
               aria-label={`Ampliar foto: ${item.title}`}
               className={`group relative block w-full overflow-hidden rounded-2xl ${featured && index === 0 ? 'aspect-[4/3] sm:aspect-square' : itemClassName} ${dark ? 'bg-white/5' : 'bg-mist'}`}
             >
-              <Image src={item.src} alt="" fill quality={85} sizes={sizes} className="object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
+              <Image src={item.src} alt={item.alt} fill quality={85} sizes={sizes} className="object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
               <span className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <span className="absolute right-2.5 top-2.5 grid h-9 w-9 place-items-center rounded-full bg-white/90 text-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                 <Maximize2 className="h-4 w-4" />

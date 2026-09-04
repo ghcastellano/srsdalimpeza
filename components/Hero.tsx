@@ -25,7 +25,7 @@ function Line({ text, delay, className = '' }: { text: string; delay: number; cl
 }
 
 const trust = [
-  { icon: Star, label: 'Excelente no Google', sub: '73 avaliações · 5 estrelas' },
+  { icon: Star, label: 'Nota 4,9 no Google', sub: `${contact.reviewCount} avaliações` },
   { icon: Wind, label: 'Secagem rápida', sub: 'pronto em poucas horas' },
   { icon: Leaf, label: 'Produtos ecológicos', sub: 'seguros p/ crianças e pets' },
   { icon: ShieldCheck, label: 'Garantia de resultado', sub: 'se não ficar bom, voltamos' },
@@ -46,15 +46,18 @@ export default function Hero() {
 
       <div className="container-shell relative grid items-center gap-10 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32">
         <motion.div style={reduced ? undefined : { y: copyY, opacity: copyOpacity }} className="relative z-10 lg:col-span-6">
-          <motion.p
-            initial={reduced ? false : { opacity: .01, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .7, delay: .1 }}
-            className="eyebrow text-aqua-dark"
-          >
-            Higienização de estofados · {contact.region} · desde 2018
-          </motion.p>
-          <h1 className="display-title mt-6 text-[clamp(2.55rem,7.2vw,5.4rem)] text-ink">
+          {/* A linha-chave vive DENTRO do h1: o título principal passa a
+              carregar serviço + cidade (sinal on-page mais forte do SEO local)
+              sem mudar nada visualmente. */}
+          <h1 className="display-title text-[clamp(2.55rem,7.2vw,5.4rem)] text-ink">
+            <motion.span
+              initial={reduced ? false : { opacity: .01, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: .7, delay: .1 }}
+              className="eyebrow mb-6 block font-sans text-aqua-dark"
+            >
+              Higienização de sofá e estofados em {contact.city}, Santos e Bertioga · desde 2018
+            </motion.span>
             <Line text="Seu sofá como novo." delay={.15} />
             <Line text="Sua casa livre" delay={.27} />
             <Line text="de ácaros." delay={.37} className="text-gradient pr-2" />
@@ -130,8 +133,8 @@ export default function Hero() {
             <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/90 p-3 pr-5 shadow-card backdrop-blur sm:bottom-7 sm:left-7">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>
               <span>
-                <span className="block text-sm font-extrabold leading-5 text-ink">Excelente · 73 avaliações</span>
-                <span className="block text-[13px] leading-5 text-ink/70">Google · Guarujá e região</span>
+                <span className="block text-sm font-extrabold leading-5 text-ink">4,9 · {contact.reviewCount} avaliações</span>
+                <span className="block text-[13px] leading-5 text-ink/70">Google · {contact.city} e região</span>
               </span>
             </div>
             <div className="absolute right-4 top-2 z-20 rounded-full bg-ink px-4 py-2 text-[13px] font-bold text-white shadow-card sm:right-6 sm:top-4">+6.000 clientes atendidos</div>

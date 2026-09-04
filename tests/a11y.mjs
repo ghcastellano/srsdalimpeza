@@ -6,7 +6,7 @@ const base = process.env.BASE_URL || 'http://localhost:3300';
 const browser = await chromium.launch(launchOpts);
 let total = 0;
 for (const [w, h] of [[390, 844], [1440, 900]]) {
-  for (const path of ['/', '/politica-de-privacidade']) {
+  for (const path of ['/', '/higienizacao-de-sofa-guaruja', '/limpeza-pos-obra-santos', '/politica-de-privacidade']) {
     const context = await browser.newContext({ viewport: { width: w, height: h } });
     const page = await context.newPage();
     await page.goto(`${base}${path}`, { waitUntil: 'networkidle' });
