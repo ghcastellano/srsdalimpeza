@@ -2,12 +2,67 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+const VERT = `
+attribute vec2 aPos;
+varying vec2 vUv;
+void main() {
+  vUv = aPos * 0.5 + 0.5;
+  gl_Position = vec4(aPos, 0.0, 1.0);
+}`;
+
+const FRAG = `
+precision mediump float;
+uniform float uTime;
+uniform vec2 uMouse;
+uniform float uAspect;
+varying vec2 vUv;
+void main() {
+  vec2 uv = vec2(vUv.x * uAspect, vUv.y);
+  vec2 p = uv * 3.2;
+  float t = uTime * 0.11;
+  vec2 i = p;
+  float c = 1.0;
+  float inten = .006;
+  for (int n = 0; n < 4; n++) {
+    float tt = t * (1.0 - 3.5 / float(n + 1));
+    i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
+    c += 1.0 / length(vec2(p.x / (sin(i.x + tt) / inten), p.y / (cos(i.y + tt) / inten)));
+  }
+  c /= 4.0;
+  c = 1.17 - pow(c, 1.4);
+  float v = pow(abs(c), 7.0);
+  vec2 m = vec2(uMouse.x * uAspect, uMouse.y);
+  float glow = smoothstep(0.9, 0.0, distance(uv, m)) * 0.35;
+  vec3 sky = vec3(0.50, 0.85, 0.92);
+  vec3 aqua = vec3(0.11, 0.61, 0.77);
+  vec3 col = mix(sky, aqua, clamp(v * 1.4, 0.0, 1.0));
+  float alpha = clamp(v * 0.55 + glow * 0.5, 0.0, 0.6);
+  gl_FragColor = vec4(col, alpha);
+}`;
+
+function compile(gl: WebGLRenderingContext, type: number, source: string) {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    gl.deleteShader(shader);
+    return null;
+  }
+  return shader;
+}
+
 /**
- * "Luz de água": cáusticas suaves em WebGL (Three.js) atrás do hero, como o
- * reflexo do sol no fundo de uma piscina limpa. Indireto, sem objeto óbvio.
- * Reage ao mouse e respira devagar. Só em tablet/desktop, com GPU real e sem
- * prefers-reduced-motion. Sem GPU (SwiftShader etc.) cada frame vira tarefa
- * longa, então desliga; ?fx=1 força (usado pelos testes).
+ * "Luz de água": cáusticas suaves atrás do hero, como o reflexo do sol no
+ * fundo de uma piscina. Indireto, sem objeto óbvio.
+ *
+ * WebGL puro de propósito: isto é um quad de tela cheia com um fragment
+ * shader e não precisa de engine 3D. A versão anterior usava three.js, que
+ * sozinho custava 700KB de JavaScript para baixar, parsear e compilar — o
+ * suficiente para gerar uma tarefa longa e travar o scroll em máquina modesta.
+ *
+ * Só roda em tela ≥768px, com GPU real e sem prefers-reduced-motion; sem GPU
+ * (SwiftShader etc.) cada frame vira tarefa longa, então desliga. ?fx=1 força.
  */
 export default function WaterLight({ className = '' }: { className?: string }) {
   const host = useRef<HTMLDivElement>(null);
@@ -17,124 +72,101 @@ export default function WaterLight({ className = '' }: { className?: string }) {
     const el = host.current;
     if (!el) return;
     const forced = new URLSearchParams(window.location.search).has('fx');
-    const ok = window.matchMedia('(min-width: 768px) and (prefers-reduced-motion: no-preference)').matches;
-    if (!ok && !forced) return;
+    if (!forced && !window.matchMedia('(min-width: 768px) and (prefers-reduced-motion: no-preference)').matches) return;
 
-    let disposed = false;
-    let cleanup: (() => void) | undefined;
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('aria-hidden', 'true');
+    const gl = canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, powerPreference: 'low-power' });
+    if (!gl) return;
 
-    import('three').then((THREE) => {
-      if (disposed) return;
-      const canvas = document.createElement('canvas');
-      canvas.setAttribute('aria-hidden', 'true');
-      let renderer: import('three').WebGLRenderer;
-      try {
-        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
-      } catch {
-        return;
-      }
-      const gl = renderer.getContext();
-      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-      const gpu = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
-      if (!forced && /swiftshader|llvmpipe|software|mesa offscreen/i.test(gpu)) {
-        renderer.dispose();
-        return;
-      }
-      el.appendChild(canvas);
-      renderer.setClearColor(0x000000, 0);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+    const debug = gl.getExtension('WEBGL_debug_renderer_info');
+    const gpu = debug ? String(gl.getParameter(debug.UNMASKED_RENDERER_WEBGL)) : '';
+    if (!forced && /swiftshader|llvmpipe|software|mesa offscreen/i.test(gpu)) return;
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-      const uniforms = {
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0.7, 0.4) },
-        uAspect: { value: 1 },
-      };
-      const material = new THREE.ShaderMaterial({
-        transparent: true,
-        depthWrite: false,
-        uniforms,
-        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }`,
-        fragmentShader: `
-          precision highp float;
-          uniform float uTime; uniform vec2 uMouse; uniform float uAspect; varying vec2 vUv;
-          void main(){
-            vec2 uv = vec2(vUv.x * uAspect, vUv.y);
-            vec2 p = uv * 3.2;
-            float t = uTime * 0.11;
-            vec2 i = p; float c = 1.0; float inten = .006;
-            for (int n = 0; n < 4; n++) {
-              float tt = t * (1.0 - 3.5 / float(n + 1));
-              i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
-              c += 1.0 / length(vec2(p.x / (sin(i.x + tt) / inten), p.y / (cos(i.y + tt) / inten)));
-            }
-            c /= 4.0; c = 1.17 - pow(c, 1.4);
-            float v = pow(abs(c), 7.0);
-            // brilho suave que segue o mouse
-            vec2 m = vec2(uMouse.x * uAspect, uMouse.y);
-            float glow = smoothstep(0.9, 0.0, distance(uv, m)) * 0.35;
-            vec3 sky = vec3(0.50, 0.85, 0.92);
-            vec3 aqua = vec3(0.11, 0.61, 0.77);
-            vec3 col = mix(sky, aqua, clamp(v * 1.4, 0.0, 1.0));
-            float alpha = clamp(v * 0.55 + glow * 0.5, 0.0, 0.6);
-            gl_FragColor = vec4(col, alpha);
-          }`,
-      });
-      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
-      scene.add(mesh);
+    const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    const program = vs && fs ? gl.createProgram() : null;
+    if (!vs || !fs || !program) return;
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+    gl.useProgram(program);
 
-      const target = new THREE.Vector2(0.7, 0.4);
-      const onMove = (e: PointerEvent) => {
-        const r = el.getBoundingClientRect();
-        target.set((e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height);
-      };
-      window.addEventListener('pointermove', onMove, { passive: true });
+    // Um único triângulo cobrindo a tela: mais barato que dois de um quad.
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const aPos = gl.getAttribLocation(program, 'aPos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-      const resize = () => {
-        const w = el.clientWidth;
-        const h = el.clientHeight;
-        if (!w || !h) return;
-        renderer.setSize(w, h, false);
-        uniforms.uAspect.value = w / h;
-      };
-      resize();
-      const ro = new ResizeObserver(resize);
-      ro.observe(el);
+    const uTime = gl.getUniformLocation(program, 'uTime');
+    const uMouse = gl.getUniformLocation(program, 'uMouse');
+    const uAspect = gl.getUniformLocation(program, 'uAspect');
 
-      let visible = true;
-      const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
-      io.observe(el);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.clearColor(0, 0, 0, 0);
 
-      let frame = 0;
-      let last = 0;
-      const clock = new THREE.Clock();
-      const loop = (now: number) => {
-        frame = requestAnimationFrame(loop);
-        if (!visible || document.hidden || now - last < 33) return; // ~30 fps basta
-        last = now;
-        uniforms.uTime.value = clock.getElapsedTime();
-        uniforms.uMouse.value.lerp(target, 0.05);
-        renderer.render(scene, camera);
-      };
+    el.appendChild(canvas);
+
+    const dpr = Math.min(window.devicePixelRatio, 1.25);
+    const target = { x: .7, y: .4 };
+    const mouse = { x: .7, y: .4 };
+
+    const onMove = (event: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      target.x = (event.clientX - rect.left) / rect.width;
+      target.y = 1 - (event.clientY - rect.top) / rect.height;
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+
+    const resize = () => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (!w || !h) return;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform1f(uAspect, w / h);
+    };
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(el);
+
+    let visible = true;
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
+    io.observe(el);
+
+    const start = performance.now();
+    let frame = 0;
+    let previous = 0;
+    const loop = (now: number) => {
       frame = requestAnimationFrame(loop);
-      setReady(true);
-
-      cleanup = () => {
-        cancelAnimationFrame(frame);
-        ro.disconnect();
-        io.disconnect();
-        window.removeEventListener('pointermove', onMove);
-        mesh.geometry.dispose();
-        material.dispose();
-        renderer.dispose();
-        canvas.remove();
-      };
-    });
+      if (!visible || document.hidden || now - previous < 33) return; // ~30fps basta
+      previous = now;
+      mouse.x += (target.x - mouse.x) * .05;
+      mouse.y += (target.y - mouse.y) * .05;
+      gl.uniform1f(uTime, (now - start) / 1000);
+      gl.uniform2f(uMouse, mouse.x, mouse.y);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    frame = requestAnimationFrame(loop);
+    setReady(true);
 
     return () => {
-      disposed = true;
-      cleanup?.();
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      io.disconnect();
+      window.removeEventListener('pointermove', onMove);
+      gl.deleteProgram(program);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      gl.deleteBuffer(buffer);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      canvas.remove();
     };
   }, []);
 

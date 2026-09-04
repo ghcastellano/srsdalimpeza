@@ -150,8 +150,8 @@ export default function HomePage() {
 
         {/* Problema → solução */}
         <section className="noise relative overflow-hidden bg-ink py-20 text-white sm:py-24 lg:py-32">
-          <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 h-[520px] w-[520px] rounded-full bg-aqua/25 blur-[120px]" />
-          <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-sky/20 blur-[120px]" />
+          <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(29,155,196,.30)_0%,rgba(29,155,196,.10)_45%,transparent_70%)]" />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(127,217,234,.26)_0%,rgba(127,217,234,.08)_45%,transparent_70%)]" />
           <div className="container-shell relative grid gap-12 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-7">
               <Reveal><p className="eyebrow text-sky">O que você não vê no seu sofá</p></Reveal>
@@ -349,7 +349,7 @@ export default function HomePage() {
 
         {/* Contato */}
         <section id="contato" className="relative overflow-hidden bg-ocean py-20 text-white sm:py-24 lg:py-32">
-          <div aria-hidden="true" className="pointer-events-none absolute -left-32 top-0 h-[480px] w-[480px] rounded-full bg-sky/25 blur-[120px]" />
+          <div aria-hidden="true" className="pointer-events-none absolute -left-32 top-0 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,rgba(127,217,234,.30)_0%,rgba(127,217,234,.10)_45%,transparent_70%)]" />
           <div className="container-shell relative grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading dark eyebrow="Fale conosco" title="Pronto para transformar seus estofados?" text="Preencha e receba seu orçamento no WhatsApp. Respondemos em minutos, de segunda a sexta, das 8h às 18h." />

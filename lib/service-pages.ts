@@ -85,7 +85,7 @@ export const postWorkPage: ServicePageContent = {
     'Removemos poeira fina, respingos de tinta, gesso, cimento e rejunte sem riscar as superfícies novas. Equipe treinada, equipamentos industriais e supervisão da proprietária do começo ao fim da obra.',
   hero: {
     src: '/assets/photos/pos-obra-hero.webp',
-    alt: 'Profissional da Srs da Limpeza aspirando o piso de um imóvel recém-construído durante a limpeza pós-obra',
+    alt: 'Equipe da Srs da Limpeza, de uniforme, revitalizando o piso de madeira de um apartamento após a obra',
   },
   message: 'Olá! Vim pela página de limpeza pós-obra e quero agendar uma visita técnica.',
   sections: [

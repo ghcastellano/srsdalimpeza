@@ -178,7 +178,7 @@ export default function ServicePage({ content }: { content: ServicePageContent }
         </section>
 
         <section id="contato" className="relative overflow-hidden bg-ocean py-20 text-white sm:py-24">
-          <div aria-hidden="true" className="pointer-events-none absolute -left-32 top-0 h-[480px] w-[480px] rounded-full bg-sky/25 blur-[120px]" />
+          <div aria-hidden="true" className="pointer-events-none absolute -left-32 top-0 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,rgba(127,217,234,.30)_0%,rgba(127,217,234,.10)_45%,transparent_70%)]" />
           <div className="container-shell relative grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeading dark eyebrow="Fale conosco" title="Peça seu orçamento gratuito." text="Respondemos em minutos, de segunda a sexta, das 8h às 18h." />

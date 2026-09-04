@@ -50,7 +50,10 @@ export default function SmoothScroll() {
 
     import('lenis').then(({ default: LenisCtor }) => {
       if (disposed) return;
-      lenis = new LenisCtor({ duration: 1.08 });
+      // lerp em vez de duration: resposta imediata ao gesto e assentamento
+      // rápido. Com duration ~1s cada giro de roda demorava mais de um segundo
+      // para parar, o que é percebido como travamento mesmo a 60fps.
+      lenis = new LenisCtor({ lerp: .13, wheelMultiplier: 1.1 });
       lenisRef.current = lenis;
       const loop = (time: number) => {
         lenis?.raf(time);

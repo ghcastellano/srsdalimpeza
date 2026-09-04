@@ -6,7 +6,7 @@ const nextConfig = {
     minimumCacheTTL: 2678400,
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'three'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
   // Redirects 301 do WordPress antigo. Quando o DNS apontar para cá, estas
   // URLs deixam de existir no servidor antigo; sem o 301 o Google perde o

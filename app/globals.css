@@ -107,8 +107,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: .05;
-  mix-blend-mode: soft-light;
+  opacity: .045;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
 }
 
@@ -146,6 +145,21 @@ html.cc-cursor, html.cc-cursor * { cursor: none !important; }
 html.cc-cursor input,
 html.cc-cursor textarea,
 html.cc-cursor select { cursor: text !important; }
+
+/* Reveal: só opacity + transform (o compositor resolve na GPU). */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .7s cubic-bezier(.22, 1, .36, 1);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+/* Sem JS o conteúdo não pode ficar invisível. */
+@media (scripting: none) {
+  .reveal { opacity: 1; transform: none; }
+}
 
 /* Marquee */
 @keyframes marquee-x {
