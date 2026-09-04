@@ -17,8 +17,10 @@ export default function Cursor() {
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const ringX = useSpring(x, { stiffness: 380, damping: 34, mass: .55 });
-  const ringY = useSpring(y, { stiffness: 380, damping: 34, mass: .55 });
+  // Rígido e leve: o anel praticamente acompanha o ponteiro, sem rastro longo.
+  const spring = { stiffness: 1400, damping: 60, mass: .28 };
+  const ringX = useSpring(x, spring);
+  const ringY = useSpring(y, spring);
 
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return;
@@ -71,17 +73,17 @@ export default function Cursor() {
         style={{ x, y }}
         className="absolute left-0 top-0"
       >
-        <div className={`-translate-x-1/2 -translate-y-1/2 rounded-full bg-aqua transition-all duration-200 ${expanded ? 'h-0 w-0 opacity-0' : 'h-1.5 w-1.5 opacity-100'}`} />
+        <div className={`-translate-x-1/2 -translate-y-1/2 rounded-full bg-aqua transition-all duration-200 ${expanded ? 'h-0 w-0 opacity-0' : 'h-1 w-1 opacity-100'}`} />
       </motion.div>
       {/* trailing ring / label */}
       <motion.div style={{ x: ringX, y: ringY }} className="absolute left-0 top-0">
         <div
-          className={`flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-300 ease-out ${
+          className={`flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-[width,height,background-color,border-color] duration-200 ease-out ${
             expanded
-              ? 'h-[84px] w-[84px] bg-aqua text-ink'
+              ? 'h-[58px] w-[58px] bg-aqua text-ink'
               : mode === 'link'
-                ? 'h-12 w-12 border border-aqua/80 bg-aqua/10'
-                : 'h-9 w-9 border border-aqua/60'
+                ? 'h-8 w-8 border border-aqua/80 bg-aqua/10'
+                : 'h-6 w-6 border border-aqua/60'
           }`}
         >
           <AnimatePresence>
@@ -91,7 +93,7 @@ export default function Cursor() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: .6 }}
                 transition={{ duration: .18 }}
-                className="text-[10px] font-semibold uppercase tracking-[.18em]"
+                className="text-[9px] font-bold uppercase tracking-[.14em]"
               >
                 {label}
               </motion.span>

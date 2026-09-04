@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 import Gallery from '@/components/Gallery';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import Instagram from '@/components/Instagram';
+import MediaRail from '@/components/MediaRail';
 import ProcessTimeline from '@/components/ProcessTimeline';
 import Reviews from '@/components/Reviews';
 import SectionHeading from '@/components/SectionHeading';
@@ -320,11 +320,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Instagram */}
-        <section id="instagram" className="bg-white py-20 sm:py-24 lg:py-32">
+        {/* Vídeos e bastidores */}
+        <section id="videos" className="bg-white py-20 sm:py-24 lg:py-32">
           <div className="container-shell">
-            <SectionHeading eyebrow="Instagram" title={<>Acompanhe os resultados <span className="text-gradient">de perto.</span></>} text="Vídeos e fotos publicados pela equipe no Instagram." />
-            <Instagram />
+            <SectionHeading eyebrow="Vídeos e bastidores" title={<>Veja a equipe <span className="text-gradient">trabalhando de verdade.</span></>} text="Vídeos que tocam aqui mesmo, sem sair do site, e fotos em alta resolução dos serviços." />
+            <MediaRail />
           </div>
         </section>
 

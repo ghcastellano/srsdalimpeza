@@ -155,6 +155,20 @@ export const postWorkClients = ['Residências', 'Hotéis e pousadas', 'Imobiliá
 /** `alt` descreve a imagem para busca/leitor de tela; `title` é o rótulo visível. */
 export type GalleryItem = { src: string; title: string; tag: string; alt: string };
 
+/**
+ * Item de mídia do lightbox. `kind` decide o que é reproduzido:
+ * - 'photo' (padrão): a foto em object-contain, com zoom.
+ * - 'youtube': player do YouTube embutido, tocando dentro da página.
+ * - 'instagram': embed do reel; o link para o post fica como saída.
+ */
+export type MediaItem = GalleryItem & {
+  kind?: 'photo' | 'youtube' | 'instagram';
+  /** ID do vídeo no YouTube ou código do reel no Instagram. */
+  mediaId?: string;
+  url?: string;
+  caption?: string;
+};
+
 export const gallery: GalleryItem[] = [
   { src: '/assets/photos/sofa-7.webp', title: 'Sofá de suede: antes e depois', tag: 'Higienização de sofá' , alt: 'Sofá de suede marrom higienizado pela Srs da Limpeza: metade com sujeira impregnada e metade limpa após a extração' },
   { src: '/assets/photos/sofa-1.webp', title: 'Extração profissional em sofá claro', tag: 'Equipe em ação' , alt: 'Profissional da Srs da Limpeza higienizando um sofá claro com máquina extratora em uma residência no Guarujá' },
@@ -204,11 +218,65 @@ export const reviews: Review[] = [
   { name: 'Andre Rodrigo Germano', iso: '2025-09-03', date: 'setembro de 2025', service: 'Pós-obra', text: 'Minha experiência foi ótima! Limpeza pós-obra impecável do local. Superou nossas expectativas. Super recomendo.' },
 ];
 
-/** Posts públicos do Instagram referenciados no site atual. */
-export const instagramPosts: { url: string; image: string; alt: string; caption: string; kind: string }[] = [
-  { url: 'https://www.instagram.com/reel/DV1wBAzEWu8/', image: '/assets/photos/posobra-12.webp', caption: 'Mais um lar transformado! Pós-obra completo após marcenaria, pedras, fechamento de varanda e pintura. Prontinho para receber a família.', alt: 'Apartamento entregue limpo após a limpeza pós-obra da Srs da Limpeza', kind: 'Reel · Pós-obra' },
-  { url: 'https://www.instagram.com/reel/DUrNh81kccg/', image: '/assets/photos/sofa-8.webp', caption: 'Higienização profunda de estofados: extração, odorização e secagem rápida. Veja o resultado em vídeo.', alt: 'Higienização profunda de estofado com extração, em vídeo no Instagram', kind: 'Reel · Estofados' },
-  { url: 'https://www.instagram.com/srsdalimpeza/', image: '/assets/photos/colchao-1.webp', caption: 'Bastidores, antes e depois e dicas de conservação. Siga @srsdalimpeza e acompanhe o dia a dia da equipe.', alt: 'Perfil da Srs da Limpeza no Instagram com antes e depois de estofados', kind: 'Perfil · @srsdalimpeza' },
+/**
+ * Vídeos e bastidores. Os dois vídeos do YouTube são do canal da empresa e
+ * tocam dentro da página; os reels abrem no embed do Instagram.
+ */
+export const media: MediaItem[] = [
+  {
+    kind: 'youtube',
+    mediaId: '5YG8UkMFTpE',
+    src: '/assets/photos/yt-5YG8UkMFTpE.webp',
+    title: 'A obra ou reforma acabou?',
+    tag: 'Vídeo · Limpeza pós-obra',
+    alt: 'Apartamento entregue pronto para uso após a limpeza pós-obra da Srs da Limpeza',
+    caption: 'Entregamos o imóvel pronto para uso, com qualidade e agilidade. Veja como a equipe trabalha do início à vistoria final.',
+    url: 'https://www.youtube.com/watch?v=5YG8UkMFTpE',
+  },
+  {
+    kind: 'youtube',
+    mediaId: 'VBI5Rb2Vq4Y',
+    src: '/assets/photos/yt-VBI5Rb2Vq4Y.webp',
+    title: 'Nunca use ácido em mármore',
+    tag: 'Vídeo · Revitalização de pisos',
+    alt: 'Alerta sobre o uso de ácido em piso de mármore durante a limpeza pós-obra',
+    caption: 'Ácido mancha mármore e porcelanato polido de forma irreversível. Veja o que usamos no lugar para tirar nata de cimento sem danificar o acabamento.',
+    url: 'https://www.youtube.com/watch?v=VBI5Rb2Vq4Y',
+  },
+  {
+    kind: 'instagram',
+    mediaId: 'DV1wBAzEWu8',
+    src: '/assets/photos/posobra-12.webp',
+    title: 'Mais um lar transformado',
+    tag: 'Reel · Pós-obra',
+    alt: 'Apartamento entregue limpo após a limpeza pós-obra da Srs da Limpeza',
+    caption: 'Pós-obra completo após marcenaria, pedras, fechamento de varanda e pintura. Prontinho para receber a família.',
+    url: 'https://www.instagram.com/reel/DV1wBAzEWu8/',
+  },
+  {
+    kind: 'instagram',
+    mediaId: 'DUrNh81kccg',
+    src: '/assets/photos/sofa-8.webp',
+    title: 'Higienização profunda de estofado',
+    tag: 'Reel · Estofados',
+    alt: 'Higienização profunda de estofado com extração, em vídeo no Instagram',
+    caption: 'Extração, odorização e secagem rápida. O retorno de água suja mostra o que estava no fundo da espuma.',
+    url: 'https://www.instagram.com/reel/DUrNh81kccg/',
+  },
+  {
+    src: '/assets/photos/sofa-7.webp',
+    title: 'Sofá de suede: antes e depois',
+    tag: 'Foto · Higienização de sofá',
+    alt: 'Sofá de suede marrom higienizado pela Srs da Limpeza: metade com sujeira impregnada e metade limpa após a extração',
+    caption: 'A mesma peça, na mesma foto: à esquerda antes, à direita depois da extração.',
+  },
+  {
+    src: '/assets/photos/posobra-9.webp',
+    title: 'Cozinha entregue após a obra',
+    tag: 'Foto · Limpeza pós-obra',
+    alt: 'Cozinha nova pronta para uso após limpeza pós-obra, sem poeira nem respingos de tinta',
+    caption: 'Armários limpos por dentro, esquadrias sem respingo e piso tratado antes da mudança.',
+  },
 ];
 
 export const faq = [
@@ -225,6 +293,7 @@ export const navLinks = [
   { label: 'Serviços', href: '#servicos' },
   { label: 'Como funciona', href: '#como-funciona' },
   { label: 'Resultados', href: '#resultados' },
+  { label: 'Vídeos', href: '#videos' },
   { label: 'Avaliações', href: '#avaliacoes' },
   { label: 'Pós-obra', href: '#pos-obra' },
   { label: 'FAQ', href: '#faq' },

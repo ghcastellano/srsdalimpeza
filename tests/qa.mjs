@@ -20,8 +20,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   check((await page.locator('footer').textContent()).includes('© 2026'), 'footer year 2026');
   check(await page.locator('a[href^="https://wa.me/5513974076009"]').count() > 3, 'WhatsApp estofados links');
   check(await page.locator('a[href^="https://wa.me/5513997187827"]').count() > 1, 'WhatsApp pós-obra links');
-  check(await page.locator('a[href*="instagram.com/reel/DV1wBAzEWu8"]').count() === 1, 'Instagram reel 1');
-  check(await page.locator('a[href*="instagram.com/reel/DUrNh81kccg"]').count() === 1, 'Instagram reel 2');
+  check(await page.locator('#videos [data-rail] [data-index]').count() >= 4, 'media rail has items');
   check(await page.locator('a[href*="share.google"]').count() >= 1, 'Google reviews link');
   await page.waitForTimeout(1500);
   check(await page.locator('[data-fx="on"] canvas').count() === 1, 'WebGL water light mounted on desktop');
@@ -29,7 +28,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   await page.waitForTimeout(1500);
   check(await fab.isVisible(), 'WhatsApp FAB visible');
   // nav anchors
-  for (const id of ['servicos', 'como-funciona', 'resultados', 'avaliacoes', 'pos-obra', 'faq', 'contato']) {
+  for (const id of ['servicos', 'como-funciona', 'resultados', 'videos', 'avaliacoes', 'pos-obra', 'faq', 'contato']) {
     await page.click(`header a[href="#${id}"]`);
     await page.waitForTimeout(1400);
     const top = await page.locator(`#${id}`).evaluate((el) => el.getBoundingClientRect().top);
@@ -41,7 +40,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   // Gallery buttons
   const railSel = '#resultados [data-rail]';
   const before = await page.locator(railSel).evaluate((el) => el.scrollLeft);
-  await page.getByRole('button', { name: 'Próxima foto' }).click();
+  await page.getByRole('button', { name: 'Rolar para frente' }).first().click();
   await page.waitForTimeout(700);
   const after = await page.locator(railSel).evaluate((el) => el.scrollLeft);
   check(after > before, 'gallery next button scrolls');
@@ -64,13 +63,13 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(500);
   check((await dialog.locator('h2').textContent()) !== firstTitle, 'lightbox arrow key advances');
-  await dialog.getByRole('button', { name: 'Próxima foto' }).click();
+  await dialog.getByRole('button', { name: 'Próximo' }).click();
   await page.waitForTimeout(400);
   check((await dialog.locator('h2').textContent()).length > 0, 'lightbox next button works');
   const imgBox = await dialog.locator('img').boundingBox();
   check(imgBox && imgBox.height > 500, `lightbox image sized to viewport (${Math.round(imgBox?.height ?? 0)}px)`);
   await page.keyboard.press('Escape');
-  await page.waitForTimeout(400);
+  await page.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
   check(await page.getByRole('dialog').count() === 0, 'lightbox closes with Escape');
   // Form → WhatsApp
   await page.fill('#f-name', 'Teste QA');
@@ -104,8 +103,8 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   check(top > -120 && top < 140, `mobile anchor scrolls to #faq (top=${Math.round(top)})`);
   await page.locator('#resultados [data-rail] [data-index="1"]').tap();
   await page.waitForTimeout(500);
-  check(await page.getByRole('dialog', { name: /Extração/ }).isVisible(), 'mobile tap opens lightbox');
-  await page.getByRole('button', { name: 'Fechar foto' }).tap();
+  check(await page.getByRole('dialog').isVisible(), 'mobile tap opens lightbox');
+  await page.getByRole('button', { name: 'Fechar' }).tap();
   await page.waitForTimeout(400);
   // tap targets ≥ 44px for primary CTAs
   const small = await page.evaluate(() => Array.from(document.querySelectorAll('a[href^="https://wa.me"], button')).filter((el) => { const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return cs.display !== 'none' && r.width > 0 && (r.height < 40); }).map((el) => el.textContent.trim().slice(0, 30)));
@@ -180,6 +179,42 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   check(sm.status() === 200 && pages.every((p) => smText.includes(p === '/' ? 'vercel.app<' : p.slice(1))), 'sitemap lists all pages');
   const rb = await page.goto(`${base}/robots.txt`);
   check((await rb.text()).includes('Sitemap:'), 'robots.txt points to sitemap');
+  await page.close();
+}
+
+// ---------- vídeo embutido + arraste do trilho de mídia ----------
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(base, { waitUntil: 'networkidle' });
+  const rail = '#videos [data-rail]';
+  await page.locator(rail).scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  // Lenis não pode engolir o gesto horizontal do trilho
+  check(await page.locator(`${rail}[data-lenis-prevent-horizontal]`).count() === 1, 'media rail opts out of Lenis horizontal');
+  check(await page.locator('#resultados [data-rail][data-lenis-prevent-horizontal]').count() === 1, 'gallery rail opts out of Lenis horizontal');
+  // arraste com o mouse
+  const box = await page.locator(rail).boundingBox();
+  const before = await page.locator(rail).evaluate((el) => el.scrollLeft);
+  await page.mouse.move(box.x + box.width - 80, box.y + box.height / 2);
+  await page.mouse.down();
+  for (let i = 1; i <= 12; i++) await page.mouse.move(box.x + box.width - 80 - i * 24, box.y + box.height / 2);
+  await page.mouse.up();
+  await page.waitForTimeout(400);
+  const after = await page.locator(rail).evaluate((el) => el.scrollLeft);
+  check(after > before, `media rail drags with mouse (${Math.round(before)} → ${Math.round(after)})`);
+  check(await page.getByRole('dialog').count() === 0, 'media drag does not open lightbox');
+  // o primeiro item é vídeo do YouTube: abre e toca embutido
+  await page.locator(`${rail} [data-index="0"]`).click();
+  await page.waitForTimeout(800);
+  const dialog = page.getByRole('dialog');
+  check(await dialog.isVisible(), 'video opens in lightbox');
+  const frame = dialog.locator('iframe');
+  check(await frame.count() === 1, 'lightbox renders an embedded player');
+  const src = await frame.getAttribute('src');
+  check(/youtube-nocookie\.com\/embed\/[\w-]{6,}/.test(src) && src.includes('autoplay=1'), `player is an embedded YouTube (${(src || '').slice(0, 58)}…)`);
+  await page.keyboard.press('Escape');
+  await page.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
+  check(await page.getByRole('dialog').count() === 0, 'video lightbox closes and stops playback');
   await page.close();
 }
 
