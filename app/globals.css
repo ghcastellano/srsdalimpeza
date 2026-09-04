@@ -253,13 +253,23 @@ html.cc-cursor select { cursor: text !important; }
 }
 .btn-shine:hover::after { transform: translateX(120%); }
 
-/* Pulso do FAB do WhatsApp */
+/* Pulso do FAB do WhatsApp. Um anel que cresce em transform/opacity, e não
+   box-shadow animado: box-shadow não é composto, então o botão — que fica na
+   tela o tempo todo — repintava a cada frame, para sempre. */
 @keyframes fab-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(37,211,102,.55); }
-  70% { box-shadow: 0 0 0 16px rgba(37,211,102,0); }
-  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  0% { transform: scale(1); opacity: .5; }
+  70%, 100% { transform: scale(2); opacity: 0; }
 }
-.fab-pulse { animation: fab-pulse 2.4s ease-out infinite; }
+.fab-pulse { position: relative; }
+.fab-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #25d366;
+  animation: fab-pulse 2.4s ease-out infinite;
+}
 
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
@@ -280,5 +290,5 @@ html.cc-cursor select { cursor: text !important; }
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
   }
-  .marquee-track, .fab-pulse, .float-slow { animation: none; }
+  .marquee-track, .fab-pulse::before, .float-slow { animation: none; }
 }
