@@ -25,11 +25,7 @@ export default function WordReveal({
   }, .92, .36);
 
   return (
-    <Tag
-      ref={ref as never}
-      className={`word-reveal ${className}`}
-      style={{ '--reveal-floor': dark ? '.55' : '.62' } as React.CSSProperties}
-    >
+    <Tag ref={ref as never} data-dark={dark || undefined} className={`word-reveal ${className}`}>
       {text}
     </Tag>
   );

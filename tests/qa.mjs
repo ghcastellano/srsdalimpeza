@@ -279,6 +279,40 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   await page.close();
 }
 
+// Navegação client-side: o layout NÃO remonta ao trocar de página, então um
+// observer montado uma vez só para de enxergar o conteúdo novo. Foi assim que
+// a home voltou em branco — 88 blocos parados em opacity 0, sem erro nenhum no
+// console — depois de visitar uma landing e apertar "voltar".
+{
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, ignoreHTTPSErrors: true });
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(base, { waitUntil: 'networkidle' });
+  await page.locator('a[href="/higienizacao-de-sofa-guaruja"]').first().click();
+  await page.waitForURL('**/higienizacao-de-sofa-guaruja', { timeout: 20000 });
+  await page.waitForTimeout(600);
+
+  // Só os blocos INTEIROS na viewport: o observer usa rootMargin -6%, então
+  // quem está espiando pela borda de baixo ainda não deve ter aparecido.
+  const inside = "[...document.querySelectorAll('.reveal')].filter(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;})";
+  for (const [label, go] of [['voltar', () => page.goBack()], ['avançar', () => page.goForward()], ['voltar de novo', () => page.goBack()]]) {
+    await go();
+    await page.waitForTimeout(400);
+    // Posição fixa: sem isto o navegador restaura o scroll quando quer e a
+    // medição pode pegar a viewport vazia, deixando a asserção passar à toa.
+    await page.evaluate(() => window.scrollTo(0, 900));
+    await page.waitForTimeout(250);
+    await page.evaluate(() => window.scrollTo(0, 1600));
+    await page.waitForFunction(`${inside}.every(el=>getComputedStyle(el).opacity==='1')`, null, { timeout: 8000 }).catch(() => {});
+    const state = await page.evaluate(`(() => { const n = ${inside}; return { path: location.pathname, total: n.length, shown: n.filter(el=>getComputedStyle(el).opacity==='1').length }; })()`);
+    check(state.total > 0 && state.shown === state.total,
+      `${label} (${state.path}): ${state.shown}/${state.total} blocos da viewport renderizam`);
+  }
+  check(errors.length === 0, `navegação sem erros de JS${errors.length ? ': ' + errors[0].slice(0, 90) : ''}`);
+  await page.close();
+}
+
 await browser.close();
 if (failures.length) { console.log(`\n${failures.length} failure(s)`); process.exit(1); }
 console.log('\nQA OK');

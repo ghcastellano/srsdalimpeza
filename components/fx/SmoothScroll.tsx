@@ -5,8 +5,10 @@ import { useEffect, useRef } from 'react';
 import type Lenis from 'lenis';
 
 /**
- * Smooth scrolling (Lenis) apenas para ponteiros precisos e sem
- * prefers-reduced-motion; em touch o scroll nativo é mantido.
+ * O scroll da roda/trackpad é o nativo do navegador. O Lenis fica só para
+ * animar os pulos dos links de âncora do menu — que é onde a suavização
+ * agrega — e é carregado apenas para ponteiros precisos e sem
+ * prefers-reduced-motion.
  */
 export default function SmoothScroll() {
   const pathname = usePathname();
@@ -50,10 +52,12 @@ export default function SmoothScroll() {
 
     import('lenis').then(({ default: LenisCtor }) => {
       if (disposed) return;
-      // lerp em vez de duration: resposta imediata ao gesto e assentamento
-      // rápido. Com duration ~1s cada giro de roda demorava mais de um segundo
-      // para parar, o que é percebido como travamento mesmo a 60fps.
-      lenis = new LenisCtor({ lerp: .13, wheelMultiplier: 1.1 });
+      // smoothWheel desligado de propósito: a roda e o trackpad voltam ao
+      // scroll nativo do navegador, com zero latência. Qualquer suavização
+      // faz a página andar atrás do dedo, e é isso que se sente como
+      // "travando" — não é queda de frame, é atraso de entrada.
+      // O Lenis continua aqui só pela animação dos links de âncora do menu.
+      lenis = new LenisCtor({ smoothWheel: false });
       lenisRef.current = lenis;
       const loop = (time: number) => {
         lenis?.raf(time);

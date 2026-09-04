@@ -111,7 +111,7 @@ export default function Lightbox({ items, active, onChange, onClose }: Props) {
           aria-modal="true"
           aria-labelledby={titleId}
           onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}
-          className="fade-in fixed inset-0 z-[80] grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)_auto] bg-ink/[.98] p-3 backdrop-blur-md text-white sm:p-5 lg:p-6"
+          className="fade-in fixed inset-0 z-[80] grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)_auto] bg-ink/[.98] p-3 text-white sm:p-5 lg:p-6"
         >
           <header className="flex min-w-0 items-start justify-between gap-4 border-b border-white/15 pb-3 sm:gap-6 sm:pb-4">
             <div className="min-w-0">

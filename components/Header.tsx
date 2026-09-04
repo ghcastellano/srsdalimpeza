@@ -62,7 +62,7 @@ export default function Header() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          open ? 'bg-transparent' : scrolled ? 'border-b border-ink/10 bg-paper/92 shadow-[0_8px_30px_-20px_rgba(6,38,55,.35)] backdrop-blur-sm' : 'bg-transparent'
+          open ? 'bg-transparent' : scrolled ? 'border-b border-ink/10 bg-paper shadow-[0_8px_30px_-20px_rgba(6,38,55,.35)]' : 'bg-transparent'
         }`}
       >
         <div className="container-shell flex h-[72px] items-center justify-between lg:h-[84px]">

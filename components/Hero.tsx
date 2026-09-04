@@ -55,7 +55,7 @@ export default function Hero() {
               Pedir orçamento grátis
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </a>
-            <a href="#resultados" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-ink/15 bg-white/60 px-7 text-base font-bold text-ink backdrop-blur transition-colors hover:border-aqua hover:text-aqua-dark">
+            <a href="#resultados" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-ink/15 bg-white/80 px-7 text-base font-bold text-ink transition-colors hover:border-aqua hover:text-aqua-dark">
               Ver resultados <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
             </a>
           </div>
@@ -86,7 +86,7 @@ export default function Hero() {
                 fill
                 priority
                 fetchPriority="high"
-                quality={75}
+                quality={88}
                 sizes="(max-width: 640px) 92vw, (max-width: 1023px) 560px, 46vw"
                 className="object-cover object-[center_top]"
               />
@@ -94,7 +94,7 @@ export default function Hero() {
             </div>
             
             {/* Selo flutuante */}
-            <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/90 p-3 pr-5 shadow-card backdrop-blur sm:bottom-7 sm:left-7">
+            <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/95 p-3 pr-5 shadow-card sm:bottom-7 sm:left-7">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>
               <span>
                 <span className="block text-sm font-extrabold leading-5 text-ink">4,9 · {contact.reviewCount} avaliações</span>

@@ -45,11 +45,11 @@ export default function Gallery() {
                 sizes="(max-width: 640px) 78vw, (max-width: 1023px) 46vw, 460px"
                 className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
               />
-              <span className="absolute left-4 top-4 rounded-full bg-ink/75 px-3 py-1 text-xs font-bold tabular-nums tracking-[.12em] text-white backdrop-blur">{String(index + 1).padStart(2, '0')}</span>
+              <span className="absolute left-4 top-4 rounded-full bg-ink/85 px-3 py-1 text-xs font-bold tabular-nums tracking-[.12em] text-white">{String(index + 1).padStart(2, '0')}</span>
               <span className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white text-ink opacity-90 transition-transform group-hover:scale-110"><ArrowUpRight className="h-4 w-4" /></span>
               {index === 0 && (
                 <span aria-hidden="true" className="absolute inset-x-0 bottom-4 flex justify-between px-4 text-xs font-extrabold uppercase tracking-[.16em] text-white">
-                  <span className="rounded-full bg-ink/70 px-3 py-1 backdrop-blur">Antes</span>
+                  <span className="rounded-full bg-ink/80 px-3 py-1">Antes</span>
                   <span className="rounded-full bg-ocean px-3 py-1">Depois</span>
                 </span>
               )}

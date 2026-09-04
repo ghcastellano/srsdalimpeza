@@ -95,7 +95,7 @@ export default function ServicePage({ content }: { content: ServicePageContent }
                   Pedir orçamento grátis
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
-                <a href="#contato" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-ink/15 bg-white/60 px-7 text-base font-bold text-ink backdrop-blur transition-colors hover:border-aqua hover:text-aqua-dark">
+                <a href="#contato" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-ink/15 bg-white/80 px-7 text-base font-bold text-ink transition-colors hover:border-aqua hover:text-aqua-dark">
                   Falar com a equipe
                 </a>
               </div>
@@ -183,7 +183,7 @@ export default function ServicePage({ content }: { content: ServicePageContent }
             <div className="lg:col-span-5">
               <SectionHeading dark eyebrow="Fale conosco" title="Peça seu orçamento gratuito." text="Respondemos em minutos, de segunda a sexta, das 8h às 18h." />
               <Reveal delay={.12}>
-                <div className="mt-8 rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur">
+                <div className="mt-8 rounded-3xl border border-white/15 bg-white/[.12] p-5">
                   <p className="text-xs font-bold uppercase tracking-[.16em] text-sky">Onde estamos</p>
                   <address className="mt-2 not-italic leading-7 text-white/90">{fullAddress}</address>
                   <a href={contact.googleMaps} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center gap-2 font-bold text-sky underline underline-offset-4">

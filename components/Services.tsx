@@ -23,7 +23,7 @@ export default function Services() {
                 sizes="(max-width: 640px) 92vw, (max-width: 1023px) 46vw, 23vw"
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
               />
-              <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold tabular-nums text-ink/80 backdrop-blur">0{index + 1}</span>
+              <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold tabular-nums text-ink/80">0{index + 1}</span>
             </div>
             <div className="flex flex-1 flex-col p-6">
               <h3 className="font-display text-xl font-semibold text-ink">{service.title}</h3>

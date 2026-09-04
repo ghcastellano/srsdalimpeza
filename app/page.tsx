@@ -169,7 +169,7 @@ export default function HomePage() {
                 { icon: ShieldCheck, title: 'Bactérias', text: 'Suor, restos de comida e pets: risco real para crianças e idosos.' },
               ].map(({ icon: Icon, title, text }, index) => (
                 <Reveal key={title} delay={index * .08}>
-                  <div className="flex gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                  <div className="flex gap-4 rounded-3xl border border-white/10 bg-white/[.07] p-5">
                     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky/15 text-sky"><Icon className="h-5 w-5" /></span>
                     <div>
                       <h3 className="font-display text-lg font-semibold">{title}</h3>
@@ -355,19 +355,19 @@ export default function HomePage() {
               <SectionHeading dark eyebrow="Fale conosco" title="Pronto para transformar seus estofados?" text="Preencha e receba seu orçamento no WhatsApp. Respondemos em minutos, de segunda a sexta, das 8h às 18h." />
               <Reveal delay={.12}>
                 <dl className="mt-8 grid gap-5 sm:grid-cols-2">
-                  <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur">
+                  <div className="rounded-3xl border border-white/15 bg-white/[.12] p-5">
                     <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">Estofados</dt>
                     <dd className="mt-1 text-lg font-bold"><a href={whatsappUrl(messages.upholstery)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center">{contact.upholsteryPhone}</a></dd>
                   </div>
-                  <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur">
+                  <div className="rounded-3xl border border-white/15 bg-white/[.12] p-5">
                     <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">Pós-obra e pisos</dt>
                     <dd className="mt-1 text-lg font-bold"><a href={whatsappUrl(messages.postWork, 'postWork')} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center">{contact.postWorkPhone}</a></dd>
                   </div>
-                  <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur sm:col-span-2">
+                  <div className="rounded-3xl border border-white/15 bg-white/[.12] p-5 sm:col-span-2">
                     <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">E-mail</dt>
                     <dd className="mt-1 text-base"><a href={`mailto:${contact.email}`} className="inline-flex min-h-11 items-center font-bold">{contact.email}</a></dd>
                   </div>
-                  <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur sm:col-span-2">
+                  <div className="rounded-3xl border border-white/15 bg-white/[.12] p-5 sm:col-span-2">
                     <dt className="text-xs font-bold uppercase tracking-[.16em] text-sky">Endereço e atendimento</dt>
                     <dd className="mt-1 text-base">
                       <address className="not-italic leading-7 text-white/90">{fullAddress}</address>

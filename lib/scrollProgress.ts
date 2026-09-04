@@ -12,14 +12,19 @@ let running = false;
 function loop() {
   frame = 0;
   const viewport = window.innerHeight;
+  // Lê todos os rects ANTES de escrever qualquer estilo. Intercalar leitura e
+  // escrita obriga o navegador a refazer o layout a cada elemento, em todo
+  // frame do scroll — era isso que dava a sensação de travada ao descer.
+  const pending: [Entry, number][] = [];
   for (const entry of entries) {
-    const rect = entry.el.getBoundingClientRect();
+    const top = entry.el.getBoundingClientRect().top;
     // 0 quando o topo do elemento está em `from` da viewport, 1 quando em `to`.
     const start = viewport * entry.from;
-    const end = viewport * entry.to;
-    const raw = (start - rect.top) / (start - end + rect.height * 0);
-    entry.apply(Math.min(1, Math.max(0, raw)));
+    const span = start - viewport * entry.to;
+    const raw = span === 0 ? 1 : (start - top) / span;
+    pending.push([entry, Math.min(1, Math.max(0, raw))]);
   }
+  for (const [entry, progress] of pending) entry.apply(progress);
   running = false;
 }
 

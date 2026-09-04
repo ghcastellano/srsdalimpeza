@@ -58,7 +58,7 @@ export default function MediaRail() {
                   className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
                 />
                 <span className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
-                <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[.14em] text-white backdrop-blur">
+                <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 text-xs font-bold uppercase tracking-[.14em] text-white">
                   {isVideo ? <Play className="h-3.5 w-3.5 fill-current" /> : null}
                   {item.tag}
                 </span>
