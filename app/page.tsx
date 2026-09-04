@@ -16,9 +16,9 @@ import Reviews from '@/components/Reviews';
 import SectionHeading from '@/components/SectionHeading';
 import Services from '@/components/Services';
 import WhatsAppFab from '@/components/WhatsAppFab';
-import ParallaxImage from '@/components/ui/ParallaxImage';
+import PhotoGrid from '@/components/PhotoGrid';
 import Reveal from '@/components/ui/Reveal';
-import { benefits, contact, faq, messages, postWorkClients, postWorkGallery, postWorkScope, process, siteUrl, whatsappUrl } from '@/lib/content';
+import { benefits, contact, faq, messages, postWorkClients, postWorkGallery, postWorkScope, process, reviews, siteUrl, whatsappUrl } from '@/lib/content';
 
 const benefitIcons = [ShieldCheck, Wind, Leaf, Sparkles, Users, BadgeCheck];
 
@@ -39,6 +39,13 @@ export default function HomePage() {
     openingHours: 'Mo-Fr 08:00-18:00',
     priceRange: '$$',
     aggregateRating: { '@type': 'AggregateRating', ratingValue: '5', reviewCount: '73' },
+    review: reviews.map((r) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: r.name },
+      datePublished: r.iso,
+      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+      reviewBody: r.text,
+    })),
     makesOffer: ['Higienização de sofá', 'Higienização de colchão', 'Impermeabilização de estofados', 'Limpeza pós-obra', 'Revitalização de pisos'].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
   };
   const faqSchema = {
@@ -215,18 +222,15 @@ export default function HomePage() {
               </Reveal>
             </div>
             <div className="lg:col-span-6">
-              <Reveal>
-                <ParallaxImage src="/assets/photos/pos-obra-hero.webp" alt="Profissional aspirando o piso de um imóvel recém-construído" sizes="(max-width: 1023px) 92vw, 46vw" quality={80} className="aspect-[4/3] w-full rounded-3xl" imageClassName="object-cover" />
-              </Reveal>
-              <div className="mt-5 grid grid-cols-4 gap-3">
-                {postWorkGallery.map((item, index) => (
-                  <Reveal key={item.src} delay={index * .06}>
-                    <div className="relative aspect-[3/4] overflow-hidden rounded-2xl">
-                      <Image src={item.src} alt={item.alt} fill quality={78} sizes="(max-width: 1023px) 22vw, 11vw" className="object-cover" />
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
+              <PhotoGrid
+                items={postWorkGallery}
+                featured
+                dark
+                className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4"
+                itemClassName="aspect-[3/4]"
+                sizes="(max-width: 639px) 45vw, (max-width: 1023px) 23vw, 12vw"
+              />
+              <p className="mt-4 text-sm text-white/70">Fotos reais de imóveis entregues pela equipe. Clique para ampliar.</p>
             </div>
           </div>
         </section>

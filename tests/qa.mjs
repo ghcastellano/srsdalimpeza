@@ -13,7 +13,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto(`${base}/?bolhas=1`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}/?fx=1`, { waitUntil: 'networkidle' });
   check((await page.title()).includes('Srs da Limpeza'), 'title contains brand');
   check(await page.locator('link[rel="icon"]').count() > 0, 'favicon declared');
   check(await page.locator('script[type="application/ld+json"]').count() === 2, 'JSON-LD LocalBusiness + FAQ');
@@ -24,7 +24,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   check(await page.locator('a[href*="instagram.com/reel/DUrNh81kccg"]').count() === 1, 'Instagram reel 2');
   check(await page.locator('a[href*="share.google"]').count() >= 1, 'Google reviews link');
   await page.waitForTimeout(1500);
-  check(await page.locator('[data-bubbles="on"] canvas').count() === 1, '3D bubbles mounted on desktop');
+  check(await page.locator('[data-fx="on"] canvas').count() === 1, 'WebGL water light mounted on desktop');
   const fab = page.getByRole('link', { name: 'Pedir orçamento no WhatsApp', exact: true });
   await page.waitForTimeout(1500);
   check(await fab.isVisible(), 'WhatsApp FAB visible');
@@ -39,11 +39,39 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   await page.click('#faq button[aria-expanded]');
   check(await page.locator('#faq [role="region"]').count() >= 1, 'FAQ accordion toggles');
   // Gallery buttons
-  const before = await page.locator('#resultados ul').evaluate((el) => el.scrollLeft);
-  await page.getByRole('button', { name: 'Próximo' }).click();
+  const railSel = '#resultados [data-rail]';
+  const before = await page.locator(railSel).evaluate((el) => el.scrollLeft);
+  await page.getByRole('button', { name: 'Próxima foto' }).click();
   await page.waitForTimeout(700);
-  const after = await page.locator('#resultados ul').evaluate((el) => el.scrollLeft);
+  const after = await page.locator(railSel).evaluate((el) => el.scrollLeft);
   check(after > before, 'gallery next button scrolls');
+  // drag with mouse
+  const box = await page.locator(railSel).boundingBox();
+  await page.mouse.move(box.x + box.width * .6, box.y + box.height * .4);
+  await page.mouse.down();
+  for (let i = 1; i <= 10; i++) await page.mouse.move(box.x + box.width * .6 - i * 40, box.y + box.height * .4);
+  await page.mouse.up();
+  await page.waitForTimeout(300);
+  const dragged = await page.locator(railSel).evaluate((el) => el.scrollLeft);
+  check(dragged > after + 100, `gallery drags with mouse (${Math.round(after)} → ${Math.round(dragged)})`);
+  check(await page.getByRole('dialog').count() === 0, 'drag does not open lightbox');
+  // click opens lightbox
+  await page.locator(`${railSel} [data-index="0"]`).click();
+  await page.waitForTimeout(500);
+  const dialog = page.getByRole('dialog');
+  check(await dialog.isVisible(), 'lightbox opens on click');
+  const firstTitle = await dialog.locator('h2').textContent();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(500);
+  check((await dialog.locator('h2').textContent()) !== firstTitle, 'lightbox arrow key advances');
+  await dialog.getByRole('button', { name: 'Próxima foto' }).click();
+  await page.waitForTimeout(400);
+  check((await dialog.locator('h2').textContent()).length > 0, 'lightbox next button works');
+  const imgBox = await dialog.locator('img').boundingBox();
+  check(imgBox && imgBox.height > 500, `lightbox image sized to viewport (${Math.round(imgBox?.height ?? 0)}px)`);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check(await page.getByRole('dialog').count() === 0, 'lightbox closes with Escape');
   // Form → WhatsApp
   await page.fill('#f-name', 'Teste QA');
   await page.fill('#f-phone', '13999999999');
@@ -64,7 +92,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, ignoreHTTPSErrors: true });
   const page = await context.newPage();
   await page.goto(base, { waitUntil: 'networkidle' });
-  check(await page.locator('[data-bubbles] canvas').count() === 0, 'no 3D canvas on mobile');
+  check(await page.locator('[data-fx] canvas').count() === 0, 'no WebGL canvas on mobile');
   check(!(await page.evaluate(() => document.documentElement.classList.contains('cc-cursor'))), 'no custom cursor on touch');
   await page.getByRole('button', { name: 'Abrir menu' }).click();
   await page.waitForTimeout(500);
@@ -74,6 +102,11 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   check(await page.getByRole('dialog').count() === 0, 'mobile menu closes on navigation');
   const top = await page.locator('#faq').evaluate((el) => el.getBoundingClientRect().top);
   check(top > -120 && top < 140, `mobile anchor scrolls to #faq (top=${Math.round(top)})`);
+  await page.locator('#resultados [data-rail] [data-index="1"]').tap();
+  await page.waitForTimeout(500);
+  check(await page.getByRole('dialog', { name: /Extração/ }).isVisible(), 'mobile tap opens lightbox');
+  await page.getByRole('button', { name: 'Fechar foto' }).tap();
+  await page.waitForTimeout(400);
   // tap targets ≥ 44px for primary CTAs
   const small = await page.evaluate(() => Array.from(document.querySelectorAll('a[href^="https://wa.me"], button')).filter((el) => { const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return cs.display !== 'none' && r.width > 0 && (r.height < 40); }).map((el) => el.textContent.trim().slice(0, 30)));
   check(small.length === 0, `tap targets ≥ 40px (${small.join(', ')})`);

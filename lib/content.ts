@@ -128,39 +128,52 @@ export const postWorkScope = [
 
 export const postWorkClients = ['Residências', 'Hotéis e pousadas', 'Imobiliárias', 'Arquitetos', 'Empreiteiras', 'Condomínios', 'Comércios', 'Escolas'];
 
-export const gallery = [
-  { src: '/assets/photos/sofa-7.webp', alt: 'Sofá de suede marrom: metade suja e metade higienizada, mostrando a diferença', tag: 'Sofá · antes e depois' },
-  { src: '/assets/photos/sofa-1.webp', alt: 'Profissional da Srs da Limpeza fazendo a extração em um sofá claro', tag: 'Extração profissional' },
-  { src: '/assets/photos/sofa-8.webp', alt: 'Estofado higienizado com extração profunda', tag: 'Sofá' },
-  { src: '/assets/photos/colchao-2.webp', alt: 'Colchão durante a higienização profissional', tag: 'Colchão' },
-  { src: '/assets/photos/poltronas.webp', alt: 'Poltrona clara após higienização', tag: 'Poltrona' },
-  { src: '/assets/photos/carpete-1.webp', alt: 'Carpete lavado com extração', tag: 'Carpete' },
-  { src: '/assets/photos/cadeiras-3.webp', alt: 'Cadeiras de jantar higienizadas', tag: 'Cadeiras' },
-  { src: '/assets/photos/sofa-3.webp', alt: 'Sofá de canto em tecido claro após higienização', tag: 'Sofá de canto' },
-  { src: '/assets/photos/cadeiras-1.webp', alt: 'Cadeiras de couro higienizadas', tag: 'Cadeiras' },
-  { src: '/assets/photos/tapete.webp', alt: 'Tapete higienizado', tag: 'Tapete' },
-  { src: '/assets/photos/sofa-6.webp', alt: 'Sofá higienizado em sala de estar', tag: 'Sofá' },
-  { src: '/assets/photos/colchao-3.webp', alt: 'Colchão limpo e higienizado', tag: 'Colchão' },
+export type GalleryItem = { src: string; title: string; tag: string };
+
+export const gallery: GalleryItem[] = [
+  { src: '/assets/photos/sofa-7.webp', title: 'Sofá de suede: antes e depois', tag: 'Higienização de sofá' },
+  { src: '/assets/photos/sofa-1.webp', title: 'Extração profissional em sofá claro', tag: 'Equipe em ação' },
+  { src: '/assets/photos/sofa-8.webp', title: 'Tecido recuperado com extração', tag: 'Higienização de sofá' },
+  { src: '/assets/photos/colchao-2.webp', title: 'Colchão de casal higienizado', tag: 'Higienização de colchão' },
+  { src: '/assets/photos/poltronas.webp', title: 'Poltrona clara como nova', tag: 'Poltronas' },
+  { src: '/assets/photos/carpete-1.webp', title: 'Carpete de escritório lavado', tag: 'Tapetes e carpetes' },
+  { src: '/assets/photos/cadeiras-3.webp', title: 'Cadeiras de jantar higienizadas', tag: 'Cadeiras' },
+  { src: '/assets/photos/sofa-3.webp', title: 'Sofá de canto em linho', tag: 'Higienização de sofá' },
+  { src: '/assets/photos/cadeiras-1.webp', title: 'Cadeiras de couro revitalizadas', tag: 'Cadeiras' },
+  { src: '/assets/photos/tapete.webp', title: 'Tapete de sala higienizado', tag: 'Tapetes e carpetes' },
+  { src: '/assets/photos/sofa-6.webp', title: 'Sofá retrátil pronto para uso', tag: 'Higienização de sofá' },
+  { src: '/assets/photos/colchao-3.webp', title: 'Colchão livre de ácaros', tag: 'Higienização de colchão' },
 ];
 
-export const postWorkGallery = [
-  { src: '/assets/photos/posobra-12.webp', alt: 'Ambiente limpo após obra' },
-  { src: '/assets/photos/posobra-10.webp', alt: 'Cozinha entregue após limpeza pós-obra' },
-  { src: '/assets/photos/posobra-14.webp', alt: 'Sala limpa após reforma' },
-  { src: '/assets/photos/posobra-11.webp', alt: 'Banheiro higienizado no pós-obra' },
+export const postWorkGallery: GalleryItem[] = [
+  { src: '/assets/photos/posobra-12.webp', title: 'Varanda entregue limpa após a obra', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-9.webp', title: 'Cozinha pronta para uso', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-7.webp', title: 'Ilha e bancada sem resíduo de obra', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-14.webp', title: 'Sala liberada para a mudança', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-13.webp', title: 'Cozinha com eletrodomésticos limpos', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-5.webp', title: 'Banheiro higienizado no pós-obra', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-2.webp', title: 'Porcelanato revitalizado', tag: 'Revitalização de pisos' },
+  { src: '/assets/photos/posobra-10.webp', title: 'Área social pronta para receber', tag: 'Limpeza pós-obra' },
+  { src: '/assets/photos/posobra-3.webp', title: 'Esquadrias e vidros sem respingo', tag: 'Limpeza pós-obra' },
 ];
 
-/** Avaliações reais publicadas no Google (widget do site atual, 73 avaliações). */
-export const reviews = [
-  { name: 'Daiane Ribeiro', date: 'fev. 2026', service: 'Sofá e poltrona', text: 'Elas são muito caprichosas, deixam tudo bem limpinho e cheiroso, meu sofá ficou novo depois da limpeza e minha poltrona então, que é clara, nossa, parece outra!' },
-  { name: 'Fátima Aguiar', date: 'nov. 2025', service: 'Colchões', text: 'Atendimento de excelência! Mariana foi de um profissionalismo ímpar e o serviço executado, limpeza e higienização de colchões, foi impecável! Meus colchões estavam com pontinhos de mofo e sujidade causada por tempo de uso. Tudo removido com perfeição! Super recomendo!' },
-  { name: 'Fabíola Garoni', date: 'set. 2025', service: 'Estofados e pós-obra', text: 'Contratei para higienizar meu sofá, colchões e poltronas após 4 meses de obra. A Mariana e sua equipe são ótimas profissionais, deixaram tudo limpinho e cheirosinho. Fiz também a limpeza pós-obra com a Juliana, que comanda a equipe durante todo o período e entrega um trabalho maravilhoso! Nota mil!' },
-  { name: 'Vilma Pannunzio', date: 'nov. 2025', service: 'Pós-obra e piso de madeira', text: 'Desde o primeiro contato a Juliana atendeu prontamente. Muito pontual com horários. Foi realizada a restauração do piso de madeira e o apartamento estava com muita poeira. Tudo muito bem limpo e supervisionado pela Juliana, proprietária da empresa. Prestação de serviço nota 10.' },
-  { name: 'Marina Oliveira Lopes', date: 'jan. 2026', service: 'Residencial', text: 'Atendimento rápido, equipe focada e com produtos especializados para o trabalho. Pessoas que entendem o que estão fazendo. Deixaram minha casa impecável.' },
-  { name: 'Zê', date: 'dez. 2025', service: 'Condomínio', text: 'A empresa fez serviços no meu condomínio. São muito sérios, entendem do que fazem, pontuais: marca e vem na hora e dia marcado, e o resultado ficou ótimo! Pode contratar sem medo.' },
-  { name: 'Silvana Andrade', date: 'set. 2025', service: 'Pós-obra', text: 'Excelente serviço prestado! Meu apartamento estava uma lástima no pós-obra e as meninas fizeram milagres. Juliana extremamente simpática e eficiente. Recomendo a todos!' },
-  { name: 'Andre Rodrigo Germano', date: 'set. 2025', service: 'Pós-obra', text: 'Minha experiência foi ótima! Limpeza pós-obra impecável do local. Superou nossas expectativas. Super recomendo.' },
-  { name: 'Fabio Godoy', date: 'dez. 2025', service: 'Residencial', text: 'Tudo entregue conforme o combinado, equipe prestativa e de confiança. Recomendo.' },
+/**
+ * Avaliações reais publicadas no Google (73 no total, nota Excelente).
+ * `avatar` só existe para quem tem foto de perfil pública no Google; os demais
+ * caem nas iniciais da marca. Ordenadas da mais recente para a mais antiga.
+ */
+export type Review = { name: string; iso: string; date: string; service: string; text: string; avatar?: string };
+
+export const reviews: Review[] = [
+  { name: 'Daiane Ribeiro', iso: '2026-02-10', date: 'fevereiro de 2026', service: 'Sofá e poltrona', text: 'Elas são muito caprichosas, deixam tudo bem limpinho e cheiroso, meu sofá ficou novo depois da limpeza e minha poltrona então, que é clara, nossa, parece outra!' },
+  { name: 'Marina Oliveira Lopes', iso: '2026-01-22', date: 'janeiro de 2026', service: 'Residencial', avatar: '/assets/reviews/marina-oliveira-lopes.webp', text: 'Atendimento rápido, equipe focada e com produtos especializados para o trabalho. Pessoas que entendem o que estão fazendo. Deixaram minha casa impecável.' },
+  { name: 'Zê', iso: '2025-12-15', date: 'dezembro de 2025', service: 'Condomínio', text: 'A empresa fez serviços no meu condomínio. São muito sérios, entendem do que fazem, pontuais: marca e vem na hora e dia marcado, e o resultado ficou ótimo! Pode contratar sem medo.' },
+  { name: 'Fabio Godoy', iso: '2025-12-02', date: 'dezembro de 2025', service: 'Residencial', avatar: '/assets/reviews/fabio-godoy.webp', text: 'Tudo entregue conforme o combinado, equipe prestativa e de confiança. Recomendo.' },
+  { name: 'Fátima Aguiar', iso: '2025-11-24', date: 'novembro de 2025', service: 'Colchões', text: 'Atendimento de excelência! Mariana foi de um profissionalismo ímpar e o serviço executado, limpeza e higienização de colchões, foi impecável! Meus colchões estavam com pontinhos de mofo e sujidade causada por tempo de uso. Tudo removido com perfeição! Super recomendo!' },
+  { name: 'Vilma Pannunzio', iso: '2025-11-19', date: 'novembro de 2025', service: 'Pós-obra e piso de madeira', text: 'Desde o primeiro contato a Juliana atendeu prontamente. Muito pontual com horários. Foi realizada a restauração do piso de madeira e o apartamento estava com muita poeira. Tudo muito bem limpo e supervisionado pela Juliana, proprietária da empresa. Prestação de serviço nota 10.' },
+  { name: 'Fabíola Garoni', iso: '2025-09-27', date: 'setembro de 2025', service: 'Estofados e pós-obra', avatar: '/assets/reviews/fabiola-garoni.webp', text: 'Contratei para higienizar meu sofá, colchões e poltronas após 4 meses de obra. A Mariana e sua equipe são ótimas profissionais, deixaram tudo limpinho e cheirosinho. Fiz também a limpeza pós-obra com a Juliana, que comanda a equipe durante todo o período e entrega um trabalho maravilhoso! Nota mil!' },
+  { name: 'Silvana Andrade', iso: '2025-09-05', date: 'setembro de 2025', service: 'Pós-obra', avatar: '/assets/reviews/silvana-andrade.webp', text: 'Excelente serviço prestado! Meu apartamento estava uma lástima no pós-obra e as meninas fizeram milagres. Juliana extremamente simpática e eficiente. Recomendo a todos!' },
+  { name: 'Andre Rodrigo Germano', iso: '2025-09-03', date: 'setembro de 2025', service: 'Pós-obra', text: 'Minha experiência foi ótima! Limpeza pós-obra impecável do local. Superou nossas expectativas. Super recomendo.' },
 ];
 
 /** Posts públicos do Instagram referenciados no site atual. */

@@ -32,7 +32,7 @@ for (const [name, width, height, mobile] of viewports) {
     if (path === '/') {
       const overlap = await page.evaluate(() => {
         const h1 = document.querySelector('h1')?.getBoundingClientRect();
-        const card = document.querySelector('[data-bubbles]')?.getBoundingClientRect();
+        const card = document.querySelector('[data-hero-card]')?.getBoundingClientRect();
         if (!h1 || !card) return null;
         return !(h1.right <= card.left || h1.left >= card.right || h1.bottom <= card.top || h1.top >= card.bottom);
       });

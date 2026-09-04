@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Leaf, ShieldCheck, Star, Wind } from 'lucide-react';
 import { useRef } from 'react';
-import Bubbles3D from './fx/Bubbles3D';
+import WaterLight from './fx/WaterLight';
 import Marquee from './fx/Marquee';
 import { contact, messages, whatsappUrl } from '@/lib/content';
 
@@ -42,6 +42,7 @@ export default function Hero() {
   return (
     <section id="inicio" ref={root} className="water-bg relative overflow-hidden pt-[96px] lg:min-h-[min(100svh,920px)] lg:pt-[110px]">
       <div aria-hidden="true" className="dots pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_40%,#000,transparent)]" />
+      <WaterLight className="[mask-image:radial-gradient(80%_70%_at_70%_35%,#000_30%,transparent_100%)]" />
 
       <div className="container-shell relative grid items-center gap-10 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32">
         <motion.div style={reduced ? undefined : { y: copyY, opacity: copyOpacity }} className="relative z-10 lg:col-span-6">
@@ -110,21 +111,21 @@ export default function Hero() {
           transition={{ duration: 1, delay: .35, ease: [0.22, 1, 0.36, 1] }}
           className="relative lg:col-span-6"
         >
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px] sm:aspect-[5/4] lg:aspect-[4/5] lg:max-w-none xl:aspect-[5/5.4]">
+          <div data-hero-card className="relative mx-auto aspect-[4/5] w-full max-w-[560px] sm:aspect-[5/4] lg:aspect-[4/5] lg:max-w-none xl:aspect-[5/5.4]">
             <motion.div style={reduced ? undefined : { y: imgY }} className="absolute -inset-y-[5%] inset-x-0 overflow-hidden rounded-[2rem] shadow-[0_40px_90px_-30px_rgba(6,38,55,.45)]">
               <Image
-                src="/assets/photos/hero-wide.webp"
-                alt="Crianças deitadas e sorrindo em um sofá claro recém-higienizado"
+                src="/assets/photos/equipe-srs.webp"
+                alt="Equipe da Srs da Limpeza uniformizada, com extratora e prancheta, pronta para atender"
                 fill
                 priority
                 fetchPriority="high"
                 quality={82}
                 sizes="(max-width: 640px) 92vw, (max-width: 1023px) 560px, 46vw"
-                className="object-cover object-[62%_center]"
+                className="object-cover object-[center_top]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
             </motion.div>
-            <Bubbles3D className="-inset-x-[4%] -inset-y-[6%] z-10" />
+            
             {/* Selo flutuante */}
             <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/90 p-3 pr-5 shadow-card backdrop-blur sm:bottom-7 sm:left-7">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>

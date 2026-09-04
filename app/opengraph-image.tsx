@@ -30,7 +30,14 @@ export default function OgImage() {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 30, opacity: .92 }}>
           <span>Guarujá · Santos · Bertioga</span>
-          <span>★★★★★ Excelente no Google</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <svg key={i} width="30" height="30" viewBox="0 0 24 24" fill="#ffd24a">
+                <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z" />
+              </svg>
+            ))}
+            <span style={{ marginLeft: 6 }}>Excelente no Google</span>
+          </div>
         </div>
       </div>
     ),
