@@ -79,18 +79,17 @@ export default function Hero() {
         {/* Coluna visual: foto em cartão + bolhas 3D confinadas ao cartão (md+). */}
         <div className="fade-up relative lg:col-span-6" style={{ animationDelay: '.3s' }}>
           <div data-hero-card className="relative mx-auto aspect-[4/5] w-full max-w-[560px] sm:aspect-[5/4] lg:aspect-[4/5] lg:max-w-none xl:aspect-[5/5.4]">
-            <div className="absolute -inset-y-[5%] inset-x-0 overflow-hidden rounded-[2rem] shadow-[0_40px_90px_-30px_rgba(6,38,55,.45)]">
+            <div className="absolute -inset-y-[5%] inset-x-0 overflow-hidden rounded-[2rem] bg-white shadow-[0_40px_90px_-30px_rgba(6,38,55,.45)]">
               <Image
-                src="/assets/photos/equipe-srs.webp"
-                alt="Equipe da Srs da Limpeza uniformizada, com extratora e prancheta, pronta para atender"
+                src="/assets/photos/quemsomos-4k.webp"
+                alt="Imagem institucional ilustrativa da Srs da Limpeza, preservada do site anterior"
                 fill
                 priority
                 fetchPriority="high"
-                quality={88}
-                sizes="(max-width: 640px) 92vw, (max-width: 1023px) 560px, 46vw"
-                className="object-cover object-[center_top]"
+                quality={75}
+                sizes="(max-width: 640px) 92vw, (max-width: 1023px) 560px, (min-width: 1440px) 684px, 46vw"
+                className="object-contain p-3"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
             </div>
             
             {/* Selo flutuante */}

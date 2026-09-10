@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { Wordmark } from './Brand';
+import { CookieSettings } from './TrackingConsent';
 import { contact, messages, navLinks, whatsappUrl } from '@/lib/content';
 
 export default function Footer() {
@@ -26,7 +27,7 @@ export default function Footer() {
 
         <div className="grid gap-10 pt-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_.7fr_1fr_1fr] lg:pt-12">
           <div>
-            <Wordmark white className="h-14 w-auto" />
+            <Wordmark white className="h-24 w-auto" />
             <p className="mt-6 max-w-sm text-base text-white/80">Especialistas em higienização e impermeabilização de estofados, limpeza pós-obra e revitalização de pisos. Cuidamos do que é importante para você.</p>
             <p className="mt-4 text-sm text-white/60">CNPJ {contact.cnpj}</p>
           </div>
@@ -66,6 +67,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-white/15 pt-6 text-sm text-white/70 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Srs da Limpeza · Todos os direitos reservados</p>
+          <CookieSettings />
           <Link prefetch={false} href="/politica-de-privacidade" className="flex min-h-11 w-fit items-center border-b border-transparent transition-colors hover:border-sky hover:text-white">Política de privacidade</Link>
         </div>
       </div>

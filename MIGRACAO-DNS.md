@@ -1,236 +1,148 @@
-# Migração do site para a Vercel — passo a passo para o administrador
+# Migração — Srs da Limpeza
 
-**Site novo (já no ar, para conferência):** https://srsdalimpeza.vercel.app
-**Domínio final:** srsdalimpeza.com.br
+Atualizado em 10/09/2026. O DNS não foi alterado nesta entrega.
 
----
+## Situação e critérios de liberação
 
-## Resposta curta: muda só o DNS?
+- Site de conferência: https://srsdalimpeza.vercel.app
+- Domínio principal: https://srsdalimpeza.com.br (sem www).
+- A Vercel deve servir o domínio raiz e encaminhar www para ele com 308.
+- NEXT_PUBLIC_SITE_URL em Production deve ser https://srsdalimpeza.com.br.
+- Canonical, sitemap, robots, Open Graph e schema usam o domínio próprio.
+- O cabeçalho X-Robots-Tag: noindex, follow é restrito a hosts *.vercel.app.
+  Não colocar esse bloqueio no domínio próprio. Não bloquear o rastreador
+  em robots.txt, pois ele precisa ler o noindex da prévia.
 
-**Sim.** O registro do domínio no Registro.br não muda de dono nem de registrador, e os
-nameservers também **não precisam mudar**. O que muda são **dois registros dentro da zona
-de DNS**: o do domínio raiz e o do `www`.
+Não autorizar a virada sem validar HTTPS, destinos dos anúncios e conversões.
+Trocar hospedagem não apaga automaticamente campanhas ou indexação; alterações
+de URLs e conteúdo podem causar oscilações. Não há garantia de posição ou
+de ausência de indisponibilidade.
 
-O que descobri sobre a configuração atual:
+## Rastreamento: integração preparada, validação da conta pendente
 
-| Item | Situação hoje | Muda? |
+O código carrega GTM-KJWZ3WT uma única vez, somente no domínio próprio e após
+consentimento. Na prévia/localhost, os eventos ficam apenas no dataLayer local
+após aceitar medição; nenhuma tag real do Google é carregada por essa integração.
+
+A inspeção pública do contêiner (versão 204 em 10/09/2026) mostrou:
+- Google tag G-9S4463B3RC, Conversion Linker e remarketing AW-11058728475.
+- Vários gatilhos dependem dos caminhos antigos, barras finais, IDs de formulário
+  do WordPress e textos de botões que não existem mais no novo.
+- lead_joinchat na home parece condicionado a clique de link sem filtro de
+  WhatsApp. Confirmar no Tag Assistant; não assumir que esse evento é uma venda.
+- GT-MRM49PH também era instalado diretamente pelo site antigo. Conferir seus
+  destinos antes de adicioná-lo; não duplicar a instalação do mesmo Analytics.
+
+### Contrato dos novos eventos
+
+| Ação | Evento | Parâmetros |
 |---|---|---|
-| Registrador | Registro.br (domínio `.com.br`) | Não |
-| Nameservers | `ns-cloud-c1..c4.googledomains.com` → **Google Cloud DNS** | Não |
-| Onde o DNS é editado | Console do **Google Cloud → Network Services → Cloud DNS** | — |
-| `srsdalimpeza.com.br` (A) | `34.139.152.124` (servidor Apache no Google Cloud) | **Sim** |
-| `www` (CNAME) | aponta para `srsdalimpeza.com.br` | **Sim** |
-| **MX (e-mail)** | **não existe nenhum** | **Não mexer** |
-| TXT `google-site-verification` | existe (Search Console) | **Não apagar** |
+| Clique/abertura de WhatsApp | whatsapp_click | contact_method, service_line, contact_placement, page_path |
+| Clique em telefone | telephone_click | mesmos parâmetros |
+| Formulário → abertura do WhatsApp | whatsapp_click | placement contact_form |
+| Nova tentativa de abertura | whatsapp_click | placement contact_form_retry |
 
-> **Sobre e-mail:** o domínio **não tem registros MX**, ou seja, hoje não recebe e-mail
-> nele. O contato da empresa é Gmail (`srsdalimpeza@gmail.com`). Então a troca **não
-> derruba e-mail nenhum**. Ainda assim, confirme com o cliente antes: se alguém usa
-> `contato@srsdalimpeza.com.br`, isso precisa ser resolvido antes da virada.
+service_line é upholstery ou postWork. page_path não inclui query string.
+Não enviar nome, telefone do visitante, mensagem, URL completa do WhatsApp
+ou valores dos campos ao Analytics. Os links de retorno do formulário são
+botões para não expor a mensagem como URL de link à medição automática.
 
-> **Sobre o TXT de verificação do Google:** existe um registro
-> `google-site-verification=4xIOgfwoO04O73APMsZsoLMM20T3i4kdh_T7AFTYVso`.
-> **Mantenha esse registro.** Apagá-lo faz a empresa perder a verificação no Search Console.
+### Antes do DNS, com acesso à conta
 
----
+1. Inspecionar/publicar os gatilhos correspondentes aos novos eventos no GTM.
+2. Rever/remover gatilhos legados que gerariam duplicidade ou falsos contatos.
+3. Conferir Consent Mode e as configurações de medição aprimorada do GA4.
+4. Validar uma ocorrência por ação no Tag Assistant e GA4 DebugView, sem dados
+   pessoais. Testar recusa, aceite, revogação, ambas as linhas de atendimento,
+   links e formulário.
+5. Conferir quais eventos são ações de conversão do Ads e quais são importados
+   do GA4, seus nomes, IDs/rótulos, contagem e status. Não criar uma ação nova
+   nem trocar uma conversão principal sem alinhar com o administrador.
+6. Exportar URLs finais e sitelinks das campanhas, inclusive pausadas relevantes.
+   O sitemap de quatro páginas não prova que todas as campanhas foram cobertas.
+   O contêiner também referencia caminhos antigos adicionais; validar se estão
+   em uso antes da virada.
+7. Confirmar atribuição na conta. Preservar gclid não prova conversão registrada.
+   Não clicar em anúncio pago para testar nem enviar mensagem real à empresa.
 
-## Ordem recomendada
+## URLs preservadas
 
-A ordem importa: fazendo nesta sequência, o site nunca fica fora do ar.
-
-```
-1. Adicionar o domínio na Vercel        (site antigo continua no ar)
-2. Baixar o TTL do DNS para 300s        (24h antes da virada)
-3. Trocar os 2 registros no Cloud DNS   (a virada acontece aqui)
-4. Conferir HTTPS e redirects
-5. Search Console + Google Meu Negócio
-6. Desligar o servidor antigo           (só depois de 1 semana)
-```
-
----
-
-## Passo 1 — Adicionar o domínio na Vercel
-
-Feito por quem tem acesso à conta Vercel (projeto **srsdalimpeza**, time `ghcastellano`).
-
-1. Acesse https://vercel.com/gustavo-s/srsdalimpeza/settings/domains
-2. Em **Add Domain**, digite `srsdalimpeza.com.br` e confirme.
-3. Quando perguntar como tratar o `www`, escolha a opção que
-   **redireciona `www` para o domínio sem www** (`srsdalimpeza.com.br`).
-   Isso evita conteúdo duplicado no Google.
-4. A Vercel vai mostrar uma tela **"Invalid Configuration"** com os registros DNS
-   necessários. **Anote exatamente os valores que aparecerem ali.**
-
-> ⚠️ **Use os valores que a Vercel mostrar na sua tela, não os de tutoriais antigos.**
-> A Vercel mudou os IPs e hostnames ao longo do tempo e o valor correto varia por
-> projeto e região. Historicamente eram `76.76.21.21` (A) e `cname.vercel-dns.com`
-> (CNAME); projetos novos costumam receber `216.198.79.1` e um hostname regional
-> como `xxxxx.vercel-dns.com`. **A tela do painel é a fonte da verdade.**
-
-### Variável de ambiente (importante para o SEO)
-
-Ainda na Vercel, em **Settings → Environment Variables**, adicione:
-
-| Name | Value | Environments |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | `https://srsdalimpeza.com.br` | Production |
-
-Depois clique em **Redeploy** no último deploy de produção.
-
-Isso faz o site publicar o domínio próprio em: canonical, sitemap.xml, robots.txt,
-Open Graph e em todo o schema.org. **Sem isso, o Google continua vendo o site como
-`srsdalimpeza.vercel.app`** e a autoridade não migra. Já está preparado no código —
-é só definir a variável, nada precisa ser alterado em arquivo.
-
----
-
-## Passo 2 — Baixar o TTL (fazer 24h antes)
-
-No Google Cloud DNS, abra a zona de `srsdalimpeza.com.br` e altere o **TTL** dos
-registros `A` (raiz) e `CNAME` (www) para **300 segundos**.
-
-Sem isso, provedores de internet podem continuar mandando visitantes para o servidor
-antigo por até 6 horas depois da virada. Com TTL de 300s, a troca propaga em minutos.
-
-Espere o tempo do TTL antigo (21600s = 6h) passar antes de seguir para o passo 3.
-
----
-
-## Passo 3 — Trocar os registros (a virada)
-
-**Onde:** https://console.cloud.google.com → **Network Services → Cloud DNS** →
-zona `srsdalimpeza.com.br`.
-
-Faça as duas alterações abaixo, com os valores que a Vercel mostrou no Passo 1.
-
-### 3.1 — Domínio raiz
-
-| | Antes | Depois |
-|---|---|---|
-| Nome | `srsdalimpeza.com.br.` | igual |
-| Tipo | `A` | `A` |
-| TTL | 300 | 300 |
-| Valor | `34.139.152.124` | **o IP que a Vercel mostrou** |
-
-### 3.2 — www
-
-| | Antes | Depois |
-|---|---|---|
-| Nome | `www.srsdalimpeza.com.br.` | igual |
-| Tipo | `CNAME` | `CNAME` |
-| TTL | 300 | 300 |
-| Valor | `srsdalimpeza.com.br.` | **o hostname que a Vercel mostrou** (termina com `.vercel-dns.com.`) |
-
-> No Google Cloud DNS, valores de CNAME precisam terminar com **ponto final**.
-
-### Não mexa em
-
-- O registro **TXT** `google-site-verification=...`
-- Os **NS** e o **SOA**
-- Qualquer registro que você não reconheça sem antes checar para que serve
-
----
-
-## Passo 4 — Conferir (10 a 30 minutos depois)
-
-Na Vercel, a tela de Domains deve mudar de "Invalid Configuration" para
-**"Valid Configuration"** e o certificado HTTPS é emitido sozinho (Let's Encrypt,
-automático e gratuito — não precisa comprar nem instalar nada).
-
-Verifique no navegador ou no terminal:
-
-```bash
-# devem responder 200 e com cadeado
-https://srsdalimpeza.com.br
-https://srsdalimpeza.com.br/higienizacao-de-sofa-guaruja
-https://srsdalimpeza.com.br/limpeza-pos-obra-santos
-
-# www deve redirecionar para a versão sem www
-curl -sI https://www.srsdalimpeza.com.br | head -3
-
-# a URL antiga da página de estofados deve redirecionar (308)
-curl -sI https://srsdalimpeza.com.br/higienizacao-de-estofados-na-baixada-santista | head -3
-```
-
-Os redirects do site antigo **já estão programados no projeto** e funcionam sozinhos:
-
-| URL antiga | Vai para |
+| Entrada antiga | Resultado no novo |
 |---|---|
-| `/higienizacao-de-estofados-na-baixada-santista` | `/higienizacao-de-sofa-guaruja` |
-| `/limpeza-pos-obra-santos/` | `/limpeza-pos-obra-santos` |
-| `/politica-de-privacidade/` | `/politica-de-privacidade` |
-| `/wp-admin/*`, `/wp-login.php`, `/xmlrpc.php`, `/feed` | `/` |
+| / | / (200) |
+| /higienizacao-de-estofados-na-baixada-santista/ | /higienizacao-de-sofa-guaruja (redirecionamento permanente) |
+| /limpeza-pos-obra-santos/ | /limpeza-pos-obra-santos |
+| /politica-de-privacidade/ | /politica-de-privacidade |
 
----
+Parâmetros como gclid e utm_* devem continuar presentes após todos os saltos.
+Repetir a verificação em HTTPS, com e sem www, depois da virada.
 
-## Passo 5 — Google (fazer no mesmo dia)
+## DNS — somente com autorização específica
 
-1. **Search Console** — https://search.google.com/search-console
-   - Se a propriedade for do tipo "prefixo de URL" com `http://`, adicione também
-     `https://srsdalimpeza.com.br`.
-   - Em **Sitemaps**, envie: `https://srsdalimpeza.com.br/sitemap.xml`
-   - Em **Inspeção de URL**, peça indexação das duas páginas novas de serviço.
-     Sem isso o Google pode levar semanas para achá-las; com isso, dias.
+Observações anteriores (revalidar no dia):
+- A do domínio raiz: 34.139.152.124.
+- www: CNAME para srsdalimpeza.com.br.
+- Nameservers: ns-cloud-c1..c4.googledomains.com.
+- O certificado HTTPS do www no servidor antigo apresentou incompatibilidade.
+  A configuração de redirecionamento na Vercel não corrige o certificado antigo.
+- Não foi encontrado MX na consulta anterior; isso não dispensa confirmar todos
+  os serviços e preservar registros com o administrador.
 
-2. **Google Meu Negócio** — https://business.google.com
-   - Confirme que o site cadastrado é `https://srsdalimpeza.com.br`.
+Sequência:
+1. Exportar a zona DNS e fazer backup do WordPress (arquivos e banco).
+2. Conferir todos os registros atuais, incluindo A, AAAA, CNAME, CAA, TXT e MX.
+   Preservar verificações do Google, e-mail, NS/SOA e serviços não envolvidos.
+3. Usar os valores de DNS indicados no painel da Vercel para este projeto,
+   nunca copiar IPs de tutoriais. Confirmar emissão/validação TLS de ambos
+   os hosts; quando possível, provisionar e testar antes da virada.
+4. Se reduzir TTL, aguardar pelo menos o TTL anterior antes de trocar destinos.
+   TTL menor reduz caches, mas não garante propagação instantânea.
+5. Após autorização, alterar apenas os registros necessários para o site.
+6. Testar certificado válido, 200/308, ausência de loops, parâmetros, imagens,
+   formulários, canonical/sitemap, noindex somente na prévia e rastreamento.
+7. Enviar sitemap e inspecionar URLs no Search Console. Acompanhar erros de
+   indexação e destinos/conversões no Ads. Não há prazo garantido de indexação.
+8. Manter servidor antigo e backups até que logs e verificações confirmem que
+   a migração estabilizou. Seu desligamento exige autorização específica.
 
-3. **Bing Webmaster Tools** (opcional, 5 minutos) — importa direto do Search Console.
+Reversão: restaurar os valores da zona salvos no backup. Não é instantânea:
+caches DNS e certificados podem afetar a recuperação. Manter ambos os ambientes
+operacionais durante a janela.
 
----
+## Origem dos materiais e alterações aprovadas
 
-## Passo 6 — Desligar o servidor antigo
+- Marca completa: public/assets/brand/logo-site-original.webp, copiada de
+  Icone-site.webp do .com.br. Arquivo intacto, proporção original, enquadramento
+  das margens em CSS e fundo integrado ao cabeçalho claro.
+- Favicon: enquadramento do S desse arquivo em SVG, exportado nos tamanhos
+  32/96/180/192/512. Não foi criada uma nova letra ou marca por IA.
+- Orientação final: manter a imagem institucional ilustrativa das irmãs
+  (original-quemsomos.webp, 600 × 600), substituindo o pedido de removê-la.
+  quemsomos-4k.webp é uma ampliação conservadora para 3840 × 3840, sem
+  recriar rostos ou inventar detalhes. O teste de melhoria generativa foi
+  descartado por modificar detalhes; não é usado no site. Next/Image entrega
+  tamanhos responsivos em AVIF/WebP com qualidade 75 e cache, mantendo o
+  enquadramento original com object-contain. 4K é a resolução ampliada,
+  não uma captura nativa com detalhes novos.
+- Serviços: imagens serv-higienizacao-de-sofa/colchao/cadeiras/moveis-criancas,
+  limpeza-posobra-home e revitalizacao-pisos-home-min, do .com.br.
+- Tapetes: carpete-1.webp da galeria antiga; não repetir o cartão antigo que
+  usava imagem de colchão para tapetes.
+- Impermeabilização: foto enviada em 07/09/2026 às 16:54:44, gotas no sofá.
+- Instagram: DUrNh81kccg (post da captura enviada) e DV1wBAzEWu8.
+  Prévia local, carregamento por escolha do visitante, iframe oficial e link
+  alternativo. Não é um feed automático. Aparência/disponibilidade dependem
+  do Instagram. Altura responde apenas à origem oficial e ao iframe esperado.
+- Áudio 16:51:35: preferência por preservar imagens do site anterior.
 
-**Espere pelo menos 7 dias.** Enquanto o DNS termina de propagar no mundo todo, algum
-visitante ainda pode cair no IP antigo.
+## Desenvolvimento e publicação
 
-Antes de desligar de vez:
+Repositório: https://github.com/ghcastellano/srsdalimpeza (privado).
+Branch de produção: claude/srsdal-limpeza-site-2ojrd0.
+Projeto Vercel: srsdalimpeza, equipe gustavo-s.
 
-1. **Faça backup completo** do WordPress: arquivos + banco de dados.
-2. Guarde o backup por pelo menos 6 meses.
-3. Só então desligue a VM no Google Cloud (isso também para de gerar custo).
-
----
-
-## Se algo der errado: como voltar atrás
-
-A reversão é imediata e sem perda. No Cloud DNS, devolva os dois registros aos valores
-originais:
-
-| Registro | Valor original |
-|---|---|
-| `srsdalimpeza.com.br` (A) | `34.139.152.124` |
-| `www.srsdalimpeza.com.br` (CNAME) | `srsdalimpeza.com.br.` |
-
-Com TTL de 300s, o site antigo volta a responder em cerca de 5 minutos. Por isso o
-Passo 6 (desligar o servidor antigo) só acontece no fim — enquanto ele estiver de pé,
-a volta atrás é sempre possível.
-
----
-
-## Ficha técnica do projeto
-
-| | |
-|---|---|
-| Repositório | https://github.com/ghcastellano/srsdalimpeza (branch `main`) |
-| Projeto Vercel | `srsdalimpeza` (time `gustavo-s` / `ghcastellano`) |
-| Stack | Next.js 16 · React 19 · Tailwind · TypeScript |
-| Deploy | Automático a cada push na `main` |
-| HTTPS | Automático pela Vercel, renovação sozinha |
-| Custo de hospedagem | Plano Hobby da Vercel atende este site |
-| Páginas | `/` · `/higienizacao-de-sofa-guaruja` · `/limpeza-pos-obra-santos` · `/politica-de-privacidade` |
-
-### Como alterar conteúdo depois
-
-Quase todo o texto do site (telefones, endereço, serviços, avaliações, FAQ) está em
-**um único arquivo**: `lib/content.ts`. Editar e dar push na `main` publica sozinho.
-O texto das duas páginas de serviço fica em `lib/service-pages.ts`.
-
-### Testes automáticos
-
-```bash
-npm run build                 # compila
-BASE_URL=http://localhost:3300 node tests/qa.mjs      # funcional + SEO
-BASE_URL=http://localhost:3300 node tests/a11y.mjs    # acessibilidade (axe)
-BASE_URL=http://localhost:3300 node tests/matrix.mjs  # responsivo, 12 telas
-```
+Validar build e TypeScript, executar node --test tests/tracking.test.mjs
+(Node com suporte a TypeScript stripping, como Node 22.18+), testar no navegador
+desktop/mobile e verificar o deploy correspondente ao commit publicado.
+Não usar npm audit fix --force indiscriminadamente: há avisos de dependências
+preexistentes que devem ser tratados em manutenção separada.

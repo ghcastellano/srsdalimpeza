@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import Cursor from '@/components/fx/Cursor';
 import RevealObserver from '@/components/fx/RevealObserver';
 import SmoothScroll from '@/components/fx/SmoothScroll';
+import TrackingConsent from '@/components/TrackingConsent';
 import { siteUrl } from '@/lib/content';
 import './globals.css';
 
@@ -53,11 +54,11 @@ export const metadata: Metadata = {
     // em prioridade alta durante o carregamento (21 KB disputando banda com a
     // foto do hero e as fontes) sem nenhum ganho visual.
     icon: [
-      { url: '/assets/brand/favicon.svg', type: 'image/svg+xml' },
-      { url: '/assets/brand/favicon-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/assets/brand/favicon-original-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/assets/brand/favicon-original-96.png', type: 'image/png', sizes: '96x96' },
     ],
-    shortcut: '/assets/brand/favicon-32.png',
-    apple: '/assets/brand/apple-touch-icon.png',
+    shortcut: '/assets/brand/favicon-original-32.png',
+    apple: '/assets/brand/apple-touch-original.png',
   },
   openGraph: {
     title: 'Higienização de sofá e estofados no Guarujá | Srs da Limpeza',
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {children}
         <RevealObserver />
         <Cursor />
+        <TrackingConsent />
       </body>
     </html>
   );

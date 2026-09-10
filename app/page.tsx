@@ -11,6 +11,7 @@ import Gallery from '@/components/Gallery';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import MediaRail from '@/components/MediaRail';
+import InstagramPosts from '@/components/InstagramPosts';
 import ProcessTimeline from '@/components/ProcessTimeline';
 import Reviews from '@/components/Reviews';
 import SectionHeading from '@/components/SectionHeading';
@@ -35,8 +36,8 @@ export default function HomePage() {
     url: siteUrl,
     email: contact.email,
     telephone: `+${contact.upholsteryDigits}`,
-    image: [`${siteUrl}/opengraph-image`, `${siteUrl}/assets/photos/equipe-srs.webp`, `${siteUrl}/assets/photos/sofa-7.webp`],
-    logo: `${siteUrl}/assets/brand/icon-512.png`,
+    image: [`${siteUrl}/opengraph-image`, `${siteUrl}/assets/photos/sofa-7.webp`],
+    logo: `${siteUrl}/assets/brand/logo-site-original.webp`,
     foundingDate: '2018',
     currenciesAccepted: 'BRL',
     paymentAccepted: 'Cartão de crédito, PIX, dinheiro, cartão de débito',
@@ -336,6 +337,7 @@ export default function HomePage() {
           <div className="container-shell">
             <SectionHeading eyebrow="Vídeos e bastidores" title={<>Veja a equipe <span className="text-gradient">trabalhando de verdade.</span></>} text="Vídeos que tocam aqui mesmo, sem sair do site, e fotos em alta resolução dos serviços." />
             <MediaRail />
+            <InstagramPosts />
           </div>
         </section>
 

@@ -62,12 +62,12 @@ export default function Header() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          open ? 'bg-transparent' : scrolled ? 'border-b border-ink/10 bg-paper shadow-[0_8px_30px_-20px_rgba(6,38,55,.35)]' : 'bg-transparent'
+          open ? 'bg-transparent' : scrolled ? 'border-b border-ink/10 bg-white shadow-[0_8px_30px_-20px_rgba(6,38,55,.35)]' : 'bg-white'
         }`}
       >
         <div className="container-shell flex h-[72px] items-center justify-between lg:h-[84px]">
           <Link prefetch={false} href={isHome ? '#inicio' : '/'} aria-label="Srs da Limpeza — início" className="relative z-10 flex shrink-0 items-center">
-            <Wordmark priority white={open} className="h-[40px] w-auto sm:h-[44px] lg:h-[50px]" />
+            <Wordmark priority white={open} className="h-[58px] w-auto sm:h-[62px] lg:h-[70px]" />
           </Link>
 
           <nav aria-label="Navegação principal" className="hidden items-center gap-1 text-[15px] font-semibold text-ink/80 xl:flex">

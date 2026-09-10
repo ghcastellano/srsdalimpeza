@@ -1,46 +1,17 @@
 import Image from 'next/image';
 
-/**
- * Wordmark vetorial (redesenhado a partir do logo original, mesma tipografia
- * e gradiente) — nítido em qualquer tamanho. `white` para fundos escuros.
- */
+/** Marca original intacta. O enquadramento CSS remove apenas as margens brancas. */
 export function Wordmark({ white = false, className = '', priority = false }: { white?: boolean; className?: string; priority?: boolean }) {
   return (
-    <Image
-      src={white ? '/assets/brand/wordmark-white.svg' : '/assets/brand/wordmark.svg'}
-      alt="Srs da Limpeza"
-      width={720}
-      height={310}
-      // Só o do cabeçalho entra no caminho crítico; o do rodapé carrega quando chega a vez.
-      priority={priority}
-      loading={priority ? undefined : 'lazy'}
-      className={className}
-    />
+    <span className={`relative inline-block aspect-[450/240] shrink-0 overflow-hidden ${white ? 'rounded-lg bg-white' : 'mix-blend-multiply'} ${className}`}>
+      <Image src="/assets/brand/logo-site-original.webp" alt="Srs da Limpeza — logo original com os dois personagens" width={512} height={512} priority={priority} sizes="(max-width: 640px) 160px, 400px" className="absolute left-[-7.12%] top-[-52.5%] h-auto w-[113.78%] max-w-none" />
+    </span>
   );
 }
 
-/**
- * Lockup completo: wordmark vetorial + mascotes originais (recortados do
- * logo com fundo transparente), na mesma composição do logotipo da empresa.
- */
+/** Mesma marca, sem reconstrução ou reposicionamento dos personagens. */
 export function BrandLockup({ className = '' }: { className?: string }) {
   return (
-    <div className={`relative ${className}`} role="img" aria-label="Srs da Limpeza">
-      <Image src="/assets/brand/wordmark.svg" alt="" data-decorative width={720} height={310} className="h-auto w-full" />
-      <Image
-        src="/assets/brand/mascot-man.png"
-        alt="" data-decorative
-        width={70}
-        height={160}
-        className="float-slow absolute left-[-9%] top-[-30%] h-auto w-[11%]"
-      />
-      <Image
-        src="/assets/brand/mascot-woman.png"
-        alt="" data-decorative
-        width={97}
-        height={140}
-        className="absolute bottom-[-2%] right-[-13%] h-auto w-[15%]"
-      />
-    </div>
+    <Wordmark className={`w-full ${className}`} />
   );
 }

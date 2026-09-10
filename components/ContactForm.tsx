@@ -3,6 +3,7 @@
 import { ArrowUpRight, Check } from 'lucide-react';
 import { FormEvent, useMemo, useState } from 'react';
 import { contact, whatsappUrl, type Line } from '@/lib/content';
+import { trackContact } from '@/lib/tracking';
 
 const serviceOptions: { label: string; line: Line }[] = [
   { label: 'Higienização de sofá', line: 'upholstery' },
@@ -27,6 +28,7 @@ export default function ContactForm() {
 
   function submit(event: FormEvent) {
     event.preventDefault();
+    trackContact('whatsapp', line, 'contact_form');
     window.open(whatsappUrl(finalMessage, line), '_blank', 'noopener,noreferrer');
     setSent(true);
   }
@@ -48,8 +50,8 @@ export default function ContactForm() {
         <span className="grid h-16 w-16 place-items-center rounded-full bg-whatsapp text-ink"><Check className="h-7 w-7" /></span>
         <h3 className="mt-6 font-display text-3xl font-semibold text-white">Quase lá{form.name ? `, ${form.name.split(' ')[0]}` : ''}.</h3>
         <p className="mt-3 max-w-sm text-base text-white/80">Abrimos o WhatsApp com sua mensagem pronta. É só tocar em enviar por lá. Não abriu?</p>
-        <a href={whatsappUrl(finalMessage, line)} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex min-h-12 items-center gap-3 rounded-full bg-whatsapp px-6 text-base font-bold text-ink">Abrir conversa <ArrowUpRight className="h-4 w-4" /></a>
-        <a href={`mailto:${contact.email}?subject=${encodeURIComponent('Orçamento pelo site — Srs da Limpeza')}&body=${encodeURIComponent(finalMessage)}`} className="mt-4 text-base text-white/80 underline underline-offset-4">Prefere e-mail? Enviar por e-mail</a>
+        <button type="button" onClick={() => { trackContact('whatsapp', line, 'contact_form_retry'); window.open(whatsappUrl(finalMessage, line), '_blank', 'noopener,noreferrer'); }} className="mt-7 inline-flex min-h-12 items-center gap-3 rounded-full bg-whatsapp px-6 text-base font-bold text-ink">Abrir conversa <ArrowUpRight className="h-4 w-4" /></button>
+        <button type="button" onClick={() => { window.location.href = `mailto:${contact.email}?subject=${encodeURIComponent('Orçamento pelo site — Srs da Limpeza')}&body=${encodeURIComponent(finalMessage)}`; }} className="mt-4 min-h-11 text-base text-white/80 underline underline-offset-4">Prefere e-mail? Enviar por e-mail</button>
         <button type="button" onClick={() => setSent(false)} className="mt-3 text-base text-white/70 underline underline-offset-4">Enviar outra mensagem</button>
       </div>
     );

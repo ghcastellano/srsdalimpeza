@@ -3,7 +3,7 @@
  * schema.org. Ao migrar para o domínio próprio basta definir
  * NEXT_PUBLIC_SITE_URL na Vercel — nenhuma linha de código muda.
  */
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://srsdalimpeza.vercel.app').replace(/\/$/, '');
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://srsdalimpeza.com.br').replace(/\/$/, '');
 
 export const contact = {
   brand: 'Srs da Limpeza',
@@ -64,8 +64,8 @@ export const services: Service[] = [
     slug: 'sofa',
     title: 'Higienização de sofá',
     text: 'Extração profunda que remove ácaros, manchas e odores. Seu sofá volta a ter cor, maciez e cheiro de novo.',
-    image: '/assets/photos/sofa-7.webp',
-    imageAlt: 'Higienização de sofá: antes e depois em tecido suede',
+    image: '/assets/photos/original-serv-sofa.webp',
+    imageAlt: 'Higienização de sofá — imagem do site original da Srs da Limpeza',
     href: '/higienizacao-de-sofa-guaruja',
     line: 'upholstery' as Line,
   },
@@ -73,7 +73,7 @@ export const services: Service[] = [
     slug: 'colchao',
     title: 'Higienização de colchão',
     text: 'Remove mofo, suor e ácaros que causam rinite e alergia. Você dorme em um colchão realmente limpo.',
-    image: '/assets/photos/colchao-1.webp',
+    image: '/assets/photos/original-serv-colchao.webp',
     imageAlt: 'Higienização de colchão que remove ácaros, mofo e suor',
     line: 'upholstery' as Line,
   },
@@ -81,7 +81,7 @@ export const services: Service[] = [
     slug: 'cadeiras',
     title: 'Poltronas e cadeiras',
     text: 'Cadeiras de jantar, poltronas e cadeiras de escritório com o mesmo padrão de limpeza profunda.',
-    image: '/assets/photos/cadeiras-2.webp',
+    image: '/assets/photos/original-serv-cadeiras.webp',
     imageAlt: 'Higienização de poltronas e cadeiras estofadas',
     line: 'upholstery' as Line,
   },
@@ -89,7 +89,7 @@ export const services: Service[] = [
     slug: 'tapetes',
     title: 'Tapetes e carpetes',
     text: 'Lavagem com extração que tira a sujeira acumulada entre as fibras sem danificar o tecido.',
-    image: '/assets/photos/tapete.webp',
+    image: '/assets/photos/carpete-1.webp',
     imageAlt: 'Higienização de tapetes e carpetes com extração',
     line: 'upholstery' as Line,
   },
@@ -97,7 +97,7 @@ export const services: Service[] = [
     slug: 'bebe',
     title: 'Estofados de bebê',
     text: 'Carrinhos, bebê-conforto e cadeirinhas higienizados com produtos biodegradáveis e seguros.',
-    image: '/assets/photos/cadeira-infantil.webp',
+    image: '/assets/photos/original-serv-bebe.webp',
     imageAlt: 'Higienização de estofados de bebê: bebê-conforto e cadeirinha',
     line: 'upholstery' as Line,
   },
@@ -105,15 +105,15 @@ export const services: Service[] = [
     slug: 'impermeabilizacao',
     title: 'Impermeabilização',
     text: 'Camada protetora que repele líquidos e facilita a limpeza do dia a dia. Proteção que dura.',
-    image: '/assets/photos/sofa-4.webp',
-    imageAlt: 'Impermeabilização de sofá que repele líquidos e manchas',
+    image: '/assets/photos/impermeabilizacao-gotas.jpeg',
+    imageAlt: 'Gotas de água repelidas sobre o tecido de um sofá impermeabilizado',
     line: 'upholstery' as Line,
   },
   {
     slug: 'pos-obra',
     title: 'Limpeza pós-obra',
     text: 'Remoção de poeira, cimento, tinta, gesso e rejunte. Entregamos o imóvel pronto para morar ou alugar.',
-    image: '/assets/photos/pos-obra-5.webp',
+    image: '/assets/photos/original-serv-pos-obra.webp',
     imageAlt: 'Limpeza pós-obra em imóvel recém-construído no Guarujá',
     href: '/limpeza-pos-obra-santos',
     line: 'postWork' as Line,
@@ -122,7 +122,7 @@ export const services: Service[] = [
     slug: 'pisos',
     title: 'Revitalização de pisos',
     text: 'Pisos de madeira, porcelanato e pedra recuperados com máquinas industriais e produtos adequados.',
-    image: '/assets/photos/posobra-2.webp',
+    image: '/assets/photos/original-serv-pisos.webp',
     imageAlt: 'Revitalização de piso de porcelanato após a obra',
     line: 'postWork' as Line,
   },

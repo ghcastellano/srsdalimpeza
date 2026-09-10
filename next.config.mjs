@@ -39,6 +39,12 @@ const nextConfig = {
     ];
     return [
       { source: '/(.*)', headers: security },
+      // A prévia não disputa indexação com o domínio da empresa.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: '.*\\.vercel\\.app' }],
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }],
+      },
       { source: '/assets/:path*', headers: cache },
     ];
   },
