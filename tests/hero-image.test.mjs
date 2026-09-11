@@ -20,3 +20,16 @@ test('destaque usa o novo arquivo, qualidade alta e proporção preservada', asy
   assert.match(hero, /quality=\{90\}/);
   assert.match(hero, /object-contain/);
 });
+
+test('contagem, imagem e avaliações têm faixas próprias no fluxo da página', async () => {
+  const hero = await readFile('components/Hero.tsx', 'utf8');
+  const count = hero.indexOf('data-hero-count');
+  const photo = hero.indexOf('data-hero-image');
+  const reviews = hero.indexOf('data-hero-reviews');
+  assert.ok(count > 0 && photo > count && reviews > photo);
+  for (const name of ['count', 'reviews']) {
+    const element = hero.match(new RegExp(`data-hero-${name} className="([^"]+)"`));
+    assert.ok(element);
+    assert.doesNotMatch(element[1], /absolute|fixed|translate|inset/);
+  }
+});

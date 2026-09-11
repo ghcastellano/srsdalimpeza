@@ -76,10 +76,13 @@ export default function Hero() {
           </ul>
         </div>
 
-        {/* Coluna visual: foto em cartão + bolhas 3D confinadas ao cartão (md+). */}
+        {/* Faixas independentes: os selos não cobrem nenhuma parte da foto. */}
         <div className="fade-up relative lg:col-span-6" style={{ animationDelay: '.3s' }}>
-          <div data-hero-card className="relative mx-auto aspect-[4/5] w-full max-w-[560px] sm:aspect-[5/4] lg:aspect-[4/5] lg:max-w-none xl:aspect-[5/5.4]">
-            <div className="absolute -inset-y-[5%] inset-x-0 overflow-hidden rounded-[2rem] bg-white shadow-[0_40px_90px_-30px_rgba(6,38,55,.45)]">
+          <div data-hero-card className="mx-auto w-full max-w-[560px] overflow-hidden rounded-[2rem] bg-white shadow-[0_40px_90px_-30px_rgba(6,38,55,.45)] lg:max-w-none">
+            <div data-hero-count className="flex justify-end px-5 pb-2 pt-5 sm:px-6 sm:pt-6">
+              <span className="rounded-full bg-ink px-4 py-2 text-[13px] font-bold text-white">+6.000 clientes atendidos</span>
+            </div>
+            <div data-hero-image className="relative aspect-square">
               <Image
                 src="/assets/photos/irmas-enviada-4k.webp"
                 alt="Imagem institucional das irmãs da Srs da Limpeza"
@@ -92,15 +95,13 @@ export default function Hero() {
               />
             </div>
             
-            {/* Selo flutuante */}
-            <div className="absolute bottom-5 left-5 z-20 flex items-center gap-3 rounded-2xl bg-white/95 p-3 pr-5 shadow-card sm:bottom-7 sm:left-7">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>
+            <div data-hero-reviews className="mx-5 flex items-center gap-3 border-t border-ink/10 py-5 sm:mx-6 sm:py-6">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-ink text-sky"><Star className="h-5 w-5 fill-current" /></span>
               <span>
                 <span className="block text-sm font-extrabold leading-5 text-ink">4,9 · {contact.reviewCount} avaliações</span>
                 <span className="block text-[13px] leading-5 text-ink/70">Google · {contact.city} e região</span>
               </span>
             </div>
-            <div className="absolute right-4 top-2 z-20 rounded-full bg-ink px-4 py-2 text-[13px] font-bold text-white shadow-card sm:right-6 sm:top-4">+6.000 clientes atendidos</div>
           </div>
         </div>
       </div>
