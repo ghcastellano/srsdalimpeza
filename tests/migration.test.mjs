@@ -53,6 +53,12 @@ test('destaque preserva a imagem escolhida e usa entrega responsiva otimizada', 
   assert.match(html, /object-contain p-3/);
 });
 
+test('foto 03 descreve a limpeza em andamento, sem afirmar um resultado final', async () => {
+  const html = await (await fetch(base)).text();
+  assert.match(html, /Higienização de sofá em andamento/);
+  assert.doesNotMatch(html, /Tecido recuperado com extração/);
+});
+
 test('prévia pública tem noindex, sem alterar canonical', async () => {
   if (new URL(base).hostname.endsWith('.vercel.app')) {
     assert.match((await fetch(base)).headers.get('x-robots-tag') || '', /noindex/);

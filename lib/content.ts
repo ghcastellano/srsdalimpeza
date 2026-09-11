@@ -184,7 +184,7 @@ export type MediaItem = GalleryItem & {
 export const gallery: GalleryItem[] = [
   { src: '/assets/photos/sofa-7.webp', title: 'Sofá de suede: antes e depois', tag: 'Higienização de sofá' , alt: 'Sofá de suede marrom higienizado pela Srs da Limpeza: metade com sujeira impregnada e metade limpa após a extração' },
   { src: '/assets/photos/sofa-1.webp', title: 'Extração profissional em sofá claro', tag: 'Equipe em ação' , alt: 'Profissional da Srs da Limpeza higienizando um sofá claro com máquina extratora em uma residência no Guarujá' },
-  { src: '/assets/photos/sofa-8.webp', title: 'Tecido recuperado com extração', tag: 'Higienização de sofá' , alt: 'Tecido de sofá recuperado após higienização profunda com extração de sujeira e ácaros' },
+  { src: '/assets/photos/sofa-8.webp', title: 'Higienização de sofá em andamento', tag: 'Higienização de sofá' , alt: 'Bocal de extratora passando sobre o tecido de um sofá durante a higienização' },
   { src: '/assets/photos/colchao-2.webp', title: 'Colchão de casal higienizado', tag: 'Higienização de colchão' , alt: 'Colchão de casal durante a higienização profissional que remove ácaros, mofo e suor impregnado' },
   { src: '/assets/photos/poltronas.webp', title: 'Poltrona clara como nova', tag: 'Poltronas' , alt: 'Poltrona de tecido claro higienizada e sem manchas após limpeza profissional de estofados' },
   { src: '/assets/photos/carpete-1.webp', title: 'Carpete de escritório lavado', tag: 'Tapetes e carpetes' , alt: 'Carpete de escritório lavado com extração profissional, sem manchas e com secagem rápida' },
