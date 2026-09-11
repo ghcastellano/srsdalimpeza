@@ -116,14 +116,14 @@ operacionais durante a janela.
   das margens em CSS e fundo integrado ao cabeçalho claro.
 - Favicon: enquadramento do S desse arquivo em SVG, exportado nos tamanhos
   32/96/180/192/512. Não foi criada uma nova letra ou marca por IA.
-- Orientação final: manter a imagem institucional ilustrativa das irmãs
-  (original-quemsomos.webp, 600 × 600), substituindo o pedido de removê-la.
-  quemsomos-4k.webp é uma ampliação conservadora para 3840 × 3840, sem
-  recriar rostos ou inventar detalhes. O teste de melhoria generativa foi
-  descartado por modificar detalhes; não é usado no site. Next/Image entrega
-  tamanhos responsivos em AVIF/WebP com qualidade 75 e cache, mantendo o
-  enquadramento original com object-contain. 4K é a resolução ampliada,
-  não uma captura nativa com detalhes novos.
+- Imagem das irmãs: usar exclusivamente a nova imagem de 3840 × 3840 enviada
+  pelo usuário em 10/09/2026: "Foto irmãs  (3840 x 3840 px).png".
+  Convertida para irmas-enviada-4k.webp em qualidade 92, sem redimensionar,
+  retocar ou gerar novos detalhes. O PNG fornecido permanece intacto em
+  Downloads. Next/Image entrega AVIF/WebP responsivos em qualidade 90 e
+  object-contain, mantendo o layout. O nome novo evita reutilizar o cache
+  da ampliação de 600 px rejeitada pelo usuário. A versão generativa testada
+  anteriormente e quemsomos-4k.webp não são usados na página.
 - Serviços: imagens serv-higienizacao-de-sofa/colchao/cadeiras/moveis-criancas,
   limpeza-posobra-home e revitalizacao-pisos-home-min, do .com.br.
 - Tapetes: carpete-1.webp da galeria antiga; não repetir o cartão antigo que
