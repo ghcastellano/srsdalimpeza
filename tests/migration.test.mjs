@@ -47,10 +47,10 @@ test('logo transparente, foto das gotas e favicon são servidos', async () => {
 
 test('destaque preserva a imagem escolhida e usa entrega responsiva otimizada', async () => {
   const html = await (await fetch(base)).text();
-  assert.doesNotMatch(html, /original-quemsomos|quemsomos-4k|equipe-srs/);
-  assert.match(html, /irmas-enviada-4k/);
-  assert.match(html, /irmas-enviada-4k[^"<>]*q=90/);
-  assert.match(html, /object-contain p-3/);
+  assert.doesNotMatch(html, /original-quemsomos|quemsomos-4k|irmas-enviada-4k/);
+  assert.match(html, /equipe-srs/);
+  assert.match(html, /equipe-srs[^"<>]*q=90/);
+  assert.match(html, /object-cover object-top/);
 });
 
 test('foto 03 descreve a limpeza em andamento, sem afirmar um resultado final', async () => {

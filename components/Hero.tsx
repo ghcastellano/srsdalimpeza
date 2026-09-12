@@ -84,14 +84,14 @@ export default function Hero() {
             </div>
             <div data-hero-image className="relative aspect-square">
               <Image
-                src="/assets/photos/irmas-enviada-4k.webp"
+                src="/assets/photos/equipe-srs.webp"
                 alt="Imagem institucional das irmãs da Srs da Limpeza"
                 fill
                 priority
                 fetchPriority="high"
                 quality={90}
                 sizes="(max-width: 640px) 92vw, (max-width: 1023px) 560px, (min-width: 1440px) 684px, 46vw"
-                className="object-contain p-3"
+                className="object-cover object-top"
               />
             </div>
             

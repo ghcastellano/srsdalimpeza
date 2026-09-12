@@ -13,12 +13,16 @@ test('master tem 3840 px, proporção original e tamanho limitado', async () => 
   assert.ok((await stat(supplied)).size < 600_000);
 });
 
-test('destaque usa o novo arquivo, qualidade alta e proporção preservada', async () => {
+test('destaque usa a foto inteira, sem o recorte diagonal, e preserva a proporção', async () => {
   const hero = await readFile('components/Hero.tsx', 'utf8');
-  assert.match(hero, /irmas-enviada-4k\.webp/);
-  assert.doesNotMatch(hero, /original-quemsomos|quemsomos-4k\.webp/);
+  assert.match(hero, /equipe-srs\.webp/);
+  assert.doesNotMatch(hero, /original-quemsomos|quemsomos-4k\.webp|irmas-enviada-4k/);
+  const meta = await sharp('public/assets/photos/equipe-srs.webp').metadata();
+  assert.equal(meta.width, 1064);
+  assert.equal(meta.height, 1400);
+  assert.match(hero, /aspect-square/);
   assert.match(hero, /quality=\{90\}/);
-  assert.match(hero, /object-contain/);
+  assert.match(hero, /object-cover object-top/);
 });
 
 test('contagem, imagem e avaliações têm faixas próprias no fluxo da página', async () => {

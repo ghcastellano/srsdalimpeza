@@ -14,13 +14,13 @@ export default function Services() {
         const internal = Boolean(service.href);
         const card = (
           <>
-            <div className="relative aspect-[4/3] overflow-hidden">
+            <div data-service-image={service.slug} className="relative aspect-[4/3] overflow-hidden">
               <Image
                 src={service.image}
                 alt={service.imageAlt}
                 fill
-                quality={80}
-                sizes="(max-width: 640px) 92vw, (max-width: 1023px) 46vw, 23vw"
+                quality={90}
+                sizes="(max-width: 479px) 92vw, (max-width: 1023px) 46vw, (min-width: 1440px) 330px, 23vw"
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
               />
               <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold tabular-nums text-ink/80">0{index + 1}</span>

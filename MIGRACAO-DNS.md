@@ -116,16 +116,21 @@ operacionais durante a janela.
   das margens em CSS e fundo integrado ao cabeçalho claro.
 - Favicon: enquadramento do S desse arquivo em SVG, exportado nos tamanhos
   32/96/180/192/512. Não foi criada uma nova letra ou marca por IA.
-- Imagem das irmãs: usar exclusivamente a nova imagem de 3840 × 3840 enviada
-  pelo usuário em 10/09/2026: "Foto irmãs  (3840 x 3840 px).png".
-  Convertida para irmas-enviada-4k.webp em qualidade 92, sem redimensionar,
-  retocar ou gerar novos detalhes. O PNG fornecido permanece intacto em
-  Downloads. Next/Image entrega AVIF/WebP responsivos em qualidade 90 e
-  object-contain, mantendo o layout. O nome novo evita reutilizar o cache
-  da ampliação de 600 px rejeitada pelo usuário. A versão generativa testada
-  anteriormente e quemsomos-4k.webp não são usados na página.
-- Serviços: imagens serv-higienizacao-de-sofa/colchao/cadeiras/moveis-criancas,
-  limpeza-posobra-home e revitalizacao-pisos-home-min, do .com.br.
+- Imagem das irmãs (12/09/2026): a pedido do usuário, substituir a composição
+  com faixas diagonais pela foto contínua equipe-srs.webp (1064 × 1400),
+  já presente no repositório. Enquadramento quadrado alinhado pelo topo,
+  sem distorção, preservando os rostos; selos em faixas separadas da foto.
+  Next/Image entrega AVIF/WebP responsivos em qualidade 90. O arquivo 4K
+  enviado pelo usuário continua preservado, mas não é usado no destaque.
+  Não foi feita reconstrução generativa nem prometida resolução 4K da foto inteira.
+- Serviços (12/09/2026): remover as seis miniaturas de 300 × 300 com arcos
+  amarelos do uso nos cards, sem apagar os arquivos antigos. Substituições:
+  sofá → sofa-2.webp; colchão → colchao-2.webp; cadeiras → cadeiras-2.webp;
+  bebê → cadeira-infantil.webp; pós-obra → pos-obra-hero.webp;
+  pisos → posobra-14.webp. Fotos já presentes na coleção do site, sem moldura,
+  selecionadas visualmente por serviço. Enquadramento 4:3 uniforme e entrega
+  responsiva em qualidade 90. As fotos de pós-obra têm limitações de origem;
+  não ampliar artificialmente nem afirmar que houve recuperação de detalhes.
 - Tapetes: carpete-1.webp da galeria antiga; não repetir o cartão antigo que
   usava imagem de colchão para tapetes.
 - Impermeabilização: foto enviada em 07/09/2026 às 16:54:44, gotas no sofá.
