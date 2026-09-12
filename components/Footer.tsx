@@ -27,7 +27,7 @@ export default function Footer() {
 
         <div className="grid gap-10 pt-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_.7fr_1fr_1fr] lg:pt-12">
           <div>
-            <Wordmark white className="h-24 w-auto" />
+            <Wordmark className="h-24 w-auto" />
             <p className="mt-6 max-w-sm text-base text-white/80">Especialistas em higienização e impermeabilização de estofados, limpeza pós-obra e revitalização de pisos. Cuidamos do que é importante para você.</p>
             <p className="mt-4 text-sm text-white/60">CNPJ {contact.cnpj}</p>
           </div>

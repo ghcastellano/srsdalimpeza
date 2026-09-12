@@ -1,15 +1,15 @@
 import Image from 'next/image';
 
-/** Marca original intacta. O enquadramento CSS remove apenas as margens brancas. */
-export function Wordmark({ white = false, className = '', priority = false }: { white?: boolean; className?: string; priority?: boolean }) {
+/** Logo enviado pelo cliente; apenas o fundo foi removido, sem redesenho. */
+export function Wordmark({ className = '', priority = false }: { className?: string; priority?: boolean }) {
   return (
-    <span className={`relative inline-block aspect-[450/240] shrink-0 overflow-hidden ${white ? 'rounded-lg bg-white' : 'mix-blend-multiply'} ${className}`}>
-      <Image src="/assets/brand/logo-site-original.webp" alt="Srs da Limpeza — logo original com os dois personagens" width={512} height={512} priority={priority} sizes="(max-width: 640px) 160px, 400px" className="absolute left-[-7.12%] top-[-52.5%] h-auto w-[113.78%] max-w-none" />
+    <span className={`relative inline-block aspect-[2360/1190] shrink-0 ${className}`}>
+      <Image src="/assets/brand/logo-enviado-transparente.webp" alt="Srs da Limpeza" width={2360} height={1190} priority={priority} quality={100} sizes="(max-width: 640px) 200px, 400px" className="h-full w-full object-contain" />
     </span>
   );
 }
 
-/** Mesma marca, sem reconstrução ou reposicionamento dos personagens. */
+/** Mesma marca utilizada no cabeçalho e no rodapé. */
 export function BrandLockup({ className = '' }: { className?: string }) {
   return (
     <Wordmark className={`w-full ${className}`} />

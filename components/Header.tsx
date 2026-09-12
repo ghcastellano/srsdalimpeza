@@ -67,7 +67,7 @@ export default function Header() {
       >
         <div className="container-shell flex h-[72px] items-center justify-between lg:h-[84px]">
           <Link prefetch={false} href={isHome ? '#inicio' : '/'} aria-label="Srs da Limpeza — início" className="relative z-10 flex shrink-0 items-center">
-            <Wordmark priority white={open} className="h-[58px] w-auto sm:h-[62px] lg:h-[70px]" />
+            <Wordmark priority className="h-[58px] w-auto sm:h-[62px] lg:h-[70px]" />
           </Link>
 
           <nav aria-label="Navegação principal" className="hidden items-center gap-1 text-[15px] font-semibold text-ink/80 xl:flex">

@@ -37,7 +37,7 @@ export default function HomePage() {
     email: contact.email,
     telephone: `+${contact.upholsteryDigits}`,
     image: [`${siteUrl}/opengraph-image`, `${siteUrl}/assets/photos/sofa-7.webp`],
-    logo: `${siteUrl}/assets/brand/logo-site-original.webp`,
+    logo: `${siteUrl}/assets/brand/logo-enviado-transparente.png`,
     foundingDate: '2018',
     currenciesAccepted: 'BRL',
     paymentAccepted: 'Cartão de crédito, PIX, dinheiro, cartão de débito',

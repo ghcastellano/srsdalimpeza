@@ -37,8 +37,8 @@ test('sitemap e robots referenciam o domínio próprio', async () => {
   assert.match(await (await fetch(`${base}/robots.txt`)).text(), /Sitemap: https:\/\/srsdalimpeza\.com\.br\/sitemap\.xml/);
 });
 
-test('marca original, foto das gotas e favicon são servidos', async () => {
-  for (const path of ['/assets/brand/logo-site-original.webp', '/assets/brand/favicon-original-96.png', '/assets/photos/irmas-enviada-4k.webp', '/assets/photos/impermeabilizacao-gotas.jpeg']) {
+test('logo transparente, foto das gotas e favicon são servidos', async () => {
+  for (const path of ['/assets/brand/logo-enviado-transparente.webp', '/assets/brand/logo-enviado-transparente.png', '/assets/brand/favicon-original-96.png', '/assets/photos/irmas-enviada-4k.webp', '/assets/photos/impermeabilizacao-gotas.jpeg']) {
     const response = await fetch(`${base}${path}`);
     assert.equal(response.status, 200);
     assert.match(response.headers.get('content-type'), /^image\//);
