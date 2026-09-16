@@ -99,11 +99,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
     linear-gradient(180deg, #e8f5fa 0%, #f6fbfd 100%);
 }
 
-/* Faixa ciano usada no topo da primeira versão aprovada do hero. */
+/* Faixa ciano única, igual à referência aprovada do hero. */
 .hero-menu-bg {
-  background:
-    radial-gradient(58% 120% at 8% 100%, rgba(255,255,255,.23), transparent 68%),
-    linear-gradient(90deg, #b8f2f9 0%, #aaf0f7 52%, #c0f6fa 100%);
+  background-color: #b8f2f9;
 }
 
 .dots {

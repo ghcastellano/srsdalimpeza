@@ -9,6 +9,7 @@ test('cabeçalho usa o azul-ciano de referência quando o menu está fechado', a
   ]);
   assert.match(header, /scrolled \? 'hero-menu-bg border-b border-ink\/10 shadow/);
   assert.match(header, /: 'hero-menu-bg'/);
-  assert.match(styles, /\.hero-menu-bg[\s\S]*#b8f2f9[\s\S]*#aaf0f7/);
+  assert.match(styles, /\.hero-menu-bg\s*\{\s*background-color: #b8f2f9;/);
+  assert.doesNotMatch(styles.match(/\.hero-menu-bg[\s\S]*?\}/)?.[0] ?? '', /gradient/);
   assert.match(header, /open \? 'bg-transparent'/);
 });
