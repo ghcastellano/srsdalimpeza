@@ -4,6 +4,9 @@
  * NEXT_PUBLIC_SITE_URL na Vercel — nenhuma linha de código muda.
  */
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://srsdalimpeza.com.br').replace(/\/$/, '');
+// O domínio próprio ainda serve o site antigo; a imagem social deve existir no novo.
+export const shareImageUrl = 'https://srsdalimpeza.vercel.app/assets/brand/compartilhamento-whatsapp.jpg';
+export const postWorkShareImageUrl = 'https://srsdalimpeza.vercel.app/assets/brand/compartilhamento-pos-obra.jpg';
 
 export const contact = {
   brand: 'Srs da Limpeza',

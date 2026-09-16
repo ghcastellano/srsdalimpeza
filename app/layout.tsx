@@ -4,7 +4,7 @@ import Cursor from '@/components/fx/Cursor';
 import RevealObserver from '@/components/fx/RevealObserver';
 import SmoothScroll from '@/components/fx/SmoothScroll';
 import TrackingConsent from '@/components/TrackingConsent';
-import { siteUrl } from '@/lib/content';
+import { shareImageUrl, siteUrl } from '@/lib/content';
 import './globals.css';
 
 const display = localFont({
@@ -65,11 +65,11 @@ export const metadata: Metadata = {
     description: 'Higienização de estofados, impermeabilização, limpeza pós-obra e revitalização de pisos em Guarujá, Santos e Bertioga. Nota 4,9 no Google. Orçamento grátis no WhatsApp.',
     url: siteUrl,
     siteName: 'Srs da Limpeza',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Srs da Limpeza — higienização de estofados e limpeza pós-obra' }],
+    images: [{ url: shareImageUrl, width: 1200, height: 630, alt: 'Logo Srs da Limpeza e sofá higienizado' }],
     locale: 'pt_BR',
     type: 'website',
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: { card: 'summary_large_image', images: [shareImageUrl] },
 };
 
 export const viewport: Viewport = {

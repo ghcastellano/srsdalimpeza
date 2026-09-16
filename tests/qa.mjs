@@ -135,8 +135,8 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
   const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const res = await page.goto(`${base}/pagina-inexistente`);
   check(res.status() === 404 && (await page.locator('h1').textContent()).length > 0, 'custom 404');
-  const og = await page.goto(`${base}/opengraph-image`);
-  check(og.status() === 200 && og.headers()['content-type'].includes('image/png'), 'OG image renders');
+  const og = await page.goto(`${base}/assets/brand/compartilhamento-whatsapp.jpg`);
+  check(og.status() === 200 && og.headers()['content-type'].includes('image/jpeg'), 'OG image renders');
   await page.close();
 }
 
@@ -158,6 +158,7 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
         h1count: hs.length,
         h1: hs[0] ?? '',
         og: g('meta[property="og:title"]'),
+        ogImage: g('meta[property="og:image"]'),
         imgs: imgs.length,
         emptyAlt: imgs.filter((i) => !i.getAttribute('alt')).length,
         ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => s.textContent),
@@ -168,6 +169,8 @@ const check = (ok, msg) => { console.log(`${ok ? '✓' : '✗'} ${msg}`); if (!o
     check(seo.canonical.startsWith('http'), `${path} canonical ${seo.canonical}`);
     check(seo.h1count === 1, `${path} exactly one h1 (${seo.h1count})`);
     check(seo.og.length > 0, `${path} og:title present`);
+    const expectedImage = path === '/limpeza-pos-obra-santos' ? 'compartilhamento-pos-obra.jpg' : 'compartilhamento-whatsapp.jpg';
+    check(seo.ogImage === `https://srsdalimpeza.vercel.app/assets/brand/${expectedImage}`, `${path} OG image is accessible on the new site`);
     check(seo.emptyAlt === 0, `${path} all ${seo.imgs} content images have alt (${seo.emptyAlt} empty)`);
     let parsed = true;
     for (const raw of seo.ld) { try { JSON.parse(raw); } catch { parsed = false; } }
