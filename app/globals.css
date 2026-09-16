@@ -92,7 +92,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .scrollbar-none { scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 
-/* Fundo "água": gradiente suave + brilhos. */
+/* Gradiente das seções internas, sem afetar a abertura. */
 .water-bg {
   background:
     radial-gradient(60% 50% at 80% 10%, rgba(127,217,234,.35), transparent 60%),
@@ -100,7 +100,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
     linear-gradient(180deg, var(--hero-menu-cyan) 0%, #d9f8fa 54%, #f6fbfd 100%);
 }
 
-/* Faixa ciano única, igual à referência aprovada do hero. */
+/* Cabeçalho e abertura usam exatamente a mesma cor sólida. */
 .hero-menu-bg {
   background-color: var(--hero-menu-cyan);
 }

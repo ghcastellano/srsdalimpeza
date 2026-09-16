@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { ArrowDown, ArrowUpRight, Leaf, ShieldCheck, Star, Wind } from 'lucide-react';
-import WaterLight from './fx/WaterLight';
 import Marquee from './fx/Marquee';
 import { contact, messages, whatsappUrl } from '@/lib/content';
 
@@ -22,10 +21,7 @@ const trust = [
 
 export default function Hero() {
   return (
-    <section id="inicio" className="water-bg relative overflow-hidden pt-[96px] lg:min-h-[min(100svh,920px)] lg:pt-[110px]">
-      <div aria-hidden="true" className="dots pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_40%,#000,transparent)]" />
-      <WaterLight className="[mask-image:radial-gradient(80%_70%_at_70%_35%,#000_30%,transparent_100%)]" />
-
+    <section id="inicio" className="hero-menu-bg relative overflow-hidden pt-[96px] lg:min-h-[min(100svh,920px)] lg:pt-[110px]">
       <div className="container-shell relative grid items-center gap-10 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32">
         <div className="relative z-10 lg:col-span-6">
           {/* A linha-chave vive DENTRO do h1: o título principal passa a

@@ -71,8 +71,7 @@ export default function ServicePage({ content }: { content: ServicePageContent }
       <a href="#main" className="skip-link">Ir para o conteúdo</a>
       <Header />
       <main id="main" className="relative">
-        <section className="water-bg relative overflow-hidden pt-[104px] lg:pt-[132px]">
-          <div aria-hidden="true" className="dots pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_40%,#000,transparent)]" />
+        <section className="hero-menu-bg relative overflow-hidden pt-[104px] lg:pt-[132px]">
           <div className="container-shell relative grid items-center gap-10 pb-16 lg:grid-cols-12 lg:gap-12 lg:pb-24">
             <div className="lg:col-span-6">
               <nav aria-label="Trilha de navegação" className="mb-6 text-sm text-ink/70">

@@ -215,7 +215,7 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={.2}>
                 <div className="relative mt-12 hidden aspect-[4/3] overflow-hidden rounded-3xl lg:block">
-                  <Image src="/assets/photos/sofa-1.webp" alt="Profissional da Srs da Limpeza higienizando um sofá com extratora" fill quality={80} sizes="40vw" className="object-cover" />
+                  <Image src="/assets/photos/sofa-4.webp" alt="Extração em andamento em sofá claro, com a diferença entre o tecido limpo e a área ainda não higienizada" fill unoptimized sizes="40vw" className="object-cover" />
                 </div>
               </Reveal>
             </div>
