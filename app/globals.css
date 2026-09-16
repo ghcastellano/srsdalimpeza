@@ -7,6 +7,7 @@
   --ocean: #0f5f83;
   --aqua: #1d9bc4;
   --sky: #7fd9ea;
+  --hero-menu-cyan: #b8f2f9;
   --mist: #e8f5fa;
   --paper: #f6fbfd;
 }
@@ -96,12 +97,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background:
     radial-gradient(60% 50% at 80% 10%, rgba(127,217,234,.35), transparent 60%),
     radial-gradient(50% 45% at 10% 90%, rgba(29,155,196,.22), transparent 60%),
-    linear-gradient(180deg, #e8f5fa 0%, #f6fbfd 100%);
+    linear-gradient(180deg, var(--hero-menu-cyan) 0%, #d9f8fa 54%, #f6fbfd 100%);
 }
 
 /* Faixa ciano única, igual à referência aprovada do hero. */
 .hero-menu-bg {
-  background-color: #b8f2f9;
+  background-color: var(--hero-menu-cyan);
 }
 
 .dots {
