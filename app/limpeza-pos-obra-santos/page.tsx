@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     images: [{ url: postWorkShareImageUrl, width: 1200, height: 630, alt: 'Logo Srs da Limpeza e equipe realizando limpeza pós-obra' }],
     type: 'website',
   },
+  twitter: { card: 'summary_large_image', images: [postWorkShareImageUrl] },
 };
 
 export default function Page() {
