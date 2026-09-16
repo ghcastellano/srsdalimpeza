@@ -38,7 +38,7 @@ test('sitemap e robots referenciam o domínio próprio', async () => {
 });
 
 test('logo transparente, foto das gotas e favicon são servidos', async () => {
-  for (const path of ['/assets/brand/logo-enviado-transparente.webp', '/assets/brand/logo-enviado-transparente.png', '/assets/brand/favicon-original-96.png', '/assets/photos/irmas-enviada-4k.webp', '/assets/photos/impermeabilizacao-gotas.jpeg']) {
+  for (const path of ['/assets/brand/logo-enviado-transparente.webp', '/assets/brand/logo-enviado-transparente.png', '/assets/brand/favicon-original-96.png', '/assets/photos/irmas-enviada-alta-qualidade.jpeg', '/assets/photos/impermeabilizacao-gotas.jpeg']) {
     const response = await fetch(`${base}${path}`);
     assert.equal(response.status, 200);
     assert.match(response.headers.get('content-type'), /^image\//);
@@ -47,9 +47,9 @@ test('logo transparente, foto das gotas e favicon são servidos', async () => {
 
 test('destaque preserva a imagem escolhida e usa entrega responsiva otimizada', async () => {
   const html = await (await fetch(base)).text();
-  assert.doesNotMatch(html, /original-quemsomos|quemsomos-4k|irmas-enviada-4k/);
-  assert.match(html, /equipe-srs/);
-  assert.match(html, /equipe-srs[^"<>]*q=90/);
+  assert.doesNotMatch(html, /original-quemsomos|quemsomos-4k|irmas-enviada-4k|equipe-srs/);
+  assert.match(html, /irmas-enviada-alta-qualidade/);
+  assert.match(html, /irmas-enviada-alta-qualidade[^"<>]*q=90/);
   assert.match(html, /object-cover object-top/);
 });
 

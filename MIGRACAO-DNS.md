@@ -116,13 +116,15 @@ operacionais durante a janela.
   das margens em CSS e fundo integrado ao cabeçalho claro.
 - Favicon: enquadramento do S desse arquivo em SVG, exportado nos tamanhos
   32/96/180/192/512. Não foi criada uma nova letra ou marca por IA.
-- Imagem das irmãs (12/09/2026): a pedido do usuário, substituir a composição
-  com faixas diagonais pela foto contínua equipe-srs.webp (1064 × 1400),
-  já presente no repositório. Enquadramento quadrado alinhado pelo topo,
-  sem distorção, preservando os rostos; selos em faixas separadas da foto.
-  Next/Image entrega AVIF/WebP responsivos em qualidade 90. O arquivo 4K
-  enviado pelo usuário continua preservado, mas não é usado no destaque.
-  Não foi feita reconstrução generativa nem prometida resolução 4K da foto inteira.
+- Imagem institucional do destaque (16/09/2026): usar exatamente o arquivo
+  fornecido pelo usuário, `irmas-enviada-alta-qualidade.jpeg` (1024 × 1024),
+  sem recorte diagonal, distorção ou reconstrução. Next/Image entrega versões
+  AVIF/WebP responsivas em qualidade 90. Como o nome de origem identifica uma
+  geração Gemini, a imagem é tratada como institucional — não como prova
+  fotográfica de uma integrante da equipe.
+- Galeria de sofá (16/09/2026): `sofa-3-sem-faixas.webp` é um recorte direto
+  de 900 × 675 do arquivo original. Remove somente as faixas bege gravadas no
+  topo e na base; não usa pixels gerados nem altera sofá, sala ou tapete.
 - Serviços (12/09/2026): remover as seis miniaturas de 300 × 300 com arcos
   amarelos do uso nos cards, sem apagar os arquivos antigos. Substituições:
   sofá → sofa-2.webp; colchão → colchao-2.webp; cadeiras → cadeiras-2.webp;

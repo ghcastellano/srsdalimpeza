@@ -61,7 +61,7 @@ export const upholsteryPage: ServicePageContent = {
     { title: 'Higienizamos no local', text: 'Aspiração, pré-tratamento, extração e odorização. O móvel não sai de casa.' },
     { title: 'Você confere antes de pagar', text: 'Mostramos o resultado e a água extraída. Só então fechamos o serviço.' },
   ],
-  gallery: pick(gallery, ['sofa-7.webp', 'sofa-1.webp', 'colchao-2.webp', 'poltronas.webp', 'sofa-3.webp', 'cadeiras-3.webp', 'tapete.webp', 'sofa-8.webp']),
+  gallery: pick(gallery, ['sofa-7.webp', 'sofa-1.webp', 'colchao-2.webp', 'poltronas.webp', 'sofa-3-sem-faixas.webp', 'cadeiras-3.webp', 'tapete.webp', 'sofa-8.webp']),
   faq: [
     { q: 'Quanto tempo o sofá leva para secar?', a: 'Na maioria dos casos, de 3 a 6 horas. A extração retira quase toda a umidade, então o que sobra evapora rápido. Tecidos mais densos, como veludo, e dias muito úmidos podem levar até 12 horas. Deixar ventilador ligado e janela aberta acelera.' },
     { q: 'Preciso tirar o sofá do lugar ou levar a algum lugar?', a: 'Não. Todo o serviço é feito na sua casa, com a máquina que levamos. Só pedimos um ponto de energia e espaço para circular ao redor do móvel.' },

@@ -189,7 +189,7 @@ export const gallery: GalleryItem[] = [
   { src: '/assets/photos/poltronas.webp', title: 'Poltrona clara como nova', tag: 'Poltronas' , alt: 'Poltrona de tecido claro higienizada e sem manchas após limpeza profissional de estofados' },
   { src: '/assets/photos/carpete-1.webp', title: 'Carpete de escritório lavado', tag: 'Tapetes e carpetes' , alt: 'Carpete de escritório lavado com extração profissional, sem manchas e com secagem rápida' },
   { src: '/assets/photos/cadeiras-3.webp', title: 'Cadeiras de jantar higienizadas', tag: 'Cadeiras' , alt: 'Cadeiras de jantar estofadas higienizadas em residência na Baixada Santista' },
-  { src: '/assets/photos/sofa-3.webp', title: 'Sofá de canto em linho', tag: 'Higienização de sofá' , alt: 'Sofá de canto em tecido claro higienizado e pronto para uso em sala de estar' },
+  { src: '/assets/photos/sofa-3-sem-faixas.webp', title: 'Sofá de canto em linho', tag: 'Higienização de sofá' , alt: 'Sofá de canto em tecido claro higienizado e pronto para uso em sala de estar' },
   { src: '/assets/photos/cadeiras-1.webp', title: 'Cadeiras de couro revitalizadas', tag: 'Cadeiras' , alt: 'Cadeiras de couro revitalizadas após limpeza e hidratação profissional' },
   { src: '/assets/photos/tapete.webp', title: 'Tapete de sala higienizado', tag: 'Tapetes e carpetes' , alt: 'Tapete de sala higienizado com lavagem por extração, sem odores e livre de ácaros' },
   { src: '/assets/photos/sofa-6.webp', title: 'Sofá retrátil pronto para uso', tag: 'Higienização de sofá' , alt: 'Sofá retrátil higienizado e pronto para uso poucas horas após a limpeza' },
